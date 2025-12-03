@@ -16,7 +16,10 @@ AgentCore supports multiple agent SDKs (Strands, Claude, OpenAI) and model provi
 
 ## When to Use This Power
 
-- Creating new AgentCore projects with `agentcore create`
+- Building a new agent from scratch with `agentcore create`
+- Getting started with agent development and need guidance on the workflow
+- Deploying an existing agent to AgentCore runtime
+- Integrating AgentCore primitives (Memory, Gateway) into an existing agent
 - Starting local development servers with hot reloading
 - Testing agents locally before cloud deployment
 - Searching AgentCore documentation
@@ -39,35 +42,21 @@ This power provides two MCP servers:
 - `search_docs` - Search Strands framework documentation
 - `fetch_doc` - Retrieve Strands documentation pages
 
-## Prerequisites
+## Getting Started
 
-Before starting with AgentCore:
+**For new users or building a new agent:** Use the getting-started steering file for complete step-by-step guidance on prerequisites, project creation, development workflow, and deployment. Access it with `readPowerSteering("agentcore", "getting-started.md")`.
 
-1. **Install the toolkit:**
-   ```bash
-   pip install bedrock-agentcore-starter-toolkit
-   ```
-
-2. **AWS Authentication:**
-   - Use `aws login` to authenticate when using Bedrock as model provider
-   - Ensure you have access to the required models in AWS Bedrock
-
-3. **Check model access:**
-   - Verify you have permissions for the Bedrock models you plan to use
-
-## Quick Start Workflow
-
-**IMPORTANT:** When creating or starting to build a new agent, always use the `getting-started.md` steering file for detailed step-by-step guidance. Use `readPowerSteering("agentcore", "getting-started.md")` to access the complete workflow guide.
+**For deploying existing agents:** Use the `manage_agentcore_runtime` MCP tool to get complete deployment requirements and instructions for wrapping and deploying existing agents to AgentCore runtime.
 
 ## Integration Guides
 
-### AgentCore Gateway Integration
+**AgentCore Gateway:** 
+- For creating and managing Gateway resources, use the `manage_agentcore_gateway` MCP tool for framework-agnostic CLI commands
+- For fully integrating Gateway with a Strands agent, use `readPowerSteering("agentcore", "agentcore-gateway-integration.md")`
 
-If you want to integrate AgentCore Gateway into your agent, refer to the gateway integration steering file for detailed instructions on configuration, setup, and best practices. Use `readPowerSteering("agentcore", "agentcore-gateway-integration.md")` to access the guide.
-
-### AgentCore Memory Integration
-
-If you want to add AgentCore Memory to your agent, refer to the memory integration steering file for comprehensive guidance on memory configuration, operations, and implementation patterns. Use `readPowerSteering("agentcore", "agentcore-memory-integration.md")` to access the guide.
+**AgentCore Memory:** 
+- For creating and managing Memory resources, use the `manage_agentcore_memory` MCP tool for framework-agnostic CLI commands
+- For fully integrating Memory with a Strands agent, use `readPowerSteering("agentcore", "agentcore-memory-integration.md")`
 
 ## Using MCP Tools
 
@@ -86,6 +75,27 @@ usePower("agentcore", "agentcore-mcp-server", "search_agentcore_docs", {
 usePower("agentcore", "agentcore-mcp-server", "fetch_agentcore_doc", {
   "doc_id": "getting-started"
 })
+```
+
+### Manage AgentCore Runtime
+
+Get deployment requirements and runtime configuration:
+```
+usePower("agentcore", "agentcore-mcp-server", "manage_agentcore_runtime", {})
+```
+
+### Manage AgentCore Memory
+
+Get memory resource creation and CLI commands:
+```
+usePower("agentcore", "agentcore-mcp-server", "manage_agentcore_memory", {})
+```
+
+### Manage AgentCore Gateway
+
+Get gateway configuration and deployment instructions:
+```
+usePower("agentcore", "agentcore-mcp-server", "manage_agentcore_gateway", {})
 ```
 
 ### Search Strands Documentation
