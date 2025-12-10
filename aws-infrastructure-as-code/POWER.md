@@ -83,13 +83,13 @@ This step validates your CDK code compiles correctly and generates valid CloudFo
 
 // Validate syntax and schema
 usePower("aws-infrastructure-as-code", "awslabs.aws-iac-mcp-server", "validate_cloudformation_template", {
-  "template_content": "<your-synthesized-template>",
+  "template_content": "<your-synthesized-template-as-YAML-or-JSON-string>",
   "regions": ["us-east-1"]
 })
 
 // Check security compliance
 usePower("aws-infrastructure-as-code", "awslabs.aws-iac-mcp-server", "check_cloudformation_template_compliance", {
-  "template_content": "<your-synthesized-template>"
+  "template_content": "<your-synthesized-template-as-YAML-or-JSON-string>"
 })
 
 // Get pre-deployment validation guidance
