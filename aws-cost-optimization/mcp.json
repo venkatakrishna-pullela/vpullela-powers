@@ -1,0 +1,45 @@
+{
+  "mcpServers": {
+    "awslabs.billing-cost-management-mcp-server": {
+      "command": "uvx",
+      "args": ["awslabs.billing-cost-management-mcp-server@latest"],
+      "env": {
+        "AWS_REGION": "us-east-1",
+        "AWS_PROFILE": "default",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "cost_explorer",
+        "budgets", 
+        "cost_optimization",
+        "compute_optimizer",
+        "ri_performance",
+        "sp_performance",
+        "cost_anomaly",
+        "cost_comparison",
+        "free_tier_usage",
+        "rec_details"
+      ]
+    },
+    "awslabs.aws-pricing-mcp-server": {
+      "command": "uvx",
+      "args": ["awslabs.aws-pricing-mcp-server@latest"],
+      "env": {
+        "AWS_REGION": "us-east-1",
+        "AWS_PROFILE": "default",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "get_pricing",
+        "get_pricing_service_codes", 
+        "get_pricing_service_attributes",
+        "get_pricing_attribute_values",
+        "analyze_cdk_project",
+        "analyze_terraform_project",
+        "generate_cost_report"
+      ]
+    }
+  }
+}
