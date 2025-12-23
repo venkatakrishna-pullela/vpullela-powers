@@ -99,10 +99,12 @@ Comprehensive AWS cost optimization for both business teams and developers. Anal
 
 ### awslabs.billing-cost-management-mcp-server  
 **Package:** `awslabs.billing-cost-management-mcp-server`  
+**License:** Apache-2.0  
 **Purpose:** Comprehensive cost analysis, budget monitoring (read-only), and optimization recommendations
 
 ### awslabs.aws-pricing-mcp-server
 **Package:** `awslabs.aws-pricing-mcp-server`  
+**License:** Apache-2.0  
 **Purpose:** Real-time pricing intelligence, cost modeling, and infrastructure cost analysis
 
 ---
