@@ -20,6 +20,13 @@ Documentation is available at https://kiro.dev/docs/powers/
 
 ---
 
+### aws-cost-optimization
+**AWS Cost Optimization** - Comprehensive AWS cost optimization for both business teams and developers. Implement cloud financial management, analyze costs, get optimization recommendations, and enable cost-aware development workflows. Aligned with AWS Well-Architected Cost Optimization Pillar.
+
+**MCP Servers:** awslabs.billing-cost-management-mcp-server, awslabs.aws-pricing-mcp-server
+
+---
+
 ### aws-infrastructure-as-code
 **Build AWS infrastructure with CDK and CloudFormation** - Generate well-architected AWS infrastructure with CDK and CloudFormation - access latest documentation, validate templates, and troubleshoot deployments.
 

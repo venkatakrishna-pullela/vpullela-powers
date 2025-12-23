@@ -1,70 +1,94 @@
 ---
 name: "aws-cost-optimization"
 displayName: "AWS Cost Optimization"
-description: "Comprehensive AWS cost optimization power aligned with AWS Well-Architected Cost Optimization Pillar. Implement cloud financial management, adopt consumption models, measure efficiency, eliminate undifferentiated heavy lifting, and analyze expenditure attribution across your entire AWS environment."
-keywords: ["finops", "cost-optimization", "aws-billing", "cost-analysis", "budget-management", "rightsizing", "cost-intelligence", "savings-plans", "reserved-instances", "cost-anomaly", "spend-analysis", "cost-forecasting", "resource-optimization", "well-architected", "cloud-financial-management", "consumption-model", "efficiency-measurement", "expenditure-analysis"]
+description: "Comprehensive AWS cost optimization for both business teams and developers. Implement cloud financial management, analyze costs, get optimization recommendations, and enable cost-aware development workflows. Aligned with AWS Well-Architected Cost Optimization Pillar."
+keywords: ["finops", "cost-optimization", "aws-billing", "cost-analysis", "budget-management", "rightsizing", "cost-intelligence", "savings-plans", "reserved-instances", "cost-anomaly", "spend-analysis", "cost-forecasting", "resource-optimization", "well-architected", "cloud-financial-management", "consumption-model", "efficiency-measurement", "expenditure-analysis", "developer-cost-optimization", "pre-deployment-analysis", "architecture-cost-modeling", "development-environment-optimization", "cost-aware-development"]
 author: "Venkat Pullela"
 ---
 
 # AWS Cost Optimization Power
 
-Comprehensive AWS cost optimization aligned with the AWS Well-Architected Cost Optimization Pillar. Analyze costs, get optimization recommendations, manage budgets, and implement financial governance across your AWS environment.
+Comprehensive AWS cost optimization for both business teams and developers. Analyze costs, get optimization recommendations, manage budgets, implement financial governance, and enable cost-aware development workflows. Aligned with the AWS Well-Architected Cost Optimization Pillar.
 
 ## What Can You Do?
 
-### 1. Analyze Costs & Usage
+### For Business & FinOps Teams
+
+#### 1. Cloud Financial Management
+- Implement cost governance and accountability frameworks
+- Monitor existing AWS budgets and their performance (read-only)
+- Establish cost allocation and chargeback mechanisms
+- Track organizational cost efficiency and ROI
+
+**Example:** "Show me our organizational cost breakdown by business unit"
+
+#### 2. Cost Analysis & Forecasting
 - Historical cost analysis with flexible filtering and forecasting
 - Multi-dimensional cost breakdowns by service, account, region, and tags
 - Usage pattern analysis and trend identification
 - Cost comparison between time periods with detailed drivers
 
-**Example:** "Show me my AWS costs for the last 3 months by service"
+**Example:** "Compare our costs between last quarter and this quarter"
 
-### 2. Get Optimization Recommendations
+#### 3. Optimization & Governance
 - Automated rightsizing recommendations for compute resources
-- Reserved Instance and Savings Plans purchase recommendations
-- Idle resource detection and elimination opportunities
-- Cross-service cost optimization analysis
+- Reserved Instance and Savings Plans performance analysis
+- Cost anomaly detection and unusual spending pattern analysis
+- Cross-service cost optimization recommendations
 
-**Example:** "Find cost optimization opportunities in my account"
+**Example:** "Find cost optimization opportunities across our organization"
 
-### 3. Budget & Anomaly Monitoring
-- Monitor existing AWS budgets and their status (read-only - cannot create new budgets)
-- Detect and analyze cost anomalies and unusual spending patterns
-- Track budget performance and utilization
-- Monitor Free Tier usage to avoid unexpected charges
+### For Developers & Engineering Teams
 
-**Example:** "Show me my current budgets and their status"
+#### 4. Pre-Deployment Cost Analysis
+- Cost modeling for CDK and Terraform projects before deployment
+- Architecture cost comparison and optimization recommendations
+- Service pricing analysis across regions and configurations
+- Generate detailed cost estimates with assumptions and recommendations
 
-### 4. Pricing Intelligence
-- Real-time AWS pricing analysis across services and regions
-- Cost modeling for CDK and Terraform projects
-- Service pricing comparisons and optimization opportunities
-- Generate detailed cost analysis reports
+**Example:** "Estimate costs for this CDK stack before I deploy it"
 
-**Example:** "Compare EC2 pricing between us-east-1 and us-west-2"
+#### 5. Development Environment Optimization
+- Development and testing environment cost analysis
+- Free Tier usage monitoring to avoid unexpected charges
+- Cost-efficient architecture pattern recommendations
+- Development workflow cost optimization
 
-### 5. Advanced Analytics
-- SQL-based cost analysis with session persistence
-- S3 Storage Lens analytics for storage optimization
-- Reserved Instance and Savings Plans performance tracking
-- Custom cost allocation and chargeback analysis
+**Example:** "Analyze costs for our development environments"
 
-**Example:** "Analyze my Reserved Instance utilization trends"
+#### 6. Cost-Aware Development
+- Real-time AWS pricing intelligence across services and regions
+- Service cost comparisons for architecture decisions
+- Infrastructure cost analysis and optimization recommendations
+- Cost impact analysis for code and infrastructure changes
+
+**Example:** "Compare Lambda vs ECS costs for my microservice architecture"
 
 ---
 
 ## Quick Start
 
-**Already have AWS credentials configured?** Try these commands right away:
+**For Business & FinOps Teams** - Try these organizational cost management commands:
 
 ```
-"Show me my AWS costs for the last 3 months"
-"What are my top 5 cost drivers this month?"
-"Find cost optimization opportunities in my account"
-"Show me my current budgets and their status"
-"Analyze my Reserved Instance utilization"
-"Compare my costs between last month and this month"
+"Show me our AWS costs for the last 3 months by business unit"
+"What are our top 5 cost drivers this month?"
+"Find cost optimization opportunities across our organization"
+"Show me our current budgets and their performance"
+"Analyze our Reserved Instance utilization and savings"
+"Compare our costs between last quarter and this quarter"
+"Detect any cost anomalies in the last 30 days"
+```
+
+**For Developers & Engineering Teams** - Try these development-focused commands:
+
+```
+"Estimate costs for this CDK stack before deployment"
+"Compare Lambda vs ECS costs for my microservice"
+"What's the cheapest way to build this serverless API?"
+"Show me pricing differences between us-east-1 and eu-west-1"
+"Analyze costs for our development environments"
+"Monitor our Free Tier usage to avoid unexpected charges"
 ```
 
 **New to AWS Cost Management?** Follow the onboarding section below for complete setup.
@@ -75,11 +99,11 @@ Comprehensive AWS cost optimization aligned with the AWS Well-Architected Cost O
 
 ### awslabs.billing-cost-management-mcp-server  
 **Package:** `awslabs.billing-cost-management-mcp-server`  
-**Purpose:** Comprehensive billing operations, budget monitoring, cost analysis, and optimization recommendations
+**Purpose:** Comprehensive cost analysis, budget monitoring (read-only), and optimization recommendations
 
 ### awslabs.aws-pricing-mcp-server
 **Package:** `awslabs.aws-pricing-mcp-server`  
-**Purpose:** Real-time AWS pricing intelligence and cost comparison
+**Purpose:** Real-time pricing intelligence, cost modeling, and infrastructure cost analysis
 
 ---
 
@@ -97,9 +121,9 @@ The AWS Cost Optimization Power provides these tools across two MCP servers:
 - **rec_details** - Detailed analysis combining Cost Optimization Hub, Compute Optimizer, and Cost Explorer data
 
 ### Budget & Anomaly Monitoring
-- **budgets** - Monitor existing AWS budgets and their status (read-only - cannot create new budgets)
+- **budgets** - Monitor existing AWS budgets and their performance (read-only - cannot create or modify budgets)
 - **cost_anomaly** - Detect and analyze cost anomalies (last 90 days)
-- **free_tier_usage** - Monitor Free Tier usage across services
+- **free_tier_usage** - Monitor Free Tier usage across services to avoid unexpected charges
 
 ### Reserved Capacity Analysis
 - **ri_performance** - Reserved Instance coverage and utilization analysis
@@ -113,9 +137,9 @@ The AWS Cost Optimization Power provides these tools across two MCP servers:
 - **get_price_list_urls** - Access historical pricing data via bulk download URLs
 
 ### Infrastructure Cost Analysis
-- **analyze_cdk_project** - Analyze CDK projects for AWS services and cost optimization
-- **analyze_terraform_project** - Analyze Terraform projects for AWS services and cost optimization
-- **generate_cost_report** - Generate comprehensive cost analysis reports
+- **analyze_cdk_project** - Analyze CDK projects for AWS services and cost implications
+- **analyze_terraform_project** - Analyze Terraform projects for AWS services and cost implications
+- **generate_cost_report** - Generate comprehensive cost analysis reports with recommendations
 - **get_bedrock_patterns** - Architecture patterns and cost considerations for Amazon Bedrock
 
 ### Advanced Analytics
@@ -281,12 +305,12 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "compute_optimi
 
 ### Budget & Anomaly Monitoring
 
-**Monitor existing budgets:**
+**Monitor existing budgets (read-only):**
 ```javascript
 usePower("aws-cost-optimization", "aws-billing-cost-management", "budgets", {
   "max_results": 100
 })
-// Returns: List of existing budgets with current spend vs limits (read-only)
+// Returns: List of existing budgets with current spend vs limits (read-only - cannot create or modify budgets)
 ```
 
 **Detect cost anomalies:**
@@ -394,7 +418,9 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", 
 
 ## Workflows & Guidance
 
-This power includes comprehensive workflow guidance organized around the **AWS Well-Architected Cost Optimization Pillar's 5 design principles**:
+This power includes comprehensive workflow guidance for both business teams and developers, organized around the **AWS Well-Architected Cost Optimization Pillar's 5 design principles**:
+
+### For Business & FinOps Teams
 
 ### 💼 [Cloud Financial Management](./steering/cloud-financial-management.md)
 *Design Principle 1: Implement Cloud Financial Management*
@@ -431,6 +457,15 @@ This power includes comprehensive workflow guidance organized around the **AWS W
 - Cost driver analysis and root cause identification
 - Advanced cost attribution analytics and predictive modeling
 
+### For Developers & Engineering Teams
+
+### 👨‍💻 [Developer Cost Optimization](./steering/developer-cost-optimization.md)
+*Cost-aware development workflows and patterns*
+- Pre-deployment cost analysis and modeling
+- Development environment cost optimization
+- Cost-efficient architecture patterns and anti-patterns
+- Integration with development workflows and CI/CD pipelines
+
 ---
 
 ## Best Practices
@@ -455,9 +490,10 @@ This power includes comprehensive workflow guidance organized around the **AWS W
 - **Skip dimension exploration** - use get_dimension_values to understand your data
 - **Forget regional differences** - pricing varies significantly by region
 - **Overlook Free Tier usage** - monitor to avoid unexpected charges
-- **Monitor budgets regularly** - check budget status and utilization
+- **Ignore budget performance** - regularly check budget status and utilization
 - **Ignore optimization recommendations** - they represent real savings opportunities
 - **Use only On-Demand pricing** - consider Reserved Instances and Savings Plans
+- **Assume you can create/modify budgets** - this power provides read-only budget monitoring
 
 ---
 
