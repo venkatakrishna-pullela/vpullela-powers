@@ -1,5 +1,7 @@
 # Managed Services Optimization
 
+> **Navigation:** [← Tool Selection Guide](./tool-selection-guide.md) | [Power Overview](../POWER.md)
+
 This steering file provides comprehensive guidance for optimizing costs by leveraging managed services aligned with the AWS Well-Architected Cost Optimization Pillar's fourth design principle: **Stop Spending Money on Undifferentiated Heavy Lifting**.
 
 ## Core Principle
@@ -63,28 +65,37 @@ Use managed services to reduce operational overhead, eliminate infrastructure ma
 
 ```javascript
 // Step 1: Analyze current self-managed infrastructure costs
-const selfManagedCosts = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const selfManagedCosts = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
-    "end_date": "2024-12-01"
-  },
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\", \"Amazon Elastic Block Store\", \"Amazon Virtual Private Cloud\"], \"MatchOptions\": [\"EQUALS\"]}}",
   "metrics": "[\"UnblendedCost\"]"
 })
 
-// Step 2: Get managed service migration recommendations
-const managedServiceRecs = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_optimization", {
+// Step 2: Monitor current infrastructure performance
+const infrastructurePerformance = usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+  "namespace": "AWS/EC2",
+  "metric_name": "CPUUtilization",
+  "dimensions": [{"Name": "InstanceType", "Value": "m5.large"}],
+  "start_time": "2024-11-01T00:00:00Z",
+  "end_time": "2024-12-01T00:00:00Z",
+  "period": 3600,
+  "statistics": ["Average", "Maximum"]
+})
+
+// Step 3: Get managed service migration recommendations
+const managedServiceRecs = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_optimization", {
   "operation": "list_recommendations",
   "filters": "{\"actionTypes\": [\"MigrateToGraviton\"], \"implementationEfforts\": [\"Low\", \"Medium\"]}"
 })
 
-// Step 3: Compare managed service pricing
-const managedServicePricing = usePower("aws-cost-optimization", "aws-pricing", "get_pricing", {
+// Step 4: Compare managed service pricing
+const managedServicePricing = usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing", {
   "service_code": "AmazonRDS",
-  "region": "us-east-1",
+  "region": ["us-east-1"],
   "filters": [
     {"Field": "instanceType", "Value": "db.t3.medium", "Type": "EQUALS"},
     {"Field": "databaseEngine", "Value": "PostgreSQL", "Type": "EQUALS"},
@@ -92,8 +103,38 @@ const managedServicePricing = usePower("aws-cost-optimization", "aws-pricing", "
   ]
 })
 
-// Step 4: Calculate total cost of ownership comparison
-const tcoComparison = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+// Step 5: Monitor operational metrics for comparison
+const operationalMetrics = usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
+  "metric_data_queries": [
+    {
+      "id": "availability",
+      "metric_stat": {
+        "metric": {
+          "namespace": "AWS/ApplicationELB",
+          "metric_name": "HealthyHostCount"
+        },
+        "period": 3600,
+        "stat": "Average"
+      }
+    },
+    {
+      "id": "response_time",
+      "metric_stat": {
+        "metric": {
+          "namespace": "AWS/ApplicationELB",
+          "metric_name": "TargetResponseTime"
+        },
+        "period": 3600,
+        "stat": "Average"
+      }
+    }
+  ],
+  "start_time": "2024-11-01T00:00:00Z",
+  "end_time": "2024-12-01T00:00:00Z"
+})
+
+// Step 6: Calculate total cost of ownership comparison
+const tcoComparison = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session_sql", {
   "query": `
     WITH self_managed AS (
       SELECT 
@@ -159,21 +200,31 @@ const tcoComparison = usePower("aws-cost-optimization", "aws-billing-cost-manage
 
 ```javascript
 // Step 1: Analyze current database infrastructure costs
-const databaseInfrastructure = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const databaseInfrastructure = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01"
-  },
+  "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "filter": "{\"And\": [{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"], \"MatchOptions\": [\"EQUALS\"]}}, {\"Tags\": {\"Key\": \"Application\", \"Values\": [\"Database\"], \"MatchOptions\": [\"EQUALS\"]}}]}",
   "metrics": "[\"UnblendedCost\"]"
 })
 
-// Step 2: Get RDS pricing for equivalent capacity
-const rdsPricing = usePower("aws-cost-optimization", "aws-pricing", "get_pricing", {
+// Step 2: Monitor current database performance
+const databasePerformance = usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+  "namespace": "AWS/EC2",
+  "metric_name": "CPUUtilization",
+  "dimensions": [{"Name": "Tag:Application", "Value": "Database"}],
+  "start_time": "2024-11-01T00:00:00Z",
+  "end_time": "2024-12-01T00:00:00Z",
+  "period": 3600,
+  "statistics": ["Average", "Maximum"]
+})
+
+// Step 3: Get RDS pricing for equivalent capacity
+const rdsPricing = usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing", {
   "service_code": "AmazonRDS",
-  "region": "us-east-1",
+  "region": ["us-east-1"],
   "filters": [
     {"Field": "instanceType", "Value": ["db.r5.large", "db.r5.xlarge"], "Type": "ANY_OF"},
     {"Field": "databaseEngine", "Value": "PostgreSQL", "Type": "EQUALS"},
@@ -181,18 +232,50 @@ const rdsPricing = usePower("aws-cost-optimization", "aws-pricing", "get_pricing
   ]
 })
 
-// Step 3: Compare Aurora pricing
-const auroraPricing = usePower("aws-cost-optimization", "aws-pricing", "get_pricing", {
+// Step 4: Compare Aurora pricing
+const auroraPricing = usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing", {
   "service_code": "AmazonRDS",
-  "region": "us-east-1",
+  "region": ["us-east-1"],
   "filters": [
     {"Field": "instanceType", "Value": ["db.r5.large", "db.r5.xlarge"], "Type": "ANY_OF"},
     {"Field": "databaseEngine", "Value": "Aurora PostgreSQL", "Type": "EQUALS"}
   ]
 })
 
-// Step 4: Generate migration cost-benefit analysis
-const migrationAnalysis = usePower("aws-cost-optimization", "aws-pricing", "generate_cost_report", {
+// Step 5: Monitor database connection and query patterns
+const databaseMetrics = usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
+  "metric_data_queries": [
+    {
+      "id": "connections",
+      "metric_stat": {
+        "metric": {
+          "namespace": "CWAgent",
+          "metric_name": "DatabaseConnections",
+          "dimensions": [{"Name": "InstanceId", "Value": "i-database-instance"}]
+        },
+        "period": 3600,
+        "stat": "Average"
+      }
+    },
+    {
+      "id": "query_time",
+      "metric_stat": {
+        "metric": {
+          "namespace": "CWAgent",
+          "metric_name": "QueryExecutionTime",
+          "dimensions": [{"Name": "InstanceId", "Value": "i-database-instance"}]
+        },
+        "period": 3600,
+        "stat": "Average"
+      }
+    }
+  ],
+  "start_time": "2024-11-01T00:00:00Z",
+  "end_time": "2024-12-01T00:00:00Z"
+})
+
+// Step 6: Generate migration cost-benefit analysis
+const migrationAnalysis = usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "generate_cost_report", {
   "pricing_data": {
     "current_infrastructure": databaseInfrastructure,
     "rds_option": rdsPricing,
@@ -262,7 +345,7 @@ const migrationAnalysis = usePower("aws-cost-optimization", "aws-pricing", "gene
 
 ```javascript
 // Step 1: Analyze current container infrastructure
-const containerInfrastructure = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const containerInfrastructure = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -272,23 +355,66 @@ const containerInfrastructure = usePower("aws-cost-optimization", "aws-billing-c
   "metrics": "[\"UnblendedCost\"]"
 })
 
-// Step 2: Get Fargate pricing for equivalent workloads
-const fargatePricing = usePower("aws-cost-optimization", "aws-pricing", "get_pricing", {
+// Step 2: Monitor container host utilization
+const containerUtilization = usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+  "namespace": "ContainerInsights",
+  "metric_name": "cluster_cpu_utilization",
+  "dimensions": [{"Name": "ClusterName", "Value": "my-cluster"}],
+  "start_time": "2024-11-01T00:00:00Z",
+  "end_time": "2024-12-01T00:00:00Z",
+  "period": 3600,
+  "statistics": ["Average", "Maximum"]
+})
+
+// Step 3: Get Fargate pricing for equivalent workloads
+const fargatePricing = usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing", {
   "service_code": "AmazonECS",
-  "region": "us-east-1",
+  "region": ["us-east-1"],
   "filters": [
     {"Field": "usagetype", "Value": "Fargate", "Type": "CONTAINS"}
   ]
 })
 
-// Step 3: Get EKS managed service pricing
-const eksPricing = usePower("aws-cost-optimization", "aws-pricing", "get_pricing", {
+// Step 4: Get EKS managed service pricing
+const eksPricing = usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing", {
   "service_code": "AmazonEKS",
-  "region": "us-east-1"
+  "region": ["us-east-1"]
 })
 
-// Step 4: Analyze container workload patterns
-const workloadPatterns = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+// Step 5: Monitor container performance metrics
+const containerPerformance = usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
+  "metric_data_queries": [
+    {
+      "id": "cpu_utilization",
+      "metric_stat": {
+        "metric": {
+          "namespace": "ContainerInsights",
+          "metric_name": "pod_cpu_utilization",
+          "dimensions": [{"Name": "ClusterName", "Value": "my-cluster"}]
+        },
+        "period": 3600,
+        "stat": "Average"
+      }
+    },
+    {
+      "id": "memory_utilization",
+      "metric_stat": {
+        "metric": {
+          "namespace": "ContainerInsights",
+          "metric_name": "pod_memory_utilization",
+          "dimensions": [{"Name": "ClusterName", "Value": "my-cluster"}]
+        },
+        "period": 3600,
+        "stat": "Average"
+      }
+    }
+  ],
+  "start_time": "2024-11-01T00:00:00Z",
+  "end_time": "2024-12-01T00:00:00Z"
+})
+
+// Step 6: Analyze container workload patterns
+const workloadPatterns = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session_sql", {
   "query": `
     SELECT 
       hour_of_day,

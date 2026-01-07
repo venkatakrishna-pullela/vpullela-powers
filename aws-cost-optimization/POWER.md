@@ -89,9 +89,16 @@ Comprehensive AWS cost optimization for both business teams and developers. Anal
 "Show me pricing differences between us-east-1 and eu-west-1"
 "Analyze costs for our development environments"
 "Monitor our Free Tier usage to avoid unexpected charges"
+"Show me CPU utilization for rightsizing my EC2 instances"
+"Analyze Lambda execution patterns affecting costs"
+"Find cost-related CloudWatch alarms that are firing"
+"Create cost efficiency metrics for my resources"
 ```
 
 **New to AWS Cost Management?** Follow the onboarding section below for complete setup.
+
+**Need help choosing the right tool?** Use our tool selection guide:
+*Call action "readSteering" with powerName="aws-cost-optimization", steeringFile="tool-selection-guide.md"*
 
 ---
 
@@ -106,6 +113,11 @@ Comprehensive AWS cost optimization for both business teams and developers. Anal
 **Package:** `awslabs.aws-pricing-mcp-server`  
 **License:** Apache-2.0  
 **Purpose:** Real-time pricing intelligence, cost modeling, and infrastructure cost analysis
+
+### awslabs.cloudwatch-mcp-server
+**Package:** `awslabs.cloudwatch-mcp-server`  
+**License:** Apache-2.0  
+**Purpose:** Metrics monitoring, log analysis, dashboard management, and operational insights for cost optimization
 
 ---
 
@@ -148,6 +160,19 @@ The AWS Cost Optimization Power provides these tools across two MCP servers:
 - **storage_lens** - Query S3 Storage Lens data using Athena SQL for storage optimization
 - **session_sql** - Execute SQL queries on cost data for custom analysis and cross-tool joins
 - **bcm_pricing_calc** - Access AWS Pricing Calculator workload estimates and rate preferences
+
+### Operational Monitoring & Insights
+- **list_metrics** - Discover available CloudWatch metrics for cost-related monitoring
+- **get_metric_statistics** - Retrieve metric data for resource utilization and cost correlation analysis
+- **get_metric_data** - Advanced metric queries with math expressions for cost efficiency calculations
+- **describe_alarms** - Monitor existing CloudWatch alarms for cost and performance thresholds
+- **list_dashboards** - Access existing CloudWatch dashboards for cost monitoring
+- **get_dashboard** - Retrieve dashboard configurations for cost optimization insights
+- **describe_log_groups** - Analyze CloudWatch Logs usage and retention for cost optimization
+- **get_log_events** - Query log data for cost-related events and patterns
+- **start_query** - Execute CloudWatch Logs Insights queries for advanced cost analysis
+- **get_query_results** - Retrieve results from CloudWatch Logs Insights cost analysis queries
+- **describe_metric_filters** - Analyze metric filters for cost-related log monitoring
 
 ---
 
@@ -203,7 +228,7 @@ Cost Explorer is enabled by default for most AWS accounts, but verify:
 2. If prompted, click "Enable Cost Explorer"
 3. Wait 24 hours for initial data population
 
-### Step 3: Configure Billing Permissions
+### Step 3: Configure Billing and Monitoring Permissions
 
 Ensure your AWS user/role has the required permissions:
 ```json
@@ -219,7 +244,9 @@ Ensure your AWS user/role has the required permissions:
                 "organizations:ListAccounts",
                 "organizations:DescribeOrganization",
                 "support:*",
-                "cur:*"
+                "cur:*",
+                "cloudwatch:*",
+                "logs:*"
             ],
             "Resource": "*"
         }
@@ -416,11 +443,118 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", 
 // Returns: Custom cost analysis results from session database
 ```
 
+### Operational Monitoring & Cost Correlation
+
+**Discover cost-related metrics:**
+```javascript
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "list_metrics", {
+  "namespace": "AWS/EC2",
+  "metric_name": "CPUUtilization"
+})
+// Returns: Available EC2 CPU metrics for rightsizing analysis
+```
+
+**Analyze resource utilization for cost optimization:**
+```javascript
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+  "namespace": "AWS/EC2",
+  "metric_name": "CPUUtilization",
+  "dimensions": [{"Name": "InstanceId", "Value": "i-1234567890abcdef0"}],
+  "start_time": "2024-11-01T00:00:00Z",
+  "end_time": "2024-12-01T00:00:00Z",
+  "period": 3600,
+  "statistics": ["Average", "Maximum"]
+})
+// Returns: CPU utilization data for rightsizing decisions
+```
+
+**Create cost efficiency calculations:**
+```javascript
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
+  "metric_data_queries": [
+    {
+      "id": "cpu_util",
+      "metric_stat": {
+        "metric": {
+          "namespace": "AWS/EC2",
+          "metric_name": "CPUUtilization",
+          "dimensions": [{"Name": "InstanceId", "Value": "i-1234567890abcdef0"}]
+        },
+        "period": 3600,
+        "stat": "Average"
+      }
+    },
+    {
+      "id": "cost_efficiency",
+      "expression": "cpu_util / 100 * FILL(cpu_util, 0)"
+    }
+  ],
+  "start_time": "2024-11-01T00:00:00Z",
+  "end_time": "2024-12-01T00:00:00Z"
+})
+// Returns: Cost efficiency metrics combining utilization and cost data
+```
+
+**Monitor cost-related alarms:**
+```javascript
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
+  "alarm_name_prefix": "HighCost",
+  "state_value": "ALARM"
+})
+// Returns: Active cost-related alarms requiring attention
+```
+
+**Analyze log-based cost events:**
+```javascript
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "start_query", {
+  "log_group_name": "/aws/lambda/my-function",
+  "start_time": "2024-11-01T00:00:00Z",
+  "end_time": "2024-12-01T00:00:00Z",
+  "query_string": "fields @timestamp, @duration, @billedDuration | filter @duration > 5000 | stats count() by bin(5m)"
+})
+// Returns: Query ID for analyzing Lambda execution patterns affecting costs
+```
+
+---
+
+## Tool Selection & Navigation Guide
+
+**🎯 Not sure which tool to use?** Use our comprehensive tool selection guide:
+
+*Call action "readSteering" with powerName="aws-cost-optimization", steeringFile="tool-selection-guide.md" for complete query-to-tool mapping and workflow guidance.*
+
+The tool selection guide provides:
+- **Query Pattern Mapping** - Match your questions to the right tools
+- **Business vs Developer Workflows** - Tailored guidance for different user types  
+- **Service-Specific Guidance** - Direct links to 20 detailed service optimization guides
+- **Workflow Combinations** - Multi-step analysis patterns
+- **CloudWatch Integration** - Performance-cost correlation analysis
+
 ---
 
 ## Workflows & Guidance
 
 This power includes comprehensive workflow guidance for both business teams and developers, organized around the **AWS Well-Architected Cost Optimization Pillar's 5 design principles**:
+
+### Service-Specific Optimization Guides
+
+For detailed cost optimization guidance on individual AWS services, see our comprehensive service guides:
+
+**High-Priority Services (Start Here):**
+- **EC2** - Instance rightsizing, Reserved Instances, Spot optimization, Auto Scaling
+- **S3** - Storage classes, lifecycle policies, data transfer optimization
+- **RDS** - Database sizing, Reserved Instances, Multi-AZ cost management
+- **Lambda** - Memory optimization, execution duration, concurrency management
+
+**Additional Services Available:**
+- **Compute:** ECS, Batch, Fargate optimization strategies
+- **Storage:** EBS, EFS, FSx cost management
+- **Database:** DynamoDB, Redshift, Aurora optimization
+- **AI/ML:** Bedrock, SageMaker, Comprehend cost strategies
+- **Networking:** CloudFront, VPC, Route53, Load Balancer optimization
+- **Analytics:** Athena, Glue, EMR, Kinesis cost management
+
+*Call action "readSteering" with powerName="aws-cost-optimization", steeringFile="services/README.md" to see all available service guides, then read specific service files like "services/ec2-cost-optimization.md" for detailed guidance.*
 
 ### For Business & FinOps Teams
 
@@ -517,6 +651,25 @@ This power includes comprehensive workflow guidance for both business teams and 
 - Check AWS credentials configuration
 - Restart Kiro to reconnect MCP servers
 - Review MCP server logs for specific errors
+
+### CloudWatch Access Issues
+**Problem**: CloudWatch metrics or logs not accessible
+**Symptoms**:
+- "Access Denied" errors when querying metrics
+- Empty results from metric queries
+- Log group access failures
+
+**Solutions**:
+1. **Verify CloudWatch permissions**:
+   ```bash
+   aws cloudwatch list-metrics --namespace AWS/EC2 --max-records 1
+   ```
+2. **Check log group permissions**:
+   ```bash
+   aws logs describe-log-groups --max-items 1
+   ```
+3. **Ensure proper IAM policies** include CloudWatch and Logs permissions
+4. **Verify region consistency** between queries and resources
 
 ### "ExpiredTokenException" or MCP Credential Issues
 **Problem**: MCP servers show expired token errors even when AWS CLI works fine.

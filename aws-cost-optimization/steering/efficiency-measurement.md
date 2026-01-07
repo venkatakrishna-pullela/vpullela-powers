@@ -1,5 +1,7 @@
 # Efficiency Measurement & Business Value Alignment
 
+> **Navigation:** [← Tool Selection Guide](./tool-selection-guide.md) | [Power Overview](../POWER.md)
+
 This steering file provides comprehensive guidance for measuring overall efficiency aligned with the AWS Well-Architected Cost Optimization Pillar's third design principle: **Measure Overall Efficiency**.
 
 ## Core Principle
@@ -165,12 +167,45 @@ const efficiencyForecast = usePower("aws-cost-optimization", "aws-billing-cost-m
 
 ```javascript
 // Step 1: Get comprehensive utilization analysis
-const utilizationAnalysis = usePower("aws-cost-optimization", "aws-billing-cost-management", "compute_optimizer", {
+const utilizationAnalysis = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute_optimizer", {
   "operation": "get_ec2_instance_recommendations"
 })
 
-// Step 2: Calculate utilization efficiency metrics
-const utilizationEfficiency = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+// Step 2: Get real-time utilization metrics from CloudWatch
+const realtimeUtilization = usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+  "namespace": "AWS/EC2",
+  "metric_name": "CPUUtilization",
+  "start_time": "2024-11-01T00:00:00Z",
+  "end_time": "2024-12-01T00:00:00Z",
+  "period": 3600,
+  "statistics": ["Average", "Maximum"]
+})
+
+// Step 3: Create efficiency correlation metrics
+const efficiencyCorrelation = usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
+  "metric_data_queries": [
+    {
+      "id": "cpu_utilization",
+      "metric_stat": {
+        "metric": {
+          "namespace": "AWS/EC2",
+          "metric_name": "CPUUtilization"
+        },
+        "period": 3600,
+        "stat": "Average"
+      }
+    },
+    {
+      "id": "cost_efficiency",
+      "expression": "cpu_utilization / 100 * cost_per_hour"
+    }
+  ],
+  "start_time": "2024-11-01T00:00:00Z",
+  "end_time": "2024-12-01T00:00:00Z"
+})
+
+// Step 4: Calculate utilization efficiency metrics
+const utilizationEfficiency = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session_sql", {
   "query": `
     WITH utilization_data AS (
       SELECT 
@@ -197,8 +232,14 @@ const utilizationEfficiency = usePower("aws-cost-optimization", "aws-billing-cos
   `
 })
 
-// Step 3: Track utilization improvement over time
-const utilizationTrends = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+// Step 5: Set up efficiency monitoring alarms
+const efficiencyAlarms = usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
+  "alarm_name_prefix": "Efficiency-",
+  "state_value": "ALARM"
+})
+
+// Step 6: Track utilization improvement over time
+const utilizationTrends = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-09-01",
   "end_date": "2024-12-01",
@@ -208,8 +249,8 @@ const utilizationTrends = usePower("aws-cost-optimization", "aws-billing-cost-ma
   "metrics": "[\"UsageQuantity\"]"
 })
 
-// Step 4: Measure optimization impact
-const optimizationImpact = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_optimization", {
+// Step 7: Measure optimization impact
+const optimizationImpact = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_optimization", {
   "operation": "list_recommendations",
   "filters": "{\"resourceTypes\": [\"Ec2Instance\"], \"actionTypes\": [\"Rightsize\"]}"
 })
@@ -365,8 +406,49 @@ const automationROI = usePower("aws-cost-optimization", "aws-billing-cost-manage
 ### Example Performance-Cost Analysis:
 
 ```javascript
-// Step 1: Analyze performance impact of cost optimizations
-const performanceCostCorrelation = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+// Step 1: Get performance metrics from CloudWatch
+const performanceMetrics = usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
+  "metric_data_queries": [
+    {
+      "id": "response_time",
+      "metric_stat": {
+        "metric": {
+          "namespace": "AWS/ApplicationELB",
+          "metric_name": "TargetResponseTime"
+        },
+        "period": 3600,
+        "stat": "Average"
+      }
+    },
+    {
+      "id": "throughput",
+      "metric_stat": {
+        "metric": {
+          "namespace": "AWS/ApplicationELB", 
+          "metric_name": "RequestCount"
+        },
+        "period": 3600,
+        "stat": "Sum"
+      }
+    },
+    {
+      "id": "error_rate",
+      "metric_stat": {
+        "metric": {
+          "namespace": "AWS/ApplicationELB",
+          "metric_name": "HTTPCode_Target_5XX_Count"
+        },
+        "period": 3600,
+        "stat": "Sum"
+      }
+    }
+  ],
+  "start_time": "2024-11-01T00:00:00Z",
+  "end_time": "2024-12-01T00:00:00Z"
+})
+
+// Step 2: Analyze performance impact of cost optimizations
+const performanceCostCorrelation = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session_sql", {
   "query": `
     WITH performance_metrics AS (
       SELECT 
@@ -395,14 +477,25 @@ const performanceCostCorrelation = usePower("aws-cost-optimization", "aws-billin
   `
 })
 
-// Step 2: Get performance-aware optimization recommendations
-const performanceOptimization = usePower("aws-cost-optimization", "aws-billing-cost-management", "compute_optimizer", {
+// Step 3: Monitor performance efficiency alarms
+const performanceAlarms = usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
+  "alarm_name_prefix": "Performance-Efficiency",
+  "state_value": "ALARM"
+})
+
+// Step 4: Get performance-aware optimization recommendations
+const performanceOptimization = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute_optimizer", {
   "operation": "get_ec2_instance_recommendations",
   "filters": "{\"finding\": [\"Optimized\", \"Overprovisioned\"]}"
 })
 
-// Step 3: Analyze performance efficiency trends
-const performanceEfficiencyTrends = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+// Step 5: Create performance efficiency dashboard
+const performanceDashboard = usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_dashboard", {
+  "dashboard_name": "Performance-Cost-Efficiency"
+})
+
+// Step 6: Analyze performance efficiency trends
+const performanceEfficiencyTrends = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session_sql", {
   "query": `
     SELECT 
       month,
@@ -418,8 +511,8 @@ const performanceEfficiencyTrends = usePower("aws-cost-optimization", "aws-billi
   `
 })
 
-// Step 4: Calculate balanced optimization opportunities
-const balancedOptimization = usePower("aws-cost-optimization", "aws-billing-cost-management", "rec_details", {
+// Step 7: Calculate balanced optimization opportunities
+const balancedOptimization = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "rec_details", {
   "recommendation_id": "sample-recommendation-id" // Use actual recommendation ID
 })
 ```

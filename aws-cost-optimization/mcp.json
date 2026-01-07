@@ -40,6 +40,30 @@
         "analyze_terraform_project",
         "generate_cost_report"
       ]
+    },
+    "awslabs.cloudwatch-mcp-server": {
+      "command": "uvx",
+      "args": ["awslabs.cloudwatch-mcp-server@latest"],
+      "env": {
+        "AWS_REGION": "us-east-1",
+        "AWS_PROFILE": "default",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "list_metrics",
+        "get_metric_statistics",
+        "get_metric_data",
+        "describe_alarms",
+        "list_dashboards",
+        "get_dashboard",
+        "describe_log_groups",
+        "describe_log_streams",
+        "get_log_events",
+        "start_query",
+        "get_query_results",
+        "describe_metric_filters"
+      ]
     }
   }
 }
