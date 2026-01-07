@@ -1,14 +1,43 @@
 ---
 name: "aws-cost-optimization"
 displayName: "AWS Cost Optimization"
-description: "Comprehensive AWS cost optimization for both business teams and developers. Implement cloud financial management, analyze costs, get optimization recommendations, and enable cost-aware development workflows. Aligned with AWS Well-Architected Cost Optimization Pillar."
+description: "AWS cost optimization tools for business teams and developers. Analyze spending, get optimization recommendations, and build cost-aware applications with AWS Well-Architected best practices."
 keywords: ["finops", "cost-optimization", "aws-billing", "cost-analysis", "budget-management", "rightsizing", "cost-intelligence", "savings-plans", "reserved-instances", "cost-anomaly", "spend-analysis", "cost-forecasting", "resource-optimization", "well-architected", "cloud-financial-management", "consumption-model", "efficiency-measurement", "expenditure-analysis", "developer-cost-optimization", "pre-deployment-analysis", "architecture-cost-modeling", "development-environment-optimization", "cost-aware-development"]
 author: "Venkat Pullela"
+license: "Apache-2.0"
 ---
 
 # AWS Cost Optimization Power
 
-Comprehensive AWS cost optimization for both business teams and developers. Analyze costs, get optimization recommendations, manage budgets, implement financial governance, and enable cost-aware development workflows. Aligned with the AWS Well-Architected Cost Optimization Pillar.
+AWS cost optimization tools for business teams and developers. Analyze spending, get optimization recommendations, and build cost-aware applications with AWS Well-Architected best practices.
+
+## Introduction
+
+Kiro Powers extend your AI development environment with specialized capabilities for specific domains and workflows. This AWS Cost Optimization Power brings together multiple AWS cost management services into a unified, intelligent interface that helps you understand, optimize, and control your cloud spending.
+
+Whether you're a FinOps professional managing organizational budgets, a developer building cost-aware applications, or an architect designing efficient infrastructure, this power provides the tools and guidance you need. Instead of switching between multiple AWS consoles and learning different APIs, you can use natural language to query costs, analyze spending patterns, get optimization recommendations, and model infrastructure costs - all within your development workflow.
+
+The power integrates three AWS Labs MCP servers to provide:
+- **Real-time cost analysis** from AWS Cost Explorer and Billing APIs
+- **Pricing intelligence** for architecture decisions and cost modeling  
+- **Operational insights** from CloudWatch for performance-cost correlation
+
+Built around the AWS Well-Architected Cost Optimization Pillar's five design principles, this power helps you implement cloud financial management, adopt consumption models, measure efficiency, leverage managed services, and analyze expenditure attribution - turning cost optimization from a reactive process into a proactive development practice.
+
+## Table of Contents
+
+- [What Can You Do?](#what-can-you-do) - Core capabilities for business and development teams
+- [Quick Start](#quick-start) - Ready-to-use examples to get started immediately
+- [Available MCP Servers](#available-mcp-servers) - Technical overview of integrated services
+- [Available Tools](#available-tools) - Complete tool reference by category
+- [Onboarding](#onboarding) - Setup instructions and prerequisites
+- [Tool Usage Examples](#tool-usage-examples) - Detailed code examples for each tool
+- [Tool Selection & Navigation Guide](#tool-selection--navigation-guide) - Query-to-tool mapping
+- [Workflows & Guidance](#workflows--guidance) - Best practices and service-specific guides
+- [Best Practices](#best-practices) - Do's and don'ts for effective cost optimization
+- [Legal and Compliance Information](#legal-and-compliance-information) - License and privacy details
+- [Troubleshooting](#troubleshooting) - Common issues and solutions
+- [Learn More](#learn-more) - Additional resources and documentation
 
 ## What Can You Do?
 
@@ -41,12 +70,12 @@ Comprehensive AWS cost optimization for both business teams and developers. Anal
 ### For Developers & Engineering Teams
 
 #### 4. Pre-Deployment Cost Analysis
-- Cost modeling for CDK and Terraform projects before deployment
+- Cost modeling for CDK and Terraform projects before deployment (estimates for planning purposes)
 - Architecture cost comparison and optimization recommendations
 - Service pricing analysis across regions and configurations
-- Generate detailed cost estimates with assumptions and recommendations
+- Generate detailed cost estimates with assumptions and recommendations (for informational use)
 
-**Example:** "Estimate costs for this CDK stack before I deploy it"
+**Example:** "Provide cost estimates for this CDK stack before I deploy it"
 
 #### 5. Development Environment Optimization
 - Development and testing environment cost analysis
@@ -83,7 +112,7 @@ Comprehensive AWS cost optimization for both business teams and developers. Anal
 **For Developers & Engineering Teams** - Try these development-focused commands:
 
 ```
-"Estimate costs for this CDK stack before deployment"
+"Provide cost estimates for this CDK stack before deployment"
 "Compare Lambda vs ECS costs for my microservice"
 "What's the cheapest way to build this serverless API?"
 "Show me pricing differences between us-east-1 and eu-west-1"
@@ -95,7 +124,7 @@ Comprehensive AWS cost optimization for both business teams and developers. Anal
 "Create cost efficiency metrics for my resources"
 ```
 
-**New to AWS Cost Management?** Follow the onboarding section below for complete setup.
+**New to AWS Cost Management?** Follow the onboarding section below for setup guidance.
 
 **Need help choosing the right tool?** Use our tool selection guide:
 *Call action "readSteering" with powerName="aws-cost-optimization", steeringFile="tool-selection-guide.md"*
@@ -107,7 +136,7 @@ Comprehensive AWS cost optimization for both business teams and developers. Anal
 ### awslabs.billing-cost-management-mcp-server  
 **Package:** `awslabs.billing-cost-management-mcp-server`  
 **License:** Apache-2.0  
-**Purpose:** Comprehensive cost analysis, budget monitoring (read-only), and optimization recommendations
+**Purpose:** Cost analysis, budget monitoring (read-only), and optimization recommendations
 
 ### awslabs.aws-pricing-mcp-server
 **Package:** `awslabs.aws-pricing-mcp-server`  
@@ -153,7 +182,7 @@ The AWS Cost Optimization Power provides these tools across two MCP servers:
 ### Infrastructure Cost Analysis
 - **analyze_cdk_project** - Analyze CDK projects for AWS services and cost implications
 - **analyze_terraform_project** - Analyze Terraform projects for AWS services and cost implications
-- **generate_cost_report** - Generate comprehensive cost analysis reports with recommendations
+- **generate_cost_report** - Generate detailed cost analysis reports with recommendations
 - **get_bedrock_patterns** - Architecture patterns and cost considerations for Amazon Bedrock
 
 ### Advanced Analytics
@@ -321,7 +350,7 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_optimizat
 usePower("aws-cost-optimization", "aws-billing-cost-management", "rec_details", {
   "recommendation_id": "arn:aws:cost-optimization-hub:us-east-1:123456789012:recommendation/12345"
 })
-// Returns: Comprehensive analysis combining multiple AWS services data
+// Returns: Detailed analysis combining multiple AWS services data
 ```
 
 **Get EC2 rightsizing recommendations:**
@@ -415,7 +444,7 @@ usePower("aws-cost-optimization", "aws-pricing", "analyze_cdk_project", {
 // Returns: AWS services used in CDK project with cost implications
 ```
 
-**Generate comprehensive cost report:**
+**Generate detailed cost report:**
 ```javascript
 usePower("aws-cost-optimization", "aws-pricing", "generate_cost_report", {
   "pricing_data": { /* pricing data from get_pricing */ },
@@ -519,9 +548,9 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "start_query"
 
 ## Tool Selection & Navigation Guide
 
-**🎯 Not sure which tool to use?** Use our comprehensive tool selection guide:
+**🎯 Not sure which tool to use?** Use our tool selection guide:
 
-*Call action "readSteering" with powerName="aws-cost-optimization", steeringFile="tool-selection-guide.md" for complete query-to-tool mapping and workflow guidance.*
+*Call action "readSteering" with powerName="aws-cost-optimization", steeringFile="tool-selection-guide.md" for query-to-tool mapping and workflow guidance.*
 
 The tool selection guide provides:
 - **Query Pattern Mapping** - Match your questions to the right tools
@@ -534,11 +563,11 @@ The tool selection guide provides:
 
 ## Workflows & Guidance
 
-This power includes comprehensive workflow guidance for both business teams and developers, organized around the **AWS Well-Architected Cost Optimization Pillar's 5 design principles**:
+This power includes workflow guidance for both business teams and developers, organized around the **AWS Well-Architected Cost Optimization Pillar's 5 design principles**:
 
 ### Service-Specific Optimization Guides
 
-For detailed cost optimization guidance on individual AWS services, see our comprehensive service guides:
+For detailed cost optimization guidance on individual AWS services, see our service guides:
 
 **High-Priority Services (Start Here):**
 - **EC2** - Instance rightsizing, Reserved Instances, Spot optimization, Auto Scaling
@@ -554,7 +583,7 @@ For detailed cost optimization guidance on individual AWS services, see our comp
 - **Networking:** CloudFront, VPC, Route53, Load Balancer optimization
 - **Analytics:** Athena, Glue, EMR, Kinesis cost management
 
-*Call action "readSteering" with powerName="aws-cost-optimization", steeringFile="services/README.md" to see all available service guides, then read specific service files like "services/ec2-cost-optimization.md" for detailed guidance.*
+*Call action "readSteering" with powerName="aws-cost-optimization", steeringFile="services/README.md" to see available service guides, then read specific service files like "services/ec2-cost-optimization.md" for detailed guidance.*
 
 ### For Business & FinOps Teams
 
@@ -611,7 +640,7 @@ For detailed cost optimization guidance on individual AWS services, see our comp
 - **Start with high-level analysis** (service-level costs) before drilling down to resources
 - **Use appropriate time ranges** - daily for recent analysis, monthly for trends
 - **Leverage auto-approval patterns** - most read operations are automatically approved
-- **Combine multiple tools** for comprehensive analysis (cost + optimization + pricing)
+- **Combine multiple tools** for thorough analysis (cost + optimization + pricing)
 - **Set up budget monitoring** with multiple alert thresholds (50%, 80%, 100%)
 - **Monitor anomalies regularly** - set up automated anomaly detection
 - **Use tags consistently** for accurate cost allocation and chargeback
@@ -630,6 +659,37 @@ For detailed cost optimization guidance on individual AWS services, see our comp
 - **Ignore optimization recommendations** - they represent real savings opportunities
 - **Use only On-Demand pricing** - consider Reserved Instances and Savings Plans
 - **Assume you can create/modify budgets** - this power provides read-only budget monitoring
+
+---
+
+## Legal and Compliance Information
+
+### License
+This power is released under the **Apache-2.0 License**. See the LICENSE file for full terms.
+
+### Authentication and Data Processing
+This power requires AWS credentials to function and processes AWS cost and usage data on your behalf. By using this power:
+- You acknowledge that AWS cost and usage data will be processed according to the [AWS Privacy Notice](https://aws.amazon.com/privacy/)
+- No cost or usage data is stored by this power - all data is retrieved in real-time from AWS APIs
+- All interactions with AWS services are logged by AWS CloudTrail (if enabled in your account)
+
+### Telemetry
+- This power does not collect additional telemetry beyond standard Kiro IDE telemetry
+- This power respects the general Kiro IDE telemetry opt-out signal
+
+### Disclaimers
+- **Cost Estimates**: Cost estimates and forecasts are provided for informational purposes only and should not be considered guarantees
+- **Optimization Recommendations**: Recommendations are suggestions based on AWS best practices and should be evaluated before implementation
+- **Service Availability**: This power depends on AWS service availability and may be affected by AWS service disruptions
+- **Results Accuracy**: While we strive for accuracy, users should verify all cost and optimization data independently
+
+### Third-Party Dependencies
+This power incorporates the following AWS Labs MCP servers under Apache-2.0 license:
+- `awslabs.billing-cost-management-mcp-server` (Apache-2.0)
+- `awslabs.aws-pricing-mcp-server` (Apache-2.0)  
+- `awslabs.cloudwatch-mcp-server` (Apache-2.0)
+
+All dependencies are permissively licensed and compatible with open source redistribution.
 
 ---
 

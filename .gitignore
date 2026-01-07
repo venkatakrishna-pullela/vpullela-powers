@@ -55,3 +55,7 @@ node_modules/
 # Temporary folders
 tmp/
 temp/
+
+# Allow LICENSE files
+!LICENSE
+!*/LICENSE
