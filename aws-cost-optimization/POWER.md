@@ -73,7 +73,7 @@ Built around the AWS Well-Architected Cost Optimization Pillar's five design pri
 - Cost modeling for CDK and Terraform projects before deployment (estimates for planning purposes)
 - Architecture cost comparison and optimization recommendations
 - Service pricing analysis across regions and configurations
-- Generate detailed cost estimates with assumptions and recommendations (for informational use)
+- Generate detailed cost estimates with assumptions and recommendations using current AWS pricing and your existing usage patterns (for informational use only)
 
 **Example:** "Provide cost estimates for this CDK stack before I deploy it"
 
@@ -136,17 +136,20 @@ Built around the AWS Well-Architected Cost Optimization Pillar's five design pri
 ### awslabs.billing-cost-management-mcp-server  
 **Package:** `awslabs.billing-cost-management-mcp-server`  
 **License:** Apache-2.0  
-**Purpose:** Cost analysis, budget monitoring (read-only), and optimization recommendations
+**Purpose:** Cost analysis, budget monitoring (read-only), and optimization recommendations  
+**Documentation:** https://awslabs.github.io/mcp/servers/billing-cost-management-mcp-server/
 
 ### awslabs.aws-pricing-mcp-server
 **Package:** `awslabs.aws-pricing-mcp-server`  
 **License:** Apache-2.0  
-**Purpose:** Real-time pricing intelligence, cost modeling, and infrastructure cost analysis
+**Purpose:** Real-time pricing intelligence, cost modeling, and infrastructure cost analysis  
+**Documentation:** https://awslabs.github.io/mcp/servers/aws-pricing-mcp-server/
 
 ### awslabs.cloudwatch-mcp-server
 **Package:** `awslabs.cloudwatch-mcp-server`  
 **License:** Apache-2.0  
-**Purpose:** Metrics monitoring, log analysis, dashboard management, and operational insights for cost optimization
+**Purpose:** Metrics monitoring, log analysis, dashboard management, and operational insights for cost optimization  
+**Documentation:** https://awslabs.github.io/mcp/servers/cloudwatch-mcp-server/
 
 ---
 
@@ -669,17 +672,18 @@ This power is released under the **Apache-2.0 License**. See the LICENSE file fo
 
 ### Authentication and Data Processing
 This power requires AWS credentials to function and processes AWS cost and usage data on your behalf. By using this power:
-- You acknowledge that AWS cost and usage data will be processed according to the [AWS Privacy Notice](https://aws.amazon.com/privacy/)
+- Any personal data is processed as described in the [AWS Privacy Notice](https://aws.amazon.com/privacy/).
 - No cost or usage data is stored by this power - all data is retrieved in real-time from AWS APIs
 - All interactions with AWS services are logged by AWS CloudTrail (if enabled in your account)
 
 ### Telemetry
-- This power does not collect additional telemetry beyond standard Kiro IDE telemetry
+- This power itself does not implement any client-side telemetry collection beyond what the Kiro IDE already collects
+- Third-party MCP servers included in this power are governed by their respective implementations and policies. For detailed information about telemetry practices of individual MCP servers, please refer to their respective documentation linked in the [Available MCP Servers](#available-mcp-servers) section
 - This power respects the general Kiro IDE telemetry opt-out signal
 
 ### Disclaimers
 - **Cost Estimates**: Cost estimates and forecasts are provided for informational purposes only and should not be considered guarantees
-- **Optimization Recommendations**: Recommendations are suggestions based on AWS best practices and should be evaluated before implementation
+- **Optimization Recommendations**: Recommendations are suggestions based on AWS best practices and should be evaluated by your technical team before implementation
 - **Service Availability**: This power depends on AWS service availability and may be affected by AWS service disruptions
 - **Results Accuracy**: While we strive for accuracy, users should verify all cost and optimization data independently
 
@@ -688,8 +692,6 @@ This power incorporates the following AWS Labs MCP servers under Apache-2.0 lice
 - `awslabs.billing-cost-management-mcp-server` (Apache-2.0)
 - `awslabs.aws-pricing-mcp-server` (Apache-2.0)  
 - `awslabs.cloudwatch-mcp-server` (Apache-2.0)
-
-All dependencies are permissively licensed and compatible with open source redistribution.
 
 ---
 
