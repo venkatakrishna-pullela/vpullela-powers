@@ -676,11 +676,6 @@ This power requires AWS credentials to function and processes AWS cost and usage
 - No cost or usage data is stored by this power - all data is retrieved in real-time from AWS APIs
 - All interactions with AWS services are logged by AWS CloudTrail (if enabled in your account)
 
-### Telemetry
-- This power itself does not implement any client-side telemetry collection beyond what the Kiro IDE already collects
-- Third-party MCP servers included in this power are governed by their respective implementations and policies. For detailed information about telemetry practices of individual MCP servers, please refer to their respective documentation linked in the [Available MCP Servers](#available-mcp-servers) section
-- This power respects the general Kiro IDE telemetry opt-out signal
-
 ### Disclaimers
 - **Cost Estimates**: Cost estimates and forecasts are provided for informational purposes only and should not be considered guarantees
 - **Optimization Recommendations**: Recommendations are suggestions based on AWS best practices and should be evaluated by your technical team before implementation
@@ -692,6 +687,8 @@ This power incorporates the following AWS Labs MCP servers under Apache-2.0 lice
 - `awslabs.billing-cost-management-mcp-server` (Apache-2.0)
 - `awslabs.aws-pricing-mcp-server` (Apache-2.0)  
 - `awslabs.cloudwatch-mcp-server` (Apache-2.0)
+
+For detailed information about the individual MCP servers, please refer to their respective documentation linked in the [Available MCP Servers](#available-mcp-servers) section.
 
 ---
 
