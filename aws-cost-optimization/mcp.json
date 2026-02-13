@@ -60,7 +60,6 @@
         "describe_log_groups",
         "describe_log_streams",
         "get_log_events",
-        "start_query",
         "get_query_results",
         "describe_metric_filters"
       ]
