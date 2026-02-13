@@ -8,7 +8,7 @@
 
 **Extending Kiro's AI development environment with specialized AWS capabilities**
 
-[Explore Powers](#available-powers) • [Documentation](https://kiro.dev/powers/) • [Get Started](#quick-links)
+[Explore Powers](#-available-powers) • [Documentation](https://kiro.dev/powers/) • [Get Started](#-quick-links)
 
 </div>
 
