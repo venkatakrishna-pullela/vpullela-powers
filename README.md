@@ -2,7 +2,7 @@
 
 > Intelligent AWS cost management integrated into your development workflow
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](aws-cost-optimization/LICENSE)
 [![Kiro Power](https://img.shields.io/badge/Kiro-Power-purple.svg)](https://kiro.dev/powers/)
 
 ## Overview
@@ -131,7 +131,7 @@ This power is maintained by Venkat Pullela. For issues, suggestions, or contribu
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License 2.0 - see the [LICENSE](aws-cost-optimization/LICENSE) file for details.
 
 ## Acknowledgments
 
