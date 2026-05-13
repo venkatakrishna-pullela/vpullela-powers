@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Terraform Cost Check on Save",
+  "description": "When a Terraform file is saved, automatically review it for cost optimization issues against the aws-cost-optimization steering standards",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.tf"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Review the edited Terraform file for AWS cost optimization issues. Check for: oversized or previous-generation instance types (prefer current-gen like m7g, c7g, r7g), gp2 EBS volumes instead of gp3, db.t instance families for production RDS, missing deletion_protection on stateful resources, missing Schedule tags on EC2/RDS resources, over-provisioned IOPS, missing enable_performance_insights on RDS, hardcoded regions that miss cheaper alternatives, and any other issues covered in .kiro/steering/developer-cost-optimization.md."
+  }
+}

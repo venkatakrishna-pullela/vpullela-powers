@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "name": "CDK Cost Check on Save",
+  "description": "When a CDK source file is saved, automatically review it for cost optimization issues against the aws-cost-optimization steering standards",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "lib/**/*.ts",
+      "stacks/**/*.ts",
+      "lib/**/*.py",
+      "stacks/**/*.py",
+      "lib/**/*.java",
+      "stacks/**/*.java"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Review the edited CDK file for AWS cost optimization issues. Check for: oversized or previous-generation instance types (prefer Graviton/current-gen), EbsDeviceVolumeType.GP2 instead of GP3, DatabaseInstanceEngine or instance classes using db.t families for production, missing removalPolicy on stateful constructs, missing Schedule tags on EC2/RDS resources, Lambda functions with over-provisioned memory, missing performanceInsightEnabled on RDS, and any other issues covered in .kiro/steering/developer-cost-optimization.md. Only flag issues if this appears to be AWS infrastructure code."
+  }
+}

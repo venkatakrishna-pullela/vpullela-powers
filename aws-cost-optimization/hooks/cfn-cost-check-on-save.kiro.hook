@@ -1,0 +1,24 @@
+{
+  "enabled": true,
+  "name": "CloudFormation Cost Check on Save",
+  "description": "When a CloudFormation template is saved, automatically review it against the cost-optimization steering standards and flag any violations",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "templates/**/*.yaml",
+      "templates/**/*.yml",
+      "cloudformation/**/*.yaml",
+      "cloudformation/**/*.yml",
+      "lib/**/*.yaml",
+      "lib/**/*.yml",
+      "stacks/**/*.yaml",
+      "stacks/**/*.yml"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Review the edited CloudFormation template against the cost-optimization steering standards. Flag any violations: gp2 storage, db.t instance families, missing DeletionPolicy or UpdateReplacePolicy on stateful resources, missing Schedule tags on RDS/EC2, string-quoted Number defaults, MinValue/MaxValue on Number parameters, missing Performance Insights on RDS, Fn::Join with empty delimiter instead of !Sub, or any other issues captured in .kiro/steering/developer-cost-optimization.md."
+  }
+}
+

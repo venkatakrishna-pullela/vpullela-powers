@@ -125,6 +125,45 @@ Your AWS user/role needs permissions for:
 - CloudWatch for operational metrics
 - Organizations (optional, for multi-account analysis)
 
+## Hooks
+
+This power includes agent hooks that automatically review your infrastructure code for cost issues whenever you save a file. No manual prompting needed.
+
+### Available Hooks
+
+| Hook | Trigger | File Patterns |
+|------|---------|---------------|
+| **CloudFormation Cost Check on Save** | File edited | `templates/**/*.yaml`, `cloudformation/**/*.yaml`, `lib/**/*.yaml`, `stacks/**/*.yaml` (and `.yml`) |
+| **Terraform Cost Check on Save** | File edited | `**/*.tf` |
+| **CDK Cost Check on Save** | File edited | `lib/**/*.ts`, `stacks/**/*.ts` (and `.py`, `.java`) |
+
+### What They Check
+
+**CloudFormation** — gp2 storage, `db.t` instance families, missing `DeletionPolicy`/`UpdateReplacePolicy` on stateful resources, missing `Schedule` tags on RDS/EC2, and other issues from the cost optimization steering guide.
+
+**Terraform** — previous-generation instance types, gp2 EBS volumes instead of gp3, missing `deletion_protection`, over-provisioned IOPS, missing `enable_performance_insights` on RDS.
+
+**CDK** — `EbsDeviceVolumeType.GP2` instead of GP3, `db.t` instance families in production, missing `removalPolicy` on stateful constructs, over-provisioned Lambda memory, missing `performanceInsightEnabled` on RDS.
+
+### Installation
+
+Copy the hooks to your workspace's `.kiro/hooks/` directory to activate them:
+
+```bash
+cp aws-cost-optimization/hooks/*.kiro.hook .kiro/hooks/
+```
+
+### Customizing File Patterns
+
+The CDK hook targets `lib/` and `stacks/` — the conventional CDK directory names. If your project uses a different structure (e.g. `src/` or `infrastructure/`), update the patterns in the hook file to match:
+
+```json
+"patterns": [
+  "src/**/*.ts",
+  "infrastructure/**/*.ts"
+]
+```
+
 ## Contributing
 
 This power is maintained by Venkat Pullela. For issues, suggestions, or contributions, please open an issue in the repository.
