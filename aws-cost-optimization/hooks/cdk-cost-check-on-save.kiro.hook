@@ -16,6 +16,6 @@
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Review the edited CDK file for AWS cost optimization issues. Check for: oversized or previous-generation instance types (prefer Graviton/current-gen), EbsDeviceVolumeType.GP2 instead of GP3, DatabaseInstanceEngine or instance classes using db.t families for production, missing removalPolicy on stateful constructs, missing Schedule tags on EC2/RDS resources, Lambda functions with over-provisioned memory, missing performanceInsightEnabled on RDS, and any other issues covered in .kiro/steering/developer-cost-optimization.md. Only flag issues if this appears to be AWS infrastructure code."
+    "prompt": "Review the edited CDK file for AWS cost optimization issues. Only flag issues if this appears to be AWS infrastructure code; if it is not, stay silent. Check for: oversized or previous-generation instance types (prefer Graviton/current-gen), EbsDeviceVolumeType.GP2 instead of GP3, DatabaseInstanceEngine or instance classes using db.t families for production, missing removalPolicy on stateful constructs, missing Schedule tags on EC2/RDS resources, Lambda functions with over-provisioned memory, and missing performanceInsightEnabled on RDS. For the full set of standards, load the power's guidance by calling the kiro_powers tool with action=\"readSteering\", powerName=\"aws-cost-optimization\", steeringFile=\"developer-cost-optimization.md\"."
   }
 }

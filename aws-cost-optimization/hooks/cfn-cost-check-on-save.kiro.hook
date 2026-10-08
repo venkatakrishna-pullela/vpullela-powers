@@ -18,7 +18,7 @@
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Review the edited CloudFormation template against the cost-optimization steering standards. Flag any violations: gp2 storage, db.t instance families, missing DeletionPolicy or UpdateReplacePolicy on stateful resources, missing Schedule tags on RDS/EC2, string-quoted Number defaults, MinValue/MaxValue on Number parameters, missing Performance Insights on RDS, Fn::Join with empty delimiter instead of !Sub, or any other issues captured in .kiro/steering/developer-cost-optimization.md."
+    "prompt": "Review the edited CloudFormation template against the cost-optimization standards. Only flag issues if this is actually a CloudFormation template; if it is not, stay silent. Flag any violations: gp2 storage, db.t instance families, missing DeletionPolicy or UpdateReplacePolicy on stateful resources, missing Schedule tags on RDS/EC2, string-quoted Number defaults, missing MinValue/MaxValue on Number parameters, missing Performance Insights on RDS, and Fn::Join with an empty delimiter instead of !Sub. For the full set of standards, load the power's guidance by calling the kiro_powers tool with action=\"readSteering\", powerName=\"aws-cost-optimization\", steeringFile=\"developer-cost-optimization.md\"."
   }
 }
 
