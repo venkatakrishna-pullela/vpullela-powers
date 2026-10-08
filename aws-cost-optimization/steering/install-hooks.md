@@ -21,8 +21,9 @@ there is no location where a power-level hook could be discovered even if it
 were copied. The hook definitions below are therefore templates that the agent
 writes into the user's workspace on request.
 
-The copies under this power's `hooks/` directory are kept for reference only.
-**The definitions in this file are authoritative.**
+**The definitions in this file are the only ones that ship.** This power's
+`hooks/` directory holds no hook files for that reason — see
+`hooks/README.md`.
 
 ## Agent instructions
 
