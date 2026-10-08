@@ -147,15 +147,15 @@ This power includes agent hooks that automatically review your infrastructure co
 
 ### Installation
 
-Copy the hooks to your workspace's `.kiro/hooks/` directory to activate them:
+Hooks are resolved per workspace from `.kiro/hooks/`, so installing the power does not activate them. Ask the agent to install them:
 
-```bash
-cp aws-cost-optimization/hooks/*.kiro.hook .kiro/hooks/
-```
+> "Install the aws-cost-optimization cost check hooks in this workspace"
+
+The agent reads the definitions from the power's `steering/install-hooks.md` guide, installs only the hooks matching the infrastructure-as-code present in your workspace, and adapts the file patterns to your layout.
 
 ### Customizing File Patterns
 
-The CDK hook targets `lib/` and `stacks/` — the conventional CDK directory names. If your project uses a different structure (e.g. `src/` or `infrastructure/`), update the patterns in the hook file to match:
+The CDK hook defaults to `lib/` and `stacks/` — the conventional CDK directory names. If your project uses a different structure (e.g. `src/` or `infrastructure/`), the agent adapts the patterns during installation. You can also edit them afterwards in `.kiro/hooks/cdk-cost-check-on-save.kiro.hook`:
 
 ```json
 "patterns": [
