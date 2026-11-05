@@ -36,27 +36,27 @@
 
 **Get FSx for NetApp ONTAP costs:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon FSx\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon FSx\"]}}"
 })
 ```
 
 **Analyze FSx usage patterns by resource:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"RESOURCE_ID\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon FSx\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon FSx\"]}}"
 })
 ```
 
@@ -74,14 +74,13 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 
 **Monitor FSx storage utilization:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/FSx",
   "metric_name": "StorageUtilization",
-  "dimensions": [{"Name": "FileSystemId", "Value": "fs-1234567890abcdef0"}],
+  "dimensions": [{"name": "FileSystemId", "value": "fs-1234567890abcdef0"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -107,14 +106,13 @@ FSx for NetApp ONTAP provides two storage tiers with an 82.48% cost differential
 **Implementation Steps:**
 1. **Analyze access patterns:**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+   usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
      "namespace": "AWS/FSx",
      "metric_name": "DataReadBytes",
-     "dimensions": [{"Name": "FileSystemId", "Value": "fs-1234567890abcdef0"}],
+     "dimensions": [{"name": "FileSystemId", "value": "fs-1234567890abcdef0"}],
      "start_time": "2024-11-01T00:00:00Z",
      "end_time": "2024-12-01T00:00:00Z",
-     "period": 86400,
-     "statistics": ["Sum"]
+     "statistic": "Sum"
    })
    ```
 
@@ -127,29 +125,31 @@ FSx for NetApp ONTAP provides two storage tiers with an 82.48% cost differential
 3. **Monitor tiering effectiveness:**
    ```javascript
    usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-     "metric_data_queries": [
+     "queries": [
        {
          "id": "ssd_usage",
          "metric_stat": {
-           "metric": {
-             "namespace": "AWS/FSx",
-             "metric_name": "StorageUtilization",
-             "dimensions": [{"Name": "FileSystemId", "Value": "fs-1234567890abcdef0"}, {"Name": "StorageTier", "Value": "SSD"}]
-           },
-           "period": 3600,
-           "stat": "Average"
+           "namespace": "AWS/FSx",
+           "metric_name": "StorageUtilization",
+           "dimensions": [
+             {"name": "FileSystemId", "value": "fs-1234567890abcdef0"},
+             {"name": "StorageTier", "value": "SSD"}
+           ],
+           "statistic": "Average",
+           "period": 3600
          }
        },
        {
          "id": "capacity_pool_usage",
          "metric_stat": {
-           "metric": {
-             "namespace": "AWS/FSx",
-             "metric_name": "StorageUtilization",
-             "dimensions": [{"Name": "FileSystemId", "Value": "fs-1234567890abcdef0"}, {"Name": "StorageTier", "Value": "CapacityPool"}]
-           },
-           "period": 3600,
-           "stat": "Average"
+           "namespace": "AWS/FSx",
+           "metric_name": "StorageUtilization",
+           "dimensions": [
+             {"name": "FileSystemId", "value": "fs-1234567890abcdef0"},
+             {"name": "StorageTier", "value": "CapacityPool"}
+           ],
+           "statistic": "Average",
+           "period": 3600
          }
        }
      ],
@@ -177,14 +177,13 @@ FSx for NetApp ONTAP provides two storage tiers with an 82.48% cost differential
 1. **Enable storage efficiency features** at SVM root volume or individual volume level
 2. **Monitor storage savings:**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+   usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
      "namespace": "AWS/FSx",
      "metric_name": "StorageEfficiency",
-     "dimensions": [{"Name": "FileSystemId", "Value": "fs-1234567890abcdef0"}],
+     "dimensions": [{"name": "FileSystemId", "value": "fs-1234567890abcdef0"}],
      "start_time": "2024-11-01T00:00:00Z",
      "end_time": "2024-12-01T00:00:00Z",
-     "period": 3600,
-     "statistics": ["Average"]
+     "statistic": "Average"
    })
    ```
 
@@ -222,17 +221,16 @@ Second-generation FSx for NetApp ONTAP allows scaling down SSD storage when over
 **Implementation Steps:**
 1. **Monitor actual SSD usage:**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+   usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
      "namespace": "AWS/FSx",
      "metric_name": "StorageUtilization",
      "dimensions": [
-       {"Name": "FileSystemId", "Value": "fs-1234567890abcdef0"},
-       {"Name": "StorageTier", "Value": "SSD"}
+       {"name": "FileSystemId", "value": "fs-1234567890abcdef0"},
+       {"name": "StorageTier", "value": "SSD"}
      ],
      "start_time": "2024-11-01T00:00:00Z",
      "end_time": "2024-12-01T00:00:00Z",
-     "period": 3600,
-     "statistics": ["Average", "Maximum"]
+     "statistic": "Average"
    })
    ```
 
@@ -251,20 +249,18 @@ Monitor IOPS usage (default 3 IOPS per GB of SSD) and throughput utilization to 
 **Implementation Examples:**
 ```javascript
 // Monitor cost-related alarms
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "FSxCost",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "FSxCost"
 })
 
 // Analyze throughput utilization
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/FSx",
   "metric_name": "ThroughputUtilization",
-  "dimensions": [{"Name": "FileSystemId", "Value": "fs-1234567890abcdef0"}],
+  "dimensions": [{"name": "FileSystemId", "value": "fs-1234567890abcdef0"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -281,17 +277,18 @@ Default tiering policy only moves snapshot blocks, leaving active file system da
 ```javascript
 // Check current tiering policy and storage distribution
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "ssd_percentage",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/FSx",
-          "metric_name": "StorageUtilization",
-          "dimensions": [{"Name": "FileSystemId", "Value": "fs-1234567890abcdef0"}, {"Name": "StorageTier", "Value": "SSD"}]
-        },
-        "period": 3600,
-        "stat": "Average"
+        "namespace": "AWS/FSx",
+        "metric_name": "StorageUtilization",
+        "dimensions": [
+          {"name": "FileSystemId", "value": "fs-1234567890abcdef0"},
+          {"name": "StorageTier", "value": "SSD"}
+        ],
+        "statistic": "Average",
+        "period": 3600
       }
     }
   ],
@@ -314,14 +311,13 @@ Missing out on up to 65% storage capacity reduction by not enabling compression,
 **Detection:**
 ```javascript
 // Monitor storage efficiency ratios
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/FSx",
   "metric_name": "StorageEfficiency",
-  "dimensions": [{"Name": "FileSystemId", "Value": "fs-1234567890abcdef0"}],
+  "dimensions": [{"name": "FileSystemId", "value": "fs-1234567890abcdef0"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 86400,
-  "statistics": ["Average"]
+  "statistic": "Average"
 })
 ```
 
@@ -339,17 +335,16 @@ Provisioning more SSD storage than needed, especially when most data could be in
 **Detection:**
 ```javascript
 // Analyze SSD utilization trends
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/FSx",
   "metric_name": "StorageUtilization",
   "dimensions": [
-    {"Name": "FileSystemId", "Value": "fs-1234567890abcdef0"},
-    {"Name": "StorageTier", "Value": "SSD"}
+    {"name": "FileSystemId", "value": "fs-1234567890abcdef0"},
+    {"name": "StorageTier", "value": "SSD"}
   ],
   "start_time": "2024-10-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 86400,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -371,25 +366,24 @@ Large enterprise with 50TB file share system, mostly document storage with mixed
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-10-01",
   "end_date": "2024-11-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"RESOURCE_ID\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon FSx\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon FSx\"]}}"
 })
 
 // Step 2: Analyze access patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/FSx",
   "metric_name": "DataReadBytes",
-  "dimensions": [{"Name": "FileSystemId", "Value": "fs-1234567890abcdef0"}],
+  "dimensions": [{"name": "FileSystemId", "value": "fs-1234567890abcdef0"}],
   "start_time": "2024-10-01T00:00:00Z",
   "end_time": "2024-11-01T00:00:00Z",
-  "period": 86400,
-  "statistics": ["Sum"]
+  "statistic": "Sum"
 })
 
 // Step 3: Compare pricing options
@@ -423,14 +417,13 @@ Database backup storage with 100TB of backup data, accessed infrequently for com
 **Analysis Approach:**
 ```javascript
 // Analyze backup access patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/FSx",
   "metric_name": "DataReadOperations",
-  "dimensions": [{"Name": "FileSystemId", "Value": "fs-backup123456789"}],
+  "dimensions": [{"name": "FileSystemId", "value": "fs-backup123456789"}],
   "start_time": "2024-09-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 86400,
-  "statistics": ["Sum"]
+  "statistic": "Sum"
 })
 ```
 
@@ -466,14 +459,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Commands:**
 ```javascript
 // Analyze cross-service costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon FSx\", \"Amazon EC2\", \"AWS Backup\", \"AWS DataSync\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon FSx\", \"Amazon EC2\", \"AWS Backup\", \"AWS DataSync\"]}}"
 })
 ```
 
@@ -503,27 +496,23 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Budget Alerts:**
 ```javascript
 // Monitor FSx-specific budget performance
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon FSx\"]}}"
-})
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
 ```
 
 **Anomaly Detection:**
 ```javascript
 // Set up anomaly monitoring for FSx
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon FSx\"]}}"
+  "end_date": "2024-12-01"
 })
 ```
 
 **Operational Alerts:**
 ```javascript
 // Monitor FSx performance and utilization alarms
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "FSx",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "FSx"
 })
 ```
 
@@ -536,15 +525,7 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_ala
 - Performance vs cost correlation metrics
 
 **Implementation:**
-```javascript
-// Get existing FSx dashboards
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "list_dashboards", {})
-
-// Retrieve specific dashboard configuration
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_dashboard", {
-  "dashboard_name": "FSxCostOptimization"
-})
-```
+The CloudWatch MCP server can't read or create dashboards. Build the dashboard in the CloudWatch console or with infrastructure as code, and use `get_metric_data` to check each metric before you chart it. For organization-wide cost dashboards, see [Cloud Intelligence Dashboards](https://catalog.workshops.aws/awscff/en-US/visualizations/3-cid).
 
 ---
 

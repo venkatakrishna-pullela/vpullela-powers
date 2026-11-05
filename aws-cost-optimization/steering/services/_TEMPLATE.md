@@ -1,6 +1,6 @@
 # {SERVICE_NAME} Cost Optimization Guide
 
-> **Navigation:** [← Tool Selection Guide](../tool-selection-guide.md) | [All Service Guides](./README.md) | [Power Overview](../POWER.md)
+> **Navigation:** [← Tool Selection Guide](../tool-selection-guide.md) | [All Service Guides](./README.md) | [Power Overview](../../POWER.md)
 
 ## Service Overview
 
@@ -34,27 +34,27 @@
 
 **Get {SERVICE_NAME} costs by dimension:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"{AWS_SERVICE_CODE}\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"{AWS_SERVICE_CODE}\"]}}"
 })
 ```
 
 **Analyze {SERVICE_NAME} usage patterns:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"{AWS_SERVICE_CODE}\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"{AWS_SERVICE_CODE}\"]}}"
 })
 ```
 
@@ -71,37 +71,31 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 
 **Monitor resource utilization for cost correlation:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/{SERVICE_NAMESPACE}",
   "metric_name": "{UTILIZATION_METRIC}",
-  "dimensions": [{"Name": "{DIMENSION_NAME}", "Value": "{RESOURCE_ID}"}],
+  "dimensions": [{"name": "{DIMENSION_NAME}", "value": "{RESOURCE_ID}"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
 **Create cost efficiency metrics:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "utilization",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/{SERVICE_NAMESPACE}",
-          "metric_name": "{UTILIZATION_METRIC}",
-          "dimensions": [{"Name": "{DIMENSION_NAME}", "Value": "{RESOURCE_ID}"}]
-        },
-        "period": 3600,
-        "stat": "Average"
+        "namespace": "AWS/{SERVICE_NAMESPACE}",
+        "metric_name": "{UTILIZATION_METRIC}",
+        "dimensions": [{"name": "{DIMENSION_NAME}", "value": "{RESOURCE_ID}"}],
+        "statistic": "Average",
+        "period": 3600
       }
     },
-    {
-      "id": "efficiency",
-      "expression": "utilization / 100"
-    }
+    {"id": "efficiency", "expression": "utilization / 100"}
   ],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z"
@@ -122,7 +116,7 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Implementation Steps:**
 1. **Analyze current utilization:**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute_optimizer", {
+   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
      "operation": "get_{service}_recommendations"
    })
    ```
@@ -147,21 +141,21 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Analysis Commands:**
 ```javascript
 // Check current Reserved Instance utilization
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
   "operation": "get_reservation_utilization",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"{AWS_SERVICE_CODE}\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"{AWS_SERVICE_CODE}\"]}}"
 })
 
 // Check Savings Plans coverage
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "sp_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "sp-performance", {
   "operation": "get_savings_plans_coverage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"{AWS_SERVICE_CODE}\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"{AWS_SERVICE_CODE}\"]}}"
 })
 ```
 
@@ -199,19 +193,17 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Implementation Examples:**
 ```javascript
 // Monitor cost-related alarms
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "{SERVICE_NAME}Cost",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "{SERVICE_NAME}Cost"
 })
 
 // Analyze utilization patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/{SERVICE_NAMESPACE}",
   "metric_name": "{KEY_UTILIZATION_METRIC}",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -229,10 +221,9 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Detection:**
 ```javascript
 // Tool command to identify this issue
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"{AWS_SERVICE_CODE}\"]}}"
+  "end_date": "2024-12-01"
 })
 ```
 
@@ -275,12 +266,12 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   // Specific parameters for this scenario
 })
 
 // Step 2: Get optimization recommendations
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_optimization", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-optimization", {
   // Targeted filters for this use case
 })
 
@@ -323,14 +314,14 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 **Analysis Commands:**
 ```javascript
 // Analyze cross-service costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"{AWS_SERVICE_CODE}\", \"{RELATED_SERVICE_1}\", \"{RELATED_SERVICE_2}\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"{AWS_SERVICE_CODE}\", \"{RELATED_SERVICE_1}\", \"{RELATED_SERVICE_2}\"]}}"
 })
 ```
 
@@ -360,27 +351,23 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Budget Alerts:**
 ```javascript
 // Monitor service-specific budget performance
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"{AWS_SERVICE_CODE}\"]}}"
-})
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
 ```
 
 **Anomaly Detection:**
 ```javascript
 // Set up anomaly monitoring for this service
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"{AWS_SERVICE_CODE}\"]}}"
+  "end_date": "2024-12-01"
 })
 ```
 
 **Operational Alerts:**
 ```javascript
 // Monitor cost-related operational alarms
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "{SERVICE_NAME}",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "{SERVICE_NAME}"
 })
 ```
 
@@ -393,15 +380,7 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_ala
 - Resource utilization efficiency metrics
 
 **Implementation:**
-```javascript
-// Get existing dashboards for reference
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "list_dashboards", {})
-
-// Retrieve specific dashboard configuration
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_dashboard", {
-  "dashboard_name": "{SERVICE_NAME}CostOptimization"
-})
-```
+The CloudWatch MCP server can't read or create dashboards. Build the dashboard in the CloudWatch console or with infrastructure as code, and use `get_metric_data` to check each metric before you chart it. For organization-wide cost dashboards, see [Cloud Intelligence Dashboards](https://catalog.workshops.aws/awscff/en-US/visualizations/3-cid).
 
 **Custom Metrics Creation:**
 - CloudWatch dashboard setup

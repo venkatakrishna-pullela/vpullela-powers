@@ -44,7 +44,7 @@
 
 **Get RI coverage and utilization:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
   "operation": "get_reservation_coverage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -55,7 +55,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 
 **Analyze RI utilization patterns:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
   "operation": "get_reservation_utilization",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -66,41 +66,39 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 
 **Get RI purchase recommendations:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri_recommendations", {
-  "service": "AmazonEC2",
-  "lookback_period": "SIXTY_DAYS",
-  "term_in_years": "ONE_YEAR",
-  "payment_option": "PARTIAL_UPFRONT"
+// Cost Optimization Hub returns RI purchase recommendations. Term and payment
+// option follow the commitment preferences set in Cost Optimization Hub.
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-optimization", {
+  "operation": "list_recommendations",
+  "filters": "{\"actionTypes\": [\"PurchaseReservedInstances\"], \"resourceTypes\": [\"Ec2ReservedInstances\"]}"
 })
 ```
 
 **Monitor RI cost savings:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"PURCHASE_OPTION\"}]",
   "metrics": "[\"AmortizedCost\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
 })
 ```
 
 **Create RI efficiency tracking:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "ri_coverage",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/Billing",
-          "metric_name": "EstimatedCharges",
-          "dimensions": [{"Name": "ServiceName", "Value": "AmazonEC2"}]
-        },
-        "period": 86400,
-        "stat": "Maximum"
+        "namespace": "AWS/Billing",
+        "metric_name": "EstimatedCharges",
+        "dimensions": [{"name": "ServiceName", "value": "AmazonEC2"}],
+        "statistic": "Maximum",
+        "period": 86400
       }
     },
     {
@@ -217,7 +215,7 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Expiration Management:**
 ```javascript
 // Monitor RI expiration dates 60-90 days in advance
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
   "operation": "get_reservation_utilization",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -259,7 +257,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Detection:**
 ```javascript
 // Monitor RI utilization rates below 80%
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
   "operation": "get_reservation_utilization",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -313,7 +311,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current RI coverage across all services
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
   "operation": "get_reservation_coverage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -321,11 +319,10 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]"
 })
 
-// Step 2: Get recommendations for each service
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri_recommendations", {
-  "service": "AmazonRDS",
-  "lookback_period": "SIXTY_DAYS",
-  "term_in_years": "THREE_YEARS"
+// Step 2: Get RI purchase recommendations for each service (RDS shown here)
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-optimization", {
+  "operation": "list_recommendations",
+  "filters": "{\"actionTypes\": [\"PurchaseReservedInstances\"], \"resourceTypes\": [\"RdsReservedInstances\"]}"
 })
 ```
 
@@ -351,7 +348,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Approach:**
 ```javascript
 // Analyze usage growth patterns and variability
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-08-01",
   "end_date": "2024-12-01",
@@ -393,7 +390,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze RI impact across integrated services
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -427,33 +424,33 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 ### Recommended Alerts
 
 **RI Utilization Monitoring:**
+Create a reservation utilization budget in AWS Budgets, for example one that alerts below 80 percent utilization. The power reads budgets but can't create them. To check existing budgets and current utilization:
 ```javascript
-// Set up alerts for low RI utilization
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "budget_type": "RI_UTILIZATION",
-  "time_unit": "MONTHLY",
-  "budget_limit": {"amount": "80", "unit": "PERCENT"}
+// List existing budgets, including reservation utilization and coverage budgets
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
+
+// Check current RI utilization
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
+  "operation": "get_reservation_utilization",
+  "start_date": "2024-11-01",
+  "end_date": "2024-12-01",
+  "granularity": "MONTHLY"
 })
 ```
 
 **RI Coverage Tracking:**
+Create a reservation coverage budget in AWS Budgets, for example one that alerts below 70 percent coverage. To check current coverage:
 ```javascript
-// Monitor RI coverage rates
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "budget_type": "RI_COVERAGE",
-  "time_unit": "MONTHLY",
-  "budget_limit": {"amount": "70", "unit": "PERCENT"}
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
+  "operation": "get_reservation_coverage",
+  "start_date": "2024-11-01",
+  "end_date": "2024-12-01",
+  "granularity": "MONTHLY"
 })
 ```
 
 **Expiration Alerts:**
-```javascript
-// Track RI expiration dates
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "RI-Expiration",
-  "state_value": "ALARM"
-})
-```
+Turn on [reservation expiration alerts](https://docs.aws.amazon.com/cost-management/latest/userguide/ce-ris.html) in Cost Explorer. They email up to 10 recipients 7, 30, or 60 days before a reservation expires, and optionally on the day it expires. CloudWatch alarms don't track reservation expiration, and the power can't configure these alerts.
 
 ### Cost Explorer RI Reports
 

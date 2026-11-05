@@ -42,27 +42,27 @@
 
 **Get Graviton vs x86 cost comparison:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"INSTANCE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE\", \"Values\": [\"m6g.large\", \"m5.large\", \"c6g.large\", \"c5.large\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE\", \"Values\": [\"m6g.large\", \"m5.large\", \"c6g.large\", \"c5.large\"]}}"
 })
 ```
 
 **Analyze Graviton adoption patterns:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"TAG\", \"Key\": \"ProcessorType\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
 })
 ```
 
@@ -80,31 +80,28 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 
 **Monitor Graviton performance metrics:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/EC2",
   "metric_name": "CPUUtilization",
-  "dimensions": [{"Name": "InstanceId", "Value": "i-1234567890abcdef0"}],
+  "dimensions": [{"name": "InstanceId", "value": "i-1234567890abcdef0"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
 **Create Graviton cost efficiency metrics:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "graviton_cost",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/Billing",
-          "metric_name": "EstimatedCharges",
-          "dimensions": [{"Name": "ServiceName", "Value": "AmazonEC2"}]
-        },
-        "period": 86400,
-        "stat": "Maximum"
+        "namespace": "AWS/Billing",
+        "metric_name": "EstimatedCharges",
+        "dimensions": [{"name": "ServiceName", "value": "AmazonEC2"}],
+        "statistic": "Maximum",
+        "period": 86400
       }
     },
     {
@@ -274,13 +271,12 @@ Requests: $0.20 per 1M requests (same for both)
 **Detection:**
 ```javascript
 // Monitor application error rates post-migration
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/ApplicationELB",
   "metric_name": "HTTPCode_Target_5XX_Count",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum"]
+  "statistic": "Sum"
 })
 ```
 
@@ -330,18 +326,18 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current EC2 costs by instance type
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"INSTANCE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
 })
 
 // Step 2: Get Graviton migration recommendations
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute_optimizer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
   "operation": "get_ec2_instance_recommendations"
 })
 ```
@@ -368,14 +364,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Approach:**
 ```javascript
 // Analyze EMR costs and performance patterns
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic MapReduce\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic MapReduce\"]}}"
 })
 ```
 
@@ -411,14 +407,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze Graviton adoption across services
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE\", \"Values\": [\"m6g.large\", \"c6g.large\", \"r6g.large\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE\", \"Values\": [\"m6g.large\", \"c6g.large\", \"r6g.large\"]}}"
 })
 ```
 
@@ -448,31 +444,27 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Migration Progress Alerts:**
 ```javascript
 // Monitor Graviton adoption rates
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "Graviton-Adoption",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "Graviton-Adoption"
 })
 ```
 
 **Performance Monitoring:**
 ```javascript
 // Track application performance post-migration
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/ApplicationELB",
   "metric_name": "TargetResponseTime",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average"]
+  "statistic": "Average"
 })
 ```
 
 **Cost Optimization Tracking:**
 ```javascript
 // Monitor cost savings achievement
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "filters": "{\"Tags\": {\"ProcessorType\": [\"graviton2\", \"graviton3\", \"graviton4\"]}}"
-})
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
 ```
 
 ### AWS Graviton Specialist Support
@@ -524,7 +516,7 @@ Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of th
 ### AWS Documentation
 - [AWS Graviton Processor](https://aws.amazon.com/ec2/graviton/)
 - [Graviton Getting Started Guide](https://github.com/aws/aws-graviton-getting-started)
-- [Graviton Performance Runbook](https://github.com/aws/aws-graviton-getting-started/blob/main/perfrunbook/graviton_perfrunbook.md)
+- [Graviton Performance Runbook](https://github.com/aws/aws-graviton-getting-started/blob/main/perfrunbook/README.md)
 
 ### Tools & Migration Support
 - [Porting Advisor for Graviton](https://github.com/aws/porting-advisor-for-graviton)

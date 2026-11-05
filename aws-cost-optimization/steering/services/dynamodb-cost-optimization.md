@@ -37,40 +37,39 @@
 
 **Get DynamoDB costs by API operation:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"API_OPERATION\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}}"
 })
 ```
 
 **Analyze DynamoDB usage patterns:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}}"
 })
 ```
 
 **Monitor DynamoDB performance metrics:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/DynamoDB",
   "metric_name": "ConsumedReadCapacityUnits",
-  "dimensions": [{"Name": "TableName", "Value": "my-table"}],
+  "dimensions": [{"name": "TableName", "value": "my-table"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum", "Average"]
+  "statistic": "Sum"
 })
 ```
 
@@ -122,14 +121,13 @@ Optimize Provisioned mode with auto-scaling to handle traffic variations while m
 **Implementation:**
 ```javascript
 // Monitor auto-scaling effectiveness
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/DynamoDB",
   "metric_name": "ProvisionedReadCapacityUnits",
-  "dimensions": [{"Name": "TableName", "Value": "my-table"}],
+  "dimensions": [{"name": "TableName", "value": "my-table"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -160,29 +158,25 @@ Optimize read and write operations to minimize capacity unit consumption.
 ```javascript
 // Monitor read/write patterns
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "read_efficiency",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/DynamoDB",
-          "metric_name": "ConsumedReadCapacityUnits",
-          "dimensions": [{"Name": "TableName", "Value": "my-table"}]
-        },
-        "period": 3600,
-        "stat": "Sum"
+        "namespace": "AWS/DynamoDB",
+        "metric_name": "ConsumedReadCapacityUnits",
+        "dimensions": [{"name": "TableName", "value": "my-table"}],
+        "statistic": "Sum",
+        "period": 3600
       }
     },
     {
       "id": "write_efficiency",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/DynamoDB",
-          "metric_name": "ConsumedWriteCapacityUnits",
-          "dimensions": [{"Name": "TableName", "Value": "my-table"}]
-        },
-        "period": 3600,
-        "stat": "Sum"
+        "namespace": "AWS/DynamoDB",
+        "metric_name": "ConsumedWriteCapacityUnits",
+        "dimensions": [{"name": "TableName", "value": "my-table"}],
+        "statistic": "Sum",
+        "period": 3600
       }
     }
   ],
@@ -209,14 +203,14 @@ Use appropriate table classes based on access patterns to optimize storage costs
 **Implementation:**
 ```javascript
 // Analyze storage costs by table class
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"TimedStorage-ByteHrs\"]}}]}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"TimedStorage-ByteHrs\"]}}]}"
 })
 ```
 
@@ -240,14 +234,14 @@ Optimize Global Tables configuration to balance availability requirements with c
 **Implementation:**
 ```javascript
 // Monitor Global Tables costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"REGION\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}}"
 })
 ```
 
@@ -270,14 +264,14 @@ Balance data protection requirements with backup costs through strategic backup 
 **Cost Analysis:**
 ```javascript
 // Monitor backup costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"API_OPERATION\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"API_OPERATION\", \"Values\": [\"BackupStorage\", \"RestoreTableFromBackup\"]}}]}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"API_OPERATION\", \"Values\": [\"BackupStorage\", \"RestoreTableFromBackup\"]}}]}"
 })
 ```
 
@@ -293,14 +287,13 @@ Using On-Demand pricing for predictable, steady workloads results in 70% higher 
 **Detection:**
 ```javascript
 // Analyze traffic consistency
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/DynamoDB",
   "metric_name": "ConsumedReadCapacityUnits",
-  "dimensions": [{"Name": "TableName", "Value": "my-table"}],
+  "dimensions": [{"name": "TableName", "value": "my-table"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 86400,
-  "statistics": ["Average", "Maximum", "Minimum"]
+  "statistic": "Average"
 })
 ```
 
@@ -318,7 +311,7 @@ Provisioning more capacity than needed due to poor traffic analysis or fear of t
 ```javascript
 // Check capacity utilization
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "utilization",
       "expression": "consumed / provisioned * 100",
@@ -327,23 +320,19 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
     {
       "id": "consumed",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/DynamoDB",
-          "metric_name": "ConsumedReadCapacityUnits"
-        },
-        "period": 3600,
-        "stat": "Average"
+        "namespace": "AWS/DynamoDB",
+        "metric_name": "ConsumedReadCapacityUnits",
+        "statistic": "Average",
+        "period": 3600
       }
     },
     {
       "id": "provisioned",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/DynamoDB",
-          "metric_name": "ProvisionedReadCapacityUnits"
-        },
-        "period": 3600,
-        "stat": "Average"
+        "namespace": "AWS/DynamoDB",
+        "metric_name": "ProvisionedReadCapacityUnits",
+        "statistic": "Average",
+        "period": 3600
       }
     }
   ],

@@ -79,7 +79,7 @@ The AWS Cost Optimization Power transforms how teams manage cloud spending by br
 
 ## Documentation
 
-Full documentation is available in the [POWER.md](aws-cost-optimization/POWER.md) file, including:
+Full documentation is available in the [POWER.md](POWER.md) file, including:
 
 - Detailed tool reference and usage examples
 - Onboarding and setup instructions
@@ -113,12 +113,12 @@ Full documentation is available in the [POWER.md](aws-cost-optimization/POWER.md
 
 ### AWS Permissions
 
-Your AWS user/role needs permissions for:
-- Cost Explorer (`ce:*`)
-- Budgets (`budgets:*`)
-- Pricing (`pricing:*`)
-- CloudWatch (`cloudwatch:*`, `logs:*`)
-- Organizations (for consolidated billing)
+The power only needs read access. Give its AWS user or role read-only permissions for:
+- Cost Explorer, AWS Budgets, Cost Optimization Hub, AWS Compute Optimizer, Savings Plans, and Free Tier
+- The AWS Price List API (`pricing:*`, which is read-only)
+- CloudWatch metrics and alarms, and CloudWatch Logs (including Logs Insights queries)
+
+The [read-only IAM policy in POWER.md](POWER.md#step-3-configure-billing-and-monitoring-permissions) lists the exact actions. Use a member account to analyze one account, or the management account for consolidated billing data across an organization.
 
 ### AWS Services
 
@@ -128,23 +128,23 @@ Your AWS user/role needs permissions for:
 
 ## Hooks
 
-This power includes agent hooks that automatically review your infrastructure code for cost issues whenever you save a file. No manual prompting needed.
+This power includes agent hooks that automatically review your infrastructure code for cost issues whenever a matching file is saved. No manual prompting needed.
 
 ### Available Hooks
 
-| Hook | Trigger | File Patterns |
+| Hook | Trigger | Default files matched |
 |------|---------|---------------|
-| **CloudFormation Cost Check on Save** | File edited | `templates/**/*.yaml`, `cloudformation/**/*.yaml`, `lib/**/*.yaml`, `stacks/**/*.yaml` (and `.yml`) |
-| **Terraform Cost Check on Save** | File edited | `**/*.tf` |
-| **CDK Cost Check on Save** | File edited | `lib/**/*.ts`, `stacks/**/*.ts` (and `.py`, `.java`) |
+| **CloudFormation Cost Check on Save** | `PostFileSave` | `.yaml` and `.yml` files under `templates/`, `cloudformation/`, `lib/`, or `stacks/` |
+| **Terraform Cost Check on Save** | `PostFileSave` | Any `.tf` file |
+| **CDK Cost Check on Save** | `PostFileSave` | `.ts`, `.py`, and `.java` files under `lib/` or `stacks/` |
 
 ### What They Check
 
 **CloudFormation** — gp2 storage, `db.t` instance families, missing `DeletionPolicy`/`UpdateReplacePolicy` on stateful resources, missing `Schedule` tags on RDS/EC2, and other issues from the cost optimization steering guide.
 
-**Terraform** — previous-generation instance types, gp2 EBS volumes instead of gp3, missing `deletion_protection`, over-provisioned IOPS, missing `enable_performance_insights` on RDS.
+**Terraform** — previous-generation instance types, gp2 EBS volumes instead of gp3, missing `deletion_protection`, over-provisioned IOPS, missing `performance_insights_enabled` on RDS.
 
-**CDK** — `EbsDeviceVolumeType.GP2` instead of GP3, `db.t` instance families in production, missing `removalPolicy` on stateful constructs, over-provisioned Lambda memory, missing `performanceInsightEnabled` on RDS.
+**CDK** — `EbsDeviceVolumeType.GP2` instead of GP3, `db.t` instance families in production, missing `removalPolicy` on stateful constructs, over-provisioned Lambda memory, missing `enablePerformanceInsights` on RDS.
 
 ### Installation
 
@@ -152,17 +152,16 @@ Hooks are resolved per workspace from `.kiro/hooks/`, so installing the power do
 
 > "Install the aws-cost-optimization cost check hooks in this workspace"
 
-The agent reads the definitions from the power's `steering/install-hooks.md` guide, installs only the hooks matching the infrastructure-as-code present in your workspace, and adapts the file patterns to your layout.
+The agent reads the definitions from the power's `steering/install-hooks.md` guide, installs only the hooks matching the infrastructure-as-code present in your workspace, and adapts each hook's `matcher` to your layout. Each hook is a v1 hook file in `.kiro/hooks/`, the format Kiro IDE 1.0 and Kiro CLI V3 load. Start a new session after installing so the hooks load.
+
+If you installed the hooks before this format change, your workspace may still have `.kiro/hooks/*-cost-check-on-save.kiro.hook` files, which Kiro IDE 1.0 shows as legacy hooks. Delete them after installing the new ones so each review runs once.
 
 ### Customizing File Patterns
 
-The CDK hook defaults to `lib/` and `stacks/` — the conventional CDK directory names. If your project uses a different structure (e.g. `src/` or `infrastructure/`), the agent adapts the patterns during installation. You can also edit them afterwards in `.kiro/hooks/cdk-cost-check-on-save.kiro.hook`:
+The CDK hook defaults to `lib/` and `stacks/` — the conventional CDK directory names. If your project uses a different structure (e.g. `src/` or `infrastructure/`), the agent adapts the matcher during installation. You can also edit the `matcher` regular expression afterwards in `.kiro/hooks/cdk-cost-check-on-save.json`:
 
 ```json
-"patterns": [
-  "src/**/*.ts",
-  "infrastructure/**/*.ts"
-]
+"matcher": "(^|/)(src|infrastructure)/.+\\.ts$"
 ```
 
 ## Contributing
@@ -176,9 +175,9 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 ## Acknowledgments
 
 Built with AWS Labs MCP servers:
-- [billing-cost-management-mcp-server](https://awslabs.github.io/mcp/servers/billing-cost-management-mcp-server/)
-- [aws-pricing-mcp-server](https://awslabs.github.io/mcp/servers/aws-pricing-mcp-server/)
-- [cloudwatch-mcp-server](https://awslabs.github.io/mcp/servers/cloudwatch-mcp-server/)
+- [billing-cost-management-mcp-server](https://awslabs.github.io/mcp/servers/billing-cost-management-mcp-server)
+- [aws-pricing-mcp-server](https://awslabs.github.io/mcp/servers/aws-pricing-mcp-server)
+- [cloudwatch-mcp-server](https://awslabs.github.io/mcp/servers/cloudwatch-mcp-server)
 
 ## Learn More
 

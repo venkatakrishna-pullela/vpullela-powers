@@ -36,14 +36,14 @@
 
 **Get EC2 AMD instance costs:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"INSTANCE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
 })
 ```
 
@@ -62,14 +62,13 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 
 **Monitor EC2 utilization for rightsizing:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/EC2",
   "metric_name": "CPUUtilization",
-  "dimensions": [{"Name": "InstanceId", "Value": "i-1234567890abcdef0"}],
+  "dimensions": [{"name": "InstanceId", "value": "i-1234567890abcdef0"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -134,7 +133,7 @@ Migrate from Intel to AMD instances for immediate 10% cost savings with same or 
 **Implementation Steps:**
 1. **Identify migration candidates:**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute_optimizer", {
+   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
      "operation": "get_ec2_instance_recommendations"
    })
    ```
@@ -180,14 +179,14 @@ Migrate from Intel to AMD instances for immediate 10% cost savings with same or 
 **Cost Impact Analysis:**
 ```javascript
 // Analyze current generation distribution
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"INSTANCE_TYPE_FAMILY\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE\", \"Values\": [\"m6a.large\", \"m7a.large\", \"c6a.large\", \"c7a.large\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE\", \"Values\": [\"m6a.large\", \"m7a.large\", \"c6a.large\", \"c7a.large\"]}}"
 })
 ```
 
@@ -223,12 +222,12 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Implementation:**
 ```javascript
 // Analyze RI utilization for AMD instances
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
   "operation": "get_reservation_utilization",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "filters": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE_FAMILY\", \"Values\": [\"m7a\", \"c7a\", \"r7a\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE_FAMILY\", \"Values\": [\"m7a\", \"c7a\", \"r7a\"]}}"
 })
 ```
 
@@ -240,21 +239,19 @@ Monitor AMD instance performance to ensure optimization doesn't impact applicati
 **Implementation Examples:**
 ```javascript
 // Monitor AMD instance performance
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/EC2",
   "metric_name": "CPUUtilization",
-  "dimensions": [{"Name": "InstanceType", "Value": "m7a.large"}],
+  "dimensions": [{"name": "InstanceType", "value": "m7a.large"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 
 // Set up cost anomaly detection for AMD instances
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
-  "filters": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE_FAMILY\", \"Values\": [\"m7a\", \"c7a\", \"r7a\"]}}"
+  "end_date": "2024-12-01"
 })
 ```
 
@@ -336,14 +333,14 @@ Using older AMD generations (1st/2nd Gen) instead of latest 4th Gen, missing 50%
 **Detection:**
 ```javascript
 // Identify older generation AMD instances
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"INSTANCE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE\", \"Values\": [\"m5a.large\", \"m6a.large\", \"c5a.large\", \"c6a.large\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE\", \"Values\": [\"m5a.large\", \"m6a.large\", \"c5a.large\", \"c6a.large\"]}}"
 })
 ```
 
@@ -360,13 +357,12 @@ Using general-purpose AMD instances for specialized workloads instead of optimiz
 **Detection:**
 ```javascript
 // Analyze workload patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/EC2",
   "metric_name": "CPUUtilization",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -403,14 +399,14 @@ Large enterprise running SAP Business Suite on Intel instances, seeking cost opt
 **Analysis Approach:**
 ```javascript
 // Step 1: Identify SAP workloads
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-10-01",
   "end_date": "2024-11-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"TAG\", \"Key\": \"Application\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Tags\": {\"Key\": \"Application\", \"Values\": [\"SAP\"]}}"
+  "filter": "{\"Tags\": {\"Key\": \"Application\", \"Values\": [\"SAP\"]}}"
 })
 
 // Step 2: Compare Intel vs AMD pricing for SAP-certified instances
@@ -451,14 +447,14 @@ Research organization running computational fluid dynamics (CFD) simulations on 
 **Analysis Approach:**
 ```javascript
 // Analyze current HPC costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-10-01",
   "end_date": "2024-11-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"INSTANCE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Tags\": {\"Key\": \"Workload\", \"Values\": [\"HPC\"]}}"
+  "filter": "{\"Tags\": {\"Key\": \"Workload\", \"Values\": [\"HPC\"]}}"
 })
 ```
 
@@ -495,14 +491,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze cross-service costs with AMD instances
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE_FAMILY\", \"Values\": [\"m7a\", \"c7a\", \"r7a\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE_FAMILY\", \"Values\": [\"m7a\", \"c7a\", \"r7a\"]}}"
 })
 ```
 
@@ -532,17 +528,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Budget Alerts:**
 ```javascript
 // Monitor AMD instance costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "filters": "{\"Dimensions\": {\"Key\": \"INSTANCE_TYPE_FAMILY\", \"Values\": [\"m7a\", \"c7a\", \"r7a\"]}}"
-})
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
 ```
 
 **Performance Alerts:**
 ```javascript
 // Monitor AMD instance performance
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "AMD-Performance",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "AMD-Performance"
 })
 ```
 
@@ -555,15 +548,7 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_ala
 - Savings tracking: cost reduction from AMD adoption
 
 **Implementation:**
-```javascript
-// Get AMD-specific dashboards
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "list_dashboards", {})
-
-// Create custom AMD cost optimization dashboard
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_dashboard", {
-  "dashboard_name": "AMD-CostOptimization"
-})
-```
+The CloudWatch MCP server can't read or create dashboards. Build the dashboard in the CloudWatch console or with infrastructure as code, and use `get_metric_data` to check each metric before you chart it. For organization-wide cost dashboards, see [Cloud Intelligence Dashboards](https://catalog.workshops.aws/awscff/en-US/visualizations/3-cid).
 
 ---
 

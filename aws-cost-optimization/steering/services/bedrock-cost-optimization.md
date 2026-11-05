@@ -43,27 +43,27 @@
 
 **Get Bedrock costs by model:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
 })
 ```
 
 **Analyze Bedrock usage patterns by account:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"LINKED_ACCOUNT\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
 })
 ```
 
@@ -80,43 +80,48 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 
 **Monitor Bedrock token utilization:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Bedrock",
   "metric_name": "InputTokenCount",
-  "dimensions": [{"Name": "ModelId", "Value": "anthropic.claude-3-haiku-20240307-v1:0"}],
+  "dimensions": [{"name": "ModelId", "value": "anthropic.claude-3-haiku-20240307-v1:0"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum", "Average"]
+  "statistic": "Sum"
 })
 ```
 
 **Create cost-per-request metrics:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "invocations",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/Bedrock",
-          "metric_name": "Invocations",
-          "dimensions": [{"Name": "ModelId", "Value": "anthropic.claude-3-haiku-20240307-v1:0"}]
-        },
-        "period": 3600,
-        "stat": "Sum"
+        "namespace": "AWS/Bedrock",
+        "metric_name": "Invocations",
+        "dimensions": [
+          {
+            "name": "ModelId",
+            "value": "anthropic.claude-3-haiku-20240307-v1:0"
+          }
+        ],
+        "statistic": "Sum",
+        "period": 3600
       }
     },
     {
       "id": "input_tokens",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/Bedrock",
-          "metric_name": "InputTokenCount",
-          "dimensions": [{"Name": "ModelId", "Value": "anthropic.claude-3-haiku-20240307-v1:0"}]
-        },
-        "period": 3600,
-        "stat": "Sum"
+        "namespace": "AWS/Bedrock",
+        "metric_name": "InputTokenCount",
+        "dimensions": [
+          {
+            "name": "ModelId",
+            "value": "anthropic.claude-3-haiku-20240307-v1:0"
+          }
+        ],
+        "statistic": "Sum",
+        "period": 3600
       }
     },
     {
@@ -236,13 +241,12 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Implementation:**
 ```javascript
 // Monitor caching effectiveness
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Bedrock",
   "metric_name": "CacheHitRate",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average"]
+  "statistic": "Average"
 })
 ```
 
@@ -283,13 +287,12 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Detection:**
 ```javascript
 // Monitor average token usage per request
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Bedrock",
   "metric_name": "InputTokenCount",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -340,24 +343,23 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current Bedrock costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
 })
 
 // Step 2: Monitor token usage patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Bedrock",
   "metric_name": "InputTokenCount",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum", "Average"]
+  "statistic": "Sum"
 })
 ```
 
@@ -383,14 +385,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Analyze usage patterns by content type
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "HOURLY",
   "group_by": "[{\"Type\": \"TAG\", \"Key\": \"ContentType\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
 })
 ```
 
@@ -425,14 +427,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze cross-service AI costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\", \"AWS Lambda\", \"Amazon Simple Storage Service\", \"Amazon API Gateway\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\", \"AWS Lambda\", \"Amazon Simple Storage Service\", \"Amazon API Gateway\"]}}"
 })
 ```
 
@@ -462,27 +464,23 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Budget Alerts:**
 ```javascript
 // Monitor Bedrock-specific budget performance
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
-})
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
 ```
 
 **Anomaly Detection:**
 ```javascript
 // Set up anomaly monitoring for Bedrock services
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
+  "end_date": "2024-12-01"
 })
 ```
 
 **Token Usage Alerts:**
 ```javascript
 // Monitor token usage patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "Bedrock-TokenUsage",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "Bedrock-TokenUsage"
 })
 ```
 
@@ -544,7 +542,7 @@ Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of th
 ### Tools & Calculators
 - [Bedrock Playground](https://console.aws.amazon.com/bedrock/) for model comparison and testing
 - [AWS Pricing Calculator](https://calculator.aws/) for Bedrock cost modeling
-- [Token Counter Tools](https://platform.openai.com/tokenizer) for prompt optimization
+- [Amazon Bedrock token counting](https://docs.aws.amazon.com/bedrock/latest/userguide/count-tokens.html) to count a prompt's tokens with the target model's tokenizer before you run inference
 
 ### Related Power Guidance
 - SageMaker Cost Optimization for traditional ML workloads
