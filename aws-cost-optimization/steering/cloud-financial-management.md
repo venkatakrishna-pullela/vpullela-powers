@@ -46,7 +46,7 @@ Establish financial accountability and cost awareness across your organization t
 
 3. **Establish Anomaly Detection**
    ```
-   Use cost_anomaly to implement:
+   Use cost-anomaly to implement:
    - Service-level anomaly detection
    - Account-level monitoring
    - Budget variance alerts
@@ -57,17 +57,17 @@ Establish financial accountability and cost awareness across your organization t
 
 ```javascript
 // Step 1: Monitor organization master budget status
-const masterBudget = usePower("aws-cost-optimization", "aws-billing-cost-management", "budgets", {
+const masterBudget = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
   "budget_name": "Organization-Master-Budget"
 })
 
 // Step 2: Monitor business unit budget performance
-const engineeringBudget = usePower("aws-cost-optimization", "aws-billing-cost-management", "budgets", {
+const engineeringBudget = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
   "budget_name": "Engineering-Department-Budget"
 })
 
 // Step 3: Analyze cost allocation by cost center
-const costCenterAllocation = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const costCenterAllocation = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -77,7 +77,7 @@ const costCenterAllocation = usePower("aws-cost-optimization", "aws-billing-cost
 })
 
 // Step 4: Set up comprehensive anomaly detection
-const anomalyDetection = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_anomaly", {
+const anomalyDetection = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "total_impact_start": 100, // Alert on anomalies > $100
@@ -111,7 +111,7 @@ const anomalyDetection = usePower("aws-cost-optimization", "aws-billing-cost-man
 
 3. **Generate Chargeback Reports**
    ```
-   Use session_sql for custom allocation logic:
+   Use session-sql for custom allocation logic:
    - Proportional shared cost allocation
    - Usage-based chargeback calculations
    - Business metric correlation
@@ -122,15 +122,15 @@ const anomalyDetection = usePower("aws-cost-optimization", "aws-billing-cost-man
 
 ```javascript
 // Step 1: Analyze current tagging coverage
-const availableTags = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
-  "operation": "getTagValues",
+const availableTags = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
+  "operation": "getTagsOrValues",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "tag_key": "Project"
 })
 
 // Step 2: Multi-dimensional cost allocation
-const projectCosts = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const projectCosts = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -140,7 +140,7 @@ const projectCosts = usePower("aws-cost-optimization", "aws-billing-cost-managem
 })
 
 // Step 3: Department-level chargeback analysis
-const departmentChargeback = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const departmentChargeback = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -150,7 +150,7 @@ const departmentChargeback = usePower("aws-cost-optimization", "aws-billing-cost
 })
 
 // Step 4: Generate executive chargeback report
-const chargebackReport = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+const chargebackReport = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session-sql", {
   "query": `
     SELECT 
       department,
@@ -202,7 +202,7 @@ const chargebackReport = usePower("aws-cost-optimization", "aws-billing-cost-man
 
 ```javascript
 // Step 1: Monthly variance analysis
-const monthlyVariance = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_comparison", {
+const monthlyVariance = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-comparison", {
   "operation": "getCostAndUsageComparisons",
   "baseline_start_date": "2024-10-01",
   "baseline_end_date": "2024-11-01",
@@ -213,12 +213,12 @@ const monthlyVariance = usePower("aws-cost-optimization", "aws-billing-cost-mana
 })
 
 // Step 2: Budget performance analysis
-const budgetPerformance = usePower("aws-cost-optimization", "aws-billing-cost-management", "budgets", {
+const budgetPerformance = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
   "budget_name": "Engineering-Department-Budget"
 })
 
 // Step 3: Cost per business metric calculation
-const businessMetricCosts = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+const businessMetricCosts = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session-sql", {
   "query": `
     SELECT 
       month,
@@ -234,7 +234,7 @@ const businessMetricCosts = usePower("aws-cost-optimization", "aws-billing-cost-
 })
 
 // Step 4: Generate executive cost report
-const executiveReport = usePower("aws-cost-optimization", "aws-pricing", "generate_cost_report", {
+const executiveReport = usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "generate_cost_report", {
   "pricing_data": monthlyVariance,
   "service_name": "Organization Cost Summary",
   "assumptions": [
@@ -308,12 +308,12 @@ const executiveReport = usePower("aws-cost-optimization", "aws-pricing", "genera
 ### Budget Automation
 ```javascript
 // Automated budget monitoring based on historical patterns
-const budgetMonitoring = usePower("aws-cost-optimization", "aws-billing-cost-management", "budgets", {
-  "max_results": 100
+const budgetMonitoring = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
+  "max_items": 100
 })
 
 // Use forecast data to predict budget performance
-const budgetForecast = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const budgetForecast = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostForecast",
   "start_date": "2024-12-01",
   "end_date": "2025-01-01",
@@ -326,7 +326,7 @@ const budgetForecast = usePower("aws-cost-optimization", "aws-billing-cost-manag
 ### Anomaly Detection
 ```javascript
 // Comprehensive anomaly monitoring
-const anomalyMonitoring = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_anomaly", {
+const anomalyMonitoring = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "feedback": "NO", // Focus on unacknowledged anomalies
@@ -337,7 +337,7 @@ const anomalyMonitoring = usePower("aws-cost-optimization", "aws-billing-cost-ma
 ### Cost Allocation Automation
 ```javascript
 // Automated cost allocation reporting
-const allocationReport = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+const allocationReport = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session-sql", {
   "query": `
     WITH shared_costs AS (
       SELECT SUM(cost) as total_shared
@@ -410,3 +410,14 @@ const allocationReport = usePower("aws-cost-optimization", "aws-billing-cost-man
 - Make cost data easily accessible
 - Integrate cost considerations into technical processes
 - Recognize and reward cost-conscious behavior
+
+## CFM TIPs Implementation Guides
+
+Step-by-step guides from the AWS CFM TIPs workshop for the practices in this guide. When you recommend one of these practices, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Culture Change](https://catalog.workshops.aws/awscff/en-US/culture-change) for the cost optimization function, the finance and technology partnership, and a cost-aware culture
+- [Setup Budgets](https://catalog.workshops.aws/awscff/en-US/foundations/1-budgets)
+- [Setup Cost Anomaly Detection Monitors](https://catalog.workshops.aws/awscff/en-US/foundations/3-cost-anomaly)
+- [Cloud Intelligence Dashboards](https://catalog.workshops.aws/awscff/en-US/visualizations/3-cid) for financial reporting and KPIs
+- [CFM TIPs home](https://catalog.workshops.aws/awscff/en-US) for the full implementation path
+
+For other topics, call action "readSteering" with powerName="aws-cost-optimization", steeringFile="cfm-tips-playbooks.md".

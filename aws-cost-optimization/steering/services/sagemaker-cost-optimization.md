@@ -38,27 +38,27 @@
 
 **Get SageMaker costs by usage type:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\"]}}"
 })
 ```
 
 **Analyze SageMaker usage patterns by phase:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"USE1-Notebk:ml.t3.medium\", \"USE1-Train:ml.p3.2xlarge\", \"USE1-Host:ml.m5.large\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"USE1-Notebk:ml.t3.medium\", \"USE1-Train:ml.p3.2xlarge\", \"USE1-Host:ml.m5.large\"]}}"
 })
 ```
 
@@ -76,31 +76,28 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 
 **Monitor SageMaker resource utilization:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/SageMaker",
   "metric_name": "CPUUtilization",
-  "dimensions": [{"Name": "EndpointName", "Value": "my-model-endpoint"}],
+  "dimensions": [{"name": "EndpointName", "value": "my-model-endpoint"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
 **Create ML cost efficiency metrics:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "invocations",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/SageMaker",
-          "metric_name": "Invocations",
-          "dimensions": [{"Name": "EndpointName", "Value": "my-model-endpoint"}]
-        },
-        "period": 3600,
-        "stat": "Sum"
+        "namespace": "AWS/SageMaker",
+        "metric_name": "Invocations",
+        "dimensions": [{"name": "EndpointName", "value": "my-model-endpoint"}],
+        "statistic": "Sum",
+        "period": 3600
       }
     },
     {
@@ -128,7 +125,7 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 
 1. **Start with smaller datasets and instances:**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute_optimizer", {
+   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
      "operation": "get_ec2_instance_recommendations"
    })
    ```
@@ -169,14 +166,13 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Training Optimization Techniques:**
 ```javascript
 // Monitor training job performance
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/SageMaker",
   "metric_name": "TrainingJobCPUUtilization",
-  "dimensions": [{"Name": "TrainingJobName", "Value": "my-training-job"}],
+  "dimensions": [{"name": "TrainingJobName", "value": "my-training-job"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 300,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -236,12 +232,12 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Commands:**
 ```javascript
 // Check Savings Plans coverage for SageMaker
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "sp_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "sp-performance", {
   "operation": "get_savings_plans_coverage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\"]}}"
 })
 ```
 
@@ -255,14 +251,13 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Implementation:**
 ```javascript
 // Monitor endpoint scaling effectiveness
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/SageMaker",
   "metric_name": "InvocationsPerInstance",
-  "dimensions": [{"Name": "EndpointName", "Value": "my-model-endpoint"}],
+  "dimensions": [{"name": "EndpointName", "value": "my-model-endpoint"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 300,
-  "statistics": ["Average"]
+  "statistic": "Average"
 })
 ```
 
@@ -280,10 +275,9 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Detection:**
 ```javascript
 // Identify cost anomalies that might indicate idle resources
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"USE1-Notebk:ml.t3.medium\", \"USE1-Notebk:ml.m5.large\"]}}"
+  "end_date": "2024-12-01"
 })
 ```
 
@@ -333,31 +327,32 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current SageMaker costs by usage type
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\"]}}"
 })
 
-// Step 2: Get ML Savings Plans recommendations
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "sp_recommendations", {
-  "service": "AmazonSageMaker",
-  "lookback_period": "SIXTY_DAYS",
-  "term_in_years": "ONE_YEAR"
+// Step 2: Get Machine Learning (SageMaker) Savings Plans recommendations
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "sp-recommendation", {
+  "operation": "get_savings_plans_purchase_recommendation",
+  "savings_plans_type": "SAGEMAKER_SP",
+  "term_in_years": "ONE_YEAR",
+  "payment_option": "NO_UPFRONT",
+  "lookback_period_in_days": "SIXTY_DAYS"
 })
 
 // Step 3: Analyze resource utilization
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/SageMaker",
   "metric_name": "CPUUtilization",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average"]
+  "statistic": "Average"
 })
 ```
 
@@ -382,14 +377,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Analyze inference endpoint costs and utilization
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "HOURLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"USE1-Host:ml.m5.large\", \"USE1-Host:ml.c5.xlarge\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"USE1-Host:ml.m5.large\", \"USE1-Host:ml.c5.xlarge\"]}}"
 })
 ```
 
@@ -424,14 +419,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze cross-service ML costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\", \"Amazon Simple Storage Service\", \"Amazon Elastic Container Registry\", \"AWS Lambda\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\", \"Amazon Simple Storage Service\", \"Amazon Elastic Container Registry\", \"AWS Lambda\"]}}"
 })
 ```
 
@@ -461,27 +456,23 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Budget Alerts:**
 ```javascript
 // Monitor SageMaker-specific budget performance
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\"]}}"
-})
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
 ```
 
 **Anomaly Detection:**
 ```javascript
 // Set up anomaly monitoring for SageMaker services
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\"]}}"
+  "end_date": "2024-12-01"
 })
 ```
 
 **Operational Alerts:**
 ```javascript
 // Monitor SageMaker-related operational alarms
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "SageMaker",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "SageMaker"
 })
 ```
 
@@ -522,6 +513,13 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_ala
 ---
 
 ## Additional Resources
+
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon SageMaker playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/sagemaker)
+- [SageMaker Deploy](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/sagemaker/deploy) for choosing between real-time, serverless, asynchronous, and batch inference
+- [SageMaker Savings Plans](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/sagemaker/7-sp)
+- [FinOps for AI: Amazon SageMaker](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/2-finops-for-ai#sagemaker)
 
 ### AWS Documentation
 - [SageMaker Pricing](https://aws.amazon.com/sagemaker/pricing/)

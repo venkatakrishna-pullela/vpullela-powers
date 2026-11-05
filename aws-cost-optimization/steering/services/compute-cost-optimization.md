@@ -35,27 +35,27 @@
 
 **Get EC2 costs by instance type:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"INSTANCE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
 })
 ```
 
 **Analyze compute usage patterns:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
 })
 ```
 
@@ -74,31 +74,28 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 
 **Monitor EC2 utilization for cost correlation:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/EC2",
   "metric_name": "CPUUtilization",
-  "dimensions": [{"Name": "InstanceId", "Value": "i-1234567890abcdef0"}],
+  "dimensions": [{"name": "InstanceId", "value": "i-1234567890abcdef0"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
 **Create compute efficiency metrics:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "cpu_utilization",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/EC2",
-          "metric_name": "CPUUtilization",
-          "dimensions": [{"Name": "InstanceId", "Value": "i-1234567890abcdef0"}]
-        },
-        "period": 3600,
-        "stat": "Average"
+        "namespace": "AWS/EC2",
+        "metric_name": "CPUUtilization",
+        "dimensions": [{"name": "InstanceId", "value": "i-1234567890abcdef0"}],
+        "statistic": "Average",
+        "period": 3600
       }
     },
     {
@@ -125,7 +122,7 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Implementation Steps:**
 1. **Analyze current utilization:**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute_optimizer", {
+   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
      "operation": "get_ec2_instance_recommendations"
    })
    ```
@@ -150,14 +147,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Analysis Commands:**
 ```javascript
 // Check current instance generations in use
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"INSTANCE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
 })
 
 // Compare pricing between generations
@@ -194,21 +191,21 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 **Analysis Commands:**
 ```javascript
 // Check current Reserved Instance utilization
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
   "operation": "get_reservation_utilization",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
 })
 
 // Check Compute Savings Plans coverage
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "sp_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "sp-performance", {
   "operation": "get_savings_plans_coverage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
 })
 ```
 
@@ -257,13 +254,12 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 **Detection:**
 ```javascript
 // Identify underutilized instances
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/EC2",
   "metric_name": "CPUUtilization",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average"]
+  "statistic": "Average"
 })
 ```
 
@@ -310,29 +306,28 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current compute costs by instance type
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-10-01",
   "end_date": "2024-11-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"INSTANCE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
 })
 
 // Step 2: Get right-sizing recommendations
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute_optimizer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
   "operation": "get_ec2_instance_recommendations"
 })
 
 // Step 3: Analyze utilization patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/EC2",
   "metric_name": "CPUUtilization",
   "start_time": "2024-10-01T00:00:00Z",
   "end_time": "2024-11-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -356,14 +351,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Analyze development environment usage patterns
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-10-01",
   "end_date": "2024-11-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"TAG\", \"Key\": \"Environment\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Tags\": {\"Key\": \"Environment\", \"Values\": [\"development\", \"staging\"]}}"
+  "filter": "{\"Tags\": {\"Key\": \"Environment\", \"Values\": [\"development\", \"staging\"]}}"
 })
 ```
 
@@ -397,14 +392,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze compute-related costs across services
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\", \"Amazon Elastic Block Store\", \"Amazon Elastic Load Balancing\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\", \"Amazon Elastic Block Store\", \"Amazon Elastic Load Balancing\"]}}"
 })
 ```
 
@@ -434,27 +429,23 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Budget Alerts:**
 ```javascript
 // Monitor compute budget performance
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
-})
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
 ```
 
 **Anomaly Detection:**
 ```javascript
 // Set up anomaly monitoring for compute costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
+  "end_date": "2024-12-01"
 })
 ```
 
 **Utilization Alerts:**
 ```javascript
 // Monitor low utilization instances
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "LowCPUUtilization",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "LowCPUUtilization"
 })
 ```
 
@@ -467,15 +458,7 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_ala
 - Right-sizing opportunity identification
 
 **Implementation:**
-```javascript
-// Get existing compute dashboards
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "list_dashboards", {})
-
-// Create custom compute cost dashboard
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_dashboard", {
-  "dashboard_name": "ComputeCostOptimization"
-})
-```
+The CloudWatch MCP server can't read or create dashboards. Build the dashboard in the CloudWatch console or with infrastructure as code, and use `get_metric_data` to check each metric before you chart it. For organization-wide cost dashboards, see [Cloud Intelligence Dashboards](https://catalog.workshops.aws/awscff/en-US/visualizations/3-cid).
 
 ---
 
@@ -507,6 +490,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_dashboar
 ---
 
 ## Additional Resources
+
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon EC2 playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2)
+- [EC2 RightSizing](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/3-rightsizing)
+- [Spot Instances for Fault Tolerant Workloads](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/6-spot)
+- [EC2 Scheduling](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/11-scheduling)
+- [EC2 Commitment Plans](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/7-commitment-plans)
 
 ### AWS Documentation
 - [EC2 Instance Types and Pricing](https://aws.amazon.com/ec2/instance-types/)

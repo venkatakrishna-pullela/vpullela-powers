@@ -37,27 +37,27 @@
 
 **Get Container service costs:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service\", \"Amazon Elastic Container Service for Kubernetes\", \"AWS Fargate\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service\", \"Amazon Elastic Container Service for Kubernetes\", \"AWS Fargate\"]}}"
 })
 ```
 
 **Analyze EKS Fargate usage patterns:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service for Kubernetes\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service for Kubernetes\"]}}"
 })
 ```
 
@@ -74,31 +74,28 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 
 **Monitor container resource utilization:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "ContainerInsights",
   "metric_name": "cluster_cpu_utilization",
-  "dimensions": [{"Name": "ClusterName", "Value": "my-eks-cluster"}],
+  "dimensions": [{"name": "ClusterName", "value": "my-eks-cluster"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
 **Create container efficiency metrics:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "cpu_utilization",
       "metric_stat": {
-        "metric": {
-          "namespace": "ContainerInsights",
-          "metric_name": "cluster_cpu_utilization",
-          "dimensions": [{"Name": "ClusterName", "Value": "my-eks-cluster"}]
-        },
-        "period": 3600,
-        "stat": "Average"
+        "namespace": "ContainerInsights",
+        "metric_name": "cluster_cpu_utilization",
+        "dimensions": [{"name": "ClusterName", "value": "my-eks-cluster"}],
+        "statistic": "Average",
+        "period": 3600
       }
     },
     {
@@ -126,7 +123,7 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 
 1. **Analyze current resource utilization:**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute_optimizer", {
+   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
      "operation": "get_ecs_service_recommendations"
    })
    ```
@@ -161,14 +158,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Analysis Commands:**
 ```javascript
 // Check Spot instance utilization
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"PURCHASE_OPTION\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service for Kubernetes\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service for Kubernetes\"]}}"
 })
 ```
 
@@ -193,14 +190,13 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Implementation:**
 ```javascript
 // Monitor scaling effectiveness
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "ContainerInsights",
   "metric_name": "cluster_node_count",
-  "dimensions": [{"Name": "ClusterName", "Value": "my-eks-cluster"}],
+  "dimensions": [{"name": "ClusterName", "value": "my-eks-cluster"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum", "Minimum"]
+  "statistic": "Average"
 })
 ```
 
@@ -232,12 +228,12 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Commands:**
 ```javascript
 // Check Savings Plans coverage for containers
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "sp_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "sp-performance", {
   "operation": "get_savings_plans_coverage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service\", \"Amazon Elastic Container Service for Kubernetes\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service\", \"Amazon Elastic Container Service for Kubernetes\"]}}"
 })
 ```
 
@@ -255,13 +251,12 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Detection:**
 ```javascript
 // Identify resource utilization patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "ContainerInsights",
   "metric_name": "pod_cpu_utilization",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -311,29 +306,28 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current EKS costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service for Kubernetes\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service for Kubernetes\"]}}"
 })
 
 // Step 2: Get container optimization recommendations
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute_optimizer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
   "operation": "get_ecs_service_recommendations"
 })
 
 // Step 3: Analyze resource utilization
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "ContainerInsights",
   "metric_name": "cluster_cpu_utilization",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average"]
+  "statistic": "Average"
 })
 ```
 
@@ -358,14 +352,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Analyze batch processing patterns
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "HOURLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service\"]}}"
 })
 ```
 
@@ -400,14 +394,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze cross-service container costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service\", \"Amazon Elastic Container Service for Kubernetes\", \"Amazon Elastic Load Balancing\", \"Amazon Relational Database Service\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service\", \"Amazon Elastic Container Service for Kubernetes\", \"Amazon Elastic Load Balancing\", \"Amazon Relational Database Service\"]}}"
 })
 ```
 
@@ -437,27 +431,23 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Budget Alerts:**
 ```javascript
 // Monitor container-specific budget performance
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service\", \"Amazon Elastic Container Service for Kubernetes\"]}}"
-})
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
 ```
 
 **Anomaly Detection:**
 ```javascript
 // Set up anomaly monitoring for container services
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service\", \"Amazon Elastic Container Service for Kubernetes\"]}}"
+  "end_date": "2024-12-01"
 })
 ```
 
 **Operational Alerts:**
 ```javascript
 // Monitor container-related operational alarms
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "Container",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "Container"
 })
 ```
 
@@ -503,6 +493,13 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_ala
 ---
 
 ## Additional Resources
+
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon EKS playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/eks)
+- [Amazon ECS playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecs)
+- [Right-Sizing Amazon ECS Tasks](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecs/3-rightsizing-ecs-tasks)
+- [Amazon ECR playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecr)
 
 ### AWS Documentation
 - [EKS Cost Monitoring](https://docs.aws.amazon.com/eks/latest/userguide/cost-monitoring.html)

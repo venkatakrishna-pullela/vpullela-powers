@@ -51,40 +51,39 @@
 
 **Get RDS costs by usage type:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE_GROUP\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Relational Database Service\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Relational Database Service\"]}}"
 })
 ```
 
 **Analyze RDS storage costs:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE_GROUP\", \"Values\": [\"RDS: Storage\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE_GROUP\", \"Values\": [\"RDS: Storage\"]}}"
 })
 ```
 
 **Monitor RDS performance for rightsizing:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/RDS",
   "metric_name": "CPUUtilization",
-  "dimensions": [{"Name": "DBInstanceIdentifier", "Value": "my-database"}],
+  "dimensions": [{"name": "DBInstanceIdentifier", "value": "my-database"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -135,32 +134,31 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 **Implementation Steps:**
 1. **Analyze current utilization:**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute_optimizer", {
-     "operation": "get_rds_database_recommendations"
+   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
+     "operation": "get_rds_recommendations"
    })
    ```
 
 2. **Calculate RI savings:**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri_performance", {
+   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
      "operation": "get_reservation_coverage",
      "start_date": "2024-11-01",
      "end_date": "2024-12-01",
      "granularity": "MONTHLY",
-     "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Relational Database Service\"]}}"
+     "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Relational Database Service\"]}}"
    })
    ```
 
 3. **Monitor Graviton performance:**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+   usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
      "namespace": "AWS/RDS",
      "metric_name": "DatabaseConnections",
-     "dimensions": [{"Name": "DBInstanceIdentifier", "Value": "graviton-db"}],
+     "dimensions": [{"name": "DBInstanceIdentifier", "value": "graviton-db"}],
      "start_time": "2024-11-01T00:00:00Z",
      "end_time": "2024-12-01T00:00:00Z",
-     "period": 3600,
-     "statistics": ["Average", "Maximum"]
+     "statistic": "Average"
    })
    ```
 
@@ -180,14 +178,13 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 **Implementation:**
 ```javascript
 // Monitor storage utilization
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/RDS",
   "metric_name": "FreeStorageSpace",
-  "dimensions": [{"Name": "DBInstanceIdentifier", "Value": "my-database"}],
+  "dimensions": [{"name": "DBInstanceIdentifier", "value": "my-database"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 86400,
-  "statistics": ["Average", "Minimum"]
+  "statistic": "Average"
 })
 ```
 
@@ -212,14 +209,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Implementation:**
 ```javascript
 // Monitor backup costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"RDS:BackupUsage\", \"RDS:SnapshotUsage\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"RDS:BackupUsage\", \"RDS:SnapshotUsage\"]}}"
 })
 ```
 
@@ -248,14 +245,13 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Implementation:**
 ```javascript
 // Monitor read replica utilization
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/RDS",
   "metric_name": "DatabaseConnections",
-  "dimensions": [{"Name": "DBInstanceIdentifier", "Value": "read-replica-1"}],
+  "dimensions": [{"name": "DBInstanceIdentifier", "value": "read-replica-1"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -312,29 +308,25 @@ Using larger instance types than necessary due to poor capacity planning or fear
 ```javascript
 // Check CPU and memory utilization
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "cpu_util",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/RDS",
-          "metric_name": "CPUUtilization",
-          "dimensions": [{"Name": "DBInstanceIdentifier", "Value": "my-database"}]
-        },
-        "period": 3600,
-        "stat": "Average"
+        "namespace": "AWS/RDS",
+        "metric_name": "CPUUtilization",
+        "dimensions": [{"name": "DBInstanceIdentifier", "value": "my-database"}],
+        "statistic": "Average",
+        "period": 3600
       }
     },
     {
       "id": "memory_util",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/RDS",
-          "metric_name": "FreeableMemory",
-          "dimensions": [{"Name": "DBInstanceIdentifier", "Value": "my-database"}]
-        },
-        "period": 3600,
-        "stat": "Average"
+        "namespace": "AWS/RDS",
+        "metric_name": "FreeableMemory",
+        "dimensions": [{"name": "DBInstanceIdentifier", "value": "my-database"}],
+        "statistic": "Average",
+        "period": 3600
       }
     }
   ],
@@ -356,12 +348,12 @@ Running predictable workloads on On-Demand pricing, missing 30-60% cost savings.
 **Detection:**
 ```javascript
 // Analyze RI coverage
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
   "operation": "get_reservation_coverage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Relational Database Service\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Relational Database Service\"]}}"
 })
 ```
 
@@ -378,14 +370,14 @@ Manual snapshots and backups accumulating costs after database deletion or reten
 **Detection:**
 ```javascript
 // Monitor backup storage costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"RESOURCE_ID\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"RDS:BackupUsage\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"RDS:BackupUsage\"]}}"
 })
 ```
 
@@ -421,6 +413,18 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 - **Monthly:** Review Reserved Instance opportunities and utilization
 - **Quarterly:** Assess instance sizing and storage optimization
 - **Annually:** Review architecture patterns and Aurora migration opportunities
+
+---
+
+## Additional Resources
+
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon RDS playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/rds)
+- [Amazon Aurora playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/aurora)
+- [RDS RightSizing](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/rds/3-rightsizing)
+- [RDS Extended Support](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/rds/12-rds-extended-support)
+- [Database Savings Plans](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/dbsp)
 
 ---
 

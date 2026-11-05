@@ -34,7 +34,7 @@ Pay only for what you use by implementing dynamic scaling, rightsizing resources
 
 1. **Analyze Current Resource Utilization**
    ```
-   Use compute_optimizer to identify:
+   Use compute-optimizer to identify:
    - Overprovisioned instances
    - Underprovisioned instances
    - Optimal instance type recommendations
@@ -43,7 +43,7 @@ Pay only for what you use by implementing dynamic scaling, rightsizing resources
 
 2. **Get Detailed Optimization Recommendations**
    ```
-   Use cost_optimization to discover:
+   Use cost-optimization to discover:
    - EC2 rightsizing opportunities
    - EBS volume optimization
    - Lambda function optimization
@@ -52,7 +52,7 @@ Pay only for what you use by implementing dynamic scaling, rightsizing resources
 
 3. **Analyze Cost Impact**
    ```
-   Use rec_details for specific recommendations:
+   Use rec-details for specific recommendations:
    - Expected cost savings
    - Performance implications
    - Implementation complexity
@@ -63,24 +63,24 @@ Pay only for what you use by implementing dynamic scaling, rightsizing resources
 
 ```javascript
 // Step 1: Get comprehensive rightsizing recommendations
-const rightsizingRecs = usePower("aws-cost-optimization", "aws-billing-cost-management", "compute_optimizer", {
+const rightsizingRecs = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
   "operation": "get_ec2_instance_recommendations",
   "filters": "{\"finding\": [\"Overprovisioned\", \"Underprovisioned\"]}"
 })
 
 // Step 2: Focus on high-impact, low-risk recommendations
-const highImpactRecs = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_optimization", {
+const highImpactRecs = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-optimization", {
   "operation": "list_recommendations",
   "filters": "{\"resourceTypes\": [\"Ec2Instance\"], \"implementationEfforts\": [\"VeryLow\", \"Low\"], \"actionTypes\": [\"Rightsize\"]}"
 })
 
 // Step 3: Get detailed analysis for top recommendation
-const detailedAnalysis = usePower("aws-cost-optimization", "aws-billing-cost-management", "rec_details", {
+const detailedAnalysis = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "rec-details", {
   "recommendation_id": highImpactRecs[0].recommendationId
 })
 
 // Step 4: Analyze current usage patterns to validate recommendations
-const usageAnalysis = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const usageAnalysis = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -99,7 +99,7 @@ const usageAnalysis = usePower("aws-cost-optimization", "aws-billing-cost-manage
 
 1. **Analyze Auto Scaling Group Performance**
    ```
-   Use compute_optimizer to evaluate:
+   Use compute-optimizer to evaluate:
    - Auto Scaling group configurations
    - Scaling policy effectiveness
    - Instance type recommendations
@@ -117,7 +117,7 @@ const usageAnalysis = usePower("aws-cost-optimization", "aws-billing-cost-manage
 
 3. **Optimize Scaling Policies**
    ```
-   Use cost_optimization recommendations for:
+   Use cost-optimization recommendations for:
    - Scaling policy improvements
    - Instance type optimization
    - Capacity planning
@@ -128,12 +128,12 @@ const usageAnalysis = usePower("aws-cost-optimization", "aws-billing-cost-manage
 
 ```javascript
 // Step 1: Get Auto Scaling group recommendations
-const asgRecommendations = usePower("aws-cost-optimization", "aws-billing-cost-management", "compute_optimizer", {
+const asgRecommendations = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
   "operation": "get_auto_scaling_group_recommendations"
 })
 
 // Step 2: Analyze hourly usage patterns to understand scaling needs
-const hourlyUsage = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const hourlyUsage = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-25",
   "end_date": "2024-12-01",
@@ -144,7 +144,7 @@ const hourlyUsage = usePower("aws-cost-optimization", "aws-billing-cost-manageme
 })
 
 // Step 3: Compare costs during peak vs off-peak hours
-const peakOffPeakAnalysis = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+const peakOffPeakAnalysis = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session-sql", {
   "query": `
     SELECT 
       CASE 
@@ -160,7 +160,7 @@ const peakOffPeakAnalysis = usePower("aws-cost-optimization", "aws-billing-cost-
 })
 
 // Step 4: Get specific ASG optimization recommendations
-const asgOptimization = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_optimization", {
+const asgOptimization = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-optimization", {
   "operation": "list_recommendations",
   "filters": "{\"resourceTypes\": [\"Ec2AutoScalingGroup\"], \"actionTypes\": [\"Rightsize\"]}"
 })
@@ -174,7 +174,7 @@ const asgOptimization = usePower("aws-cost-optimization", "aws-billing-cost-mana
 
 1. **Analyze Lambda Function Performance**
    ```
-   Use compute_optimizer to optimize:
+   Use compute-optimizer to optimize:
    - Lambda function memory allocation
    - Execution duration optimization
    - Cost per invocation analysis
@@ -183,7 +183,7 @@ const asgOptimization = usePower("aws-cost-optimization", "aws-billing-cost-mana
 
 2. **Identify Serverless Migration Opportunities**
    ```
-   Use cost_optimization to find:
+   Use cost-optimization to find:
    - Services suitable for serverless migration
    - Container workloads for Fargate
    - Database workloads for serverless options
@@ -203,12 +203,12 @@ const asgOptimization = usePower("aws-cost-optimization", "aws-billing-cost-mana
 
 ```javascript
 // Step 1: Get Lambda function optimization recommendations
-const lambdaOptimization = usePower("aws-cost-optimization", "aws-billing-cost-management", "compute_optimizer", {
+const lambdaOptimization = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
   "operation": "get_lambda_function_recommendations"
 })
 
 // Step 2: Analyze Lambda usage patterns and costs
-const lambdaCosts = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const lambdaCosts = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -219,7 +219,7 @@ const lambdaCosts = usePower("aws-cost-optimization", "aws-billing-cost-manageme
 })
 
 // Step 3: Compare serverless vs traditional architecture costs
-const architectureComparison = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+const architectureComparison = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session-sql", {
   "query": `
     SELECT 
       'Traditional' as architecture,
@@ -238,7 +238,7 @@ const architectureComparison = usePower("aws-cost-optimization", "aws-billing-co
 })
 
 // Step 4: Identify migration opportunities
-const migrationOpportunities = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_optimization", {
+const migrationOpportunities = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-optimization", {
   "operation": "list_recommendations",
   "filters": "{\"actionTypes\": [\"MigrateToGraviton\"], \"implementationEfforts\": [\"Low\", \"Medium\"]}"
 })
@@ -252,7 +252,7 @@ const migrationOpportunities = usePower("aws-cost-optimization", "aws-billing-co
 
 1. **Analyze Storage Usage Patterns**
    ```
-   Use storage_lens to understand:
+   Use storage-lens to understand:
    - Storage class distribution
    - Access patterns and frequency
    - Lifecycle optimization opportunities
@@ -261,7 +261,7 @@ const migrationOpportunities = usePower("aws-cost-optimization", "aws-billing-co
 
 2. **Identify Storage Optimization Opportunities**
    ```
-   Use cost_optimization to find:
+   Use cost-optimization to find:
    - Unused EBS volumes
    - Storage class optimization
    - Lifecycle policy opportunities
@@ -270,7 +270,7 @@ const migrationOpportunities = usePower("aws-cost-optimization", "aws-billing-co
 
 3. **Implement Storage Lifecycle Policies**
    ```
-   Use storage_lens analytics to:
+   Use storage-lens analytics to:
    - Design optimal lifecycle policies
    - Monitor transition effectiveness
    - Track cost savings from optimization
@@ -281,7 +281,7 @@ const migrationOpportunities = usePower("aws-cost-optimization", "aws-billing-co
 
 ```javascript
 // Step 1: Analyze S3 storage patterns with Storage Lens
-const storageAnalysis = usePower("aws-cost-optimization", "aws-billing-cost-management", "storage_lens", {
+const storageAnalysis = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "storage-lens", {
   "query": `
     SELECT
       storage_class,
@@ -295,7 +295,7 @@ const storageAnalysis = usePower("aws-cost-optimization", "aws-billing-cost-mana
 })
 
 // Step 2: Identify lifecycle optimization opportunities
-const lifecycleOpportunities = usePower("aws-cost-optimization", "aws-billing-cost-management", "storage_lens", {
+const lifecycleOpportunities = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "storage-lens", {
   "query": `
     SELECT
       bucket_name,
@@ -310,13 +310,13 @@ const lifecycleOpportunities = usePower("aws-cost-optimization", "aws-billing-co
 })
 
 // Step 3: Get EBS volume optimization recommendations
-const ebsOptimization = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_optimization", {
+const ebsOptimization = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-optimization", {
   "operation": "list_recommendations",
   "filters": "{\"resourceTypes\": [\"EbsVolume\"], \"actionTypes\": [\"Delete\", \"Rightsize\"]}"
 })
 
 // Step 4: Analyze storage costs by class
-const storageCostAnalysis = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const storageCostAnalysis = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -384,7 +384,7 @@ const storageCostAnalysis = usePower("aws-cost-optimization", "aws-billing-cost-
 ### Monitoring Tools
 ```javascript
 // Monitor utilization trends
-const utilizationTrends = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const utilizationTrends = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-09-01",
   "end_date": "2024-12-01",
@@ -398,7 +398,7 @@ const utilizationTrends = usePower("aws-cost-optimization", "aws-billing-cost-ma
 ### Performance Validation
 ```javascript
 // Validate performance after optimization
-const performanceValidation = usePower("aws-cost-optimization", "aws-billing-cost-management", "compute_optimizer", {
+const performanceValidation = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
   "operation": "get_ec2_instance_recommendations",
   "filters": "{\"finding\": [\"Optimized\"]}"
 })
@@ -449,3 +449,14 @@ const performanceValidation = usePower("aws-cost-optimization", "aws-billing-cos
 - **Cost predictability**: Alignment of costs with business usage
 - **Resource efficiency**: Optimal resource allocation for business needs
 - **Innovation enablement**: Freed resources for new initiatives
+
+## CFM TIPs Implementation Guides
+
+Step-by-step guides from the AWS CFM TIPs workshop for the practices in this guide. When you recommend one of these practices, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [EC2 RightSizing](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/3-rightsizing)
+- [EC2 Scheduling](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/11-scheduling)
+- [RDS Instance Scheduling](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/rds/4-instance-schedule)
+- [Amazon ECS Autoscaling](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecs/4-ecs-autoscaling)
+- [Putting Data in the Most Appropriate S3 Storage Class](https://catalog.workshops.aws/awscff/en-US/playbooks/storage/s3/3-appropriate-storage-class)
+
+For other topics, call action "readSteering" with powerName="aws-cost-optimization", steeringFile="cfm-tips-playbooks.md".

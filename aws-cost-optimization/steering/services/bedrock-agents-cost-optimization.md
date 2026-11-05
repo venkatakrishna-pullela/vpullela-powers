@@ -36,27 +36,27 @@
 
 **Get Bedrock Agent costs by dimension:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
 })
 ```
 
 **Analyze agent usage patterns:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"Agent-InputTokens\", \"Agent-OutputTokens\", \"KnowledgeBase-VectorSearch\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"Agent-InputTokens\", \"Agent-OutputTokens\", \"KnowledgeBase-VectorSearch\"]}}"
 })
 ```
 
@@ -74,31 +74,28 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 
 **Monitor agent performance for cost correlation:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Bedrock",
   "metric_name": "AgentInvocations",
-  "dimensions": [{"Name": "AgentId", "Value": "your-agent-id"}],
+  "dimensions": [{"name": "AgentId", "value": "your-agent-id"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum", "Average"]
+  "statistic": "Sum"
 })
 ```
 
 **Create agent efficiency metrics:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "token_usage",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/Bedrock",
-          "metric_name": "InputTokenCount",
-          "dimensions": [{"Name": "AgentId", "Value": "your-agent-id"}]
-        },
-        "period": 3600,
-        "stat": "Sum"
+        "namespace": "AWS/Bedrock",
+        "metric_name": "InputTokenCount",
+        "dimensions": [{"name": "AgentId", "value": "your-agent-id"}],
+        "statistic": "Sum",
+        "period": 3600
       }
     },
     {
@@ -125,14 +122,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Implementation Steps:**
 1. **Analyze current prompt efficiency:**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
      "operation": "getCostAndUsage",
      "start_date": "2024-11-01",
      "end_date": "2024-12-01",
      "granularity": "DAILY",
      "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
      "metrics": "[\"UsageQuantity\"]",
-     "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"Agent-InputTokens\"]}}"
+     "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"Agent-InputTokens\"]}}"
    })
    ```
 
@@ -166,14 +163,13 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 })
 
 // Monitor model usage patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Bedrock",
   "metric_name": "ModelInvocations",
-  "dimensions": [{"Name": "ModelId", "Value": "anthropic.claude-3-haiku"}],
+  "dimensions": [{"name": "ModelId", "value": "anthropic.claude-3-haiku"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum"]
+  "statistic": "Sum"
 })
 ```
 
@@ -187,14 +183,13 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Implementation Examples:**
 ```javascript
 // Monitor cache hit rates and cost savings
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Bedrock",
   "metric_name": "CacheHitRate",
-  "dimensions": [{"Name": "AgentId", "Value": "your-agent-id"}],
+  "dimensions": [{"name": "AgentId", "value": "your-agent-id"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average"]
+  "statistic": "Average"
 })
 ```
 
@@ -220,14 +215,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Implementation Strategy:**
 ```javascript
 // Monitor agent orchestration costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"Agent-Orchestration\", \"Function-Calling\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"Agent-Orchestration\", \"Function-Calling\"]}}"
 })
 ```
 
@@ -245,14 +240,13 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Detection:**
 ```javascript
 // Identify high token usage patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Bedrock",
   "metric_name": "InputTokenCount",
-  "dimensions": [{"Name": "AgentId", "Value": "your-agent-id"}],
+  "dimensions": [{"name": "AgentId", "value": "your-agent-id"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -299,35 +293,33 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current agent costs by usage type
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-10-01",
   "end_date": "2024-11-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
 })
 
 // Step 2: Monitor agent performance metrics
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Bedrock",
   "metric_name": "AgentLatency",
-  "dimensions": [{"Name": "AgentId", "Value": "customer-service-agent"}],
+  "dimensions": [{"name": "AgentId", "value": "customer-service-agent"}],
   "start_time": "2024-10-01T00:00:00Z",
   "end_time": "2024-11-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "P95"]
+  "statistic": "Average"
 })
 
 // Step 3: Analyze knowledge base retrieval patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Bedrock",
   "metric_name": "KnowledgeBaseRetrievals",
   "start_time": "2024-10-01T00:00:00Z",
   "end_time": "2024-11-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum", "Average"]
+  "statistic": "Sum"
 })
 ```
 
@@ -351,14 +343,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Analyze content generation costs and patterns
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-10-01",
   "end_date": "2024-11-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"Agent-OutputTokens\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"Agent-OutputTokens\"]}}"
 })
 ```
 
@@ -392,14 +384,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze Bedrock-related costs across services
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\", \"Amazon OpenSearch Service\", \"Amazon S3\", \"AWS Lambda\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\", \"Amazon OpenSearch Service\", \"Amazon S3\", \"AWS Lambda\"]}}"
 })
 ```
 
@@ -429,27 +421,23 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Budget Alerts:**
 ```javascript
 // Monitor Bedrock Agent budget performance
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\"]}}"
-})
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
 ```
 
 **Anomaly Detection:**
 ```javascript
 // Set up anomaly monitoring for agent costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"Agent-InputTokens\", \"Agent-OutputTokens\"]}}"
+  "end_date": "2024-12-01"
 })
 ```
 
 **Performance Alerts:**
 ```javascript
 // Monitor agent performance and efficiency
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "BedrockAgent",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "BedrockAgent"
 })
 ```
 
@@ -462,15 +450,7 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_ala
 - Cache hit rates and cost savings tracking
 
 **Implementation:**
-```javascript
-// Get existing Bedrock dashboards
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "list_dashboards", {})
-
-// Create custom Bedrock Agent cost dashboard
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_dashboard", {
-  "dashboard_name": "BedrockAgentCostOptimization"
-})
-```
+The CloudWatch MCP server can't read or create dashboards. Build the dashboard in the CloudWatch console or with infrastructure as code, and use `get_metric_data` to check each metric before you chart it. For organization-wide cost dashboards, see [Cloud Intelligence Dashboards](https://catalog.workshops.aws/awscff/en-US/visualizations/3-cid).
 
 ---
 
@@ -502,6 +482,12 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_dashboar
 ---
 
 ## Additional Resources
+
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon Bedrock playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/bedrock)
+- [Tokenomics](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/3-tokenomics) for attributing, optimizing, and governing agent token spend
+- [FinOps for AI: Amazon Bedrock](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/2-finops-for-ai#bedrock)
 
 ### AWS Documentation
 - [Amazon Bedrock Agents User Guide](https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html)

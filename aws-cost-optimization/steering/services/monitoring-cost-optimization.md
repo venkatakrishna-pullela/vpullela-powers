@@ -47,27 +47,27 @@
 
 **Get Monitoring service costs:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch\", \"AWS Cost Explorer\", \"AWS Budgets\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch\", \"AWS Cost Explorer\", \"AWS Budgets\"]}}"
 })
 ```
 
 **Analyze CloudWatch usage patterns:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch\"]}}"
 })
 ```
 
@@ -84,31 +84,28 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 
 **Monitor cost optimization KPIs:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Billing",
   "metric_name": "EstimatedCharges",
-  "dimensions": [{"Name": "Currency", "Value": "USD"}],
+  "dimensions": [{"name": "Currency", "value": "USD"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 86400,
-  "statistics": ["Maximum"]
+  "statistic": "Maximum"
 })
 ```
 
 **Create cost efficiency tracking metrics:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "total_cost",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/Billing",
-          "metric_name": "EstimatedCharges",
-          "dimensions": [{"Name": "Currency", "Value": "USD"}]
-        },
-        "period": 86400,
-        "stat": "Maximum"
+        "namespace": "AWS/Billing",
+        "metric_name": "EstimatedCharges",
+        "dimensions": [{"name": "Currency", "value": "USD"}],
+        "statistic": "Maximum",
+        "period": 86400
       }
     },
     {
@@ -144,14 +141,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 1. **Enable foundational services:**
    ```javascript
    // Monitor CUR generation and storage costs
-   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
      "operation": "getCostAndUsage",
      "start_date": "2024-11-01",
      "end_date": "2024-12-01",
      "granularity": "MONTHLY",
      "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
      "metrics": "[\"UnblendedCost\"]",
-     "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Storage Service\"]}}"
+     "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Storage Service\"]}}"
    })
    ```
 
@@ -200,10 +197,9 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Implementation:**
 ```javascript
 // Set up cost anomaly monitoring
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
+  "end_date": "2024-12-01"
 })
 ```
 
@@ -259,14 +255,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Detection:**
 ```javascript
 // Identify high CloudWatch costs by usage type
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch\"]}}"
 })
 ```
 
@@ -316,18 +312,18 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current monitoring and cost intelligence costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"LINKED_ACCOUNT\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch\", \"AWS Cost Explorer\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch\", \"AWS Cost Explorer\"]}}"
 })
 
 // Step 2: Establish baseline KPIs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
   "operation": "get_reservation_coverage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -358,17 +354,20 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 ```javascript
 // Analyze cost per customer or cost per request metrics
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "total_requests",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/ApplicationELB",
-          "metric_name": "RequestCount",
-          "dimensions": [{"Name": "LoadBalancer", "Value": "app/my-load-balancer/50dc6c495c0c9188"}]
-        },
-        "period": 3600,
-        "stat": "Sum"
+        "namespace": "AWS/ApplicationELB",
+        "metric_name": "RequestCount",
+        "dimensions": [
+          {
+            "name": "LoadBalancer",
+            "value": "app/my-load-balancer/50dc6c495c0c9188"
+          }
+        ],
+        "statistic": "Sum",
+        "period": 3600
       }
     }
   ],
@@ -408,14 +407,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Analysis Commands:**
 ```javascript
 // Analyze monitoring costs across integrated services
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch\", \"AWS Lambda\", \"Amazon Simple Notification Service\", \"Amazon QuickSight\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch\", \"AWS Lambda\", \"Amazon Simple Notification Service\", \"Amazon QuickSight\"]}}"
 })
 ```
 
@@ -445,24 +444,21 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Budget Alerts:**
 ```javascript
 // Monitor cost intelligence service budgets
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch\", \"AWS Cost Explorer\"]}}"
-})
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
 ```
 
 **Cost Optimization KPI Alerts:**
 ```javascript
 // Set up KPI deviation alerts
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "CostOptimization-KPI",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "CostOptimization-KPI"
 })
 ```
 
 **Anomaly Detection Integration:**
 ```javascript
 // Monitor for cost anomalies across all services
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
   "end_date": "2024-12-01"
 })
@@ -512,6 +508,13 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 ---
 
 ## Additional Resources
+
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Cloud Intelligence Dashboards](https://catalog.workshops.aws/awscff/en-US/visualizations/3-cid) for CUDOS, KPI, and CORA dashboards
+- [AWS Data Exports](https://catalog.workshops.aws/awscff/en-US/visualizations/4-data-exports) for Cost and Usage Report (CUR 2.0) setup
+- [Amazon CloudWatch playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/management-and-governance/cloudwatch)
+- [CloudWatch Logs](https://catalog.workshops.aws/awscff/en-US/playbooks/management-and-governance/cloudwatch/3-logs)
 
 ### AWS Documentation
 - [AWS Cost Management](https://aws.amazon.com/aws-cost-management/)

@@ -43,27 +43,27 @@
 
 **Get SQS costs by usage type:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\"]}}"
 })
 ```
 
 **Analyze SQS API operation patterns:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"API_OPERATION\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\"]}}"
 })
 ```
 
@@ -80,43 +80,38 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 
 **Monitor SQS queue metrics:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/SQS",
   "metric_name": "NumberOfMessagesSent",
-  "dimensions": [{"Name": "QueueName", "Value": "my-queue"}],
+  "dimensions": [{"name": "QueueName", "value": "my-queue"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum", "Average"]
+  "statistic": "Sum"
 })
 ```
 
 **Create SQS efficiency metrics:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "messages_sent",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/SQS",
-          "metric_name": "NumberOfMessagesSent",
-          "dimensions": [{"Name": "QueueName", "Value": "my-queue"}]
-        },
-        "period": 3600,
-        "stat": "Sum"
+        "namespace": "AWS/SQS",
+        "metric_name": "NumberOfMessagesSent",
+        "dimensions": [{"name": "QueueName", "value": "my-queue"}],
+        "statistic": "Sum",
+        "period": 3600
       }
     },
     {
       "id": "empty_receives",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/SQS",
-          "metric_name": "NumberOfEmptyReceives",
-          "dimensions": [{"Name": "QueueName", "Value": "my-queue"}]
-        },
-        "period": 3600,
-        "stat": "Sum"
+        "namespace": "AWS/SQS",
+        "metric_name": "NumberOfEmptyReceives",
+        "dimensions": [{"name": "QueueName", "value": "my-queue"}],
+        "statistic": "Sum",
+        "period": 3600
       }
     },
     {
@@ -144,14 +139,13 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Implementation Strategy:**
 ```javascript
 // Monitor empty receive patterns to identify long polling opportunities
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/SQS",
   "metric_name": "NumberOfEmptyReceives",
-  "dimensions": [{"Name": "QueueName", "Value": "my-queue"}],
+  "dimensions": [{"name": "QueueName", "value": "my-queue"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum"]
+  "statistic": "Sum"
 })
 ```
 
@@ -256,13 +250,12 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Detection:**
 ```javascript
 // Identify high empty receive ratios
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/SQS",
   "metric_name": "NumberOfEmptyReceives",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum"]
+  "statistic": "Sum"
 })
 ```
 
@@ -312,24 +305,23 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current SQS request patterns
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"API_OPERATION\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\"]}}"
 })
 
 // Step 2: Monitor empty receive patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/SQS",
   "metric_name": "NumberOfEmptyReceives",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum"]
+  "statistic": "Sum"
 })
 ```
 
@@ -355,14 +347,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Analyze SQS usage by service/application
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"TAG\", \"Key\": \"Application\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\"]}}"
 })
 ```
 
@@ -398,14 +390,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze SQS integration costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\", \"AWS Lambda\", \"Amazon Simple Storage Service\", \"Amazon Simple Notification Service\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\", \"AWS Lambda\", \"Amazon Simple Storage Service\", \"Amazon Simple Notification Service\"]}}"
 })
 ```
 
@@ -435,27 +427,23 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Budget Alerts:**
 ```javascript
 // Monitor SQS-specific budget performance
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\"]}}"
-})
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
 ```
 
 **Efficiency Monitoring:**
 ```javascript
 // Monitor empty receive ratios for optimization opportunities
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "SQS-EmptyReceives",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "SQS-EmptyReceives"
 })
 ```
 
 **Cost Anomaly Detection:**
 ```javascript
 // Track unusual SQS spending patterns
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\"]}}"
+  "end_date": "2024-12-01"
 })
 ```
 
@@ -497,6 +485,13 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 ---
 
 ## Additional Resources
+
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon SQS playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/application-integration/sqs)
+- [SQS Batching](https://catalog.workshops.aws/awscff/en-US/playbooks/application-integration/sqs/2-batching)
+- [SQS Polling Modes](https://catalog.workshops.aws/awscff/en-US/playbooks/application-integration/sqs/3-polling-modes)
+- [SQS Payload Compression](https://catalog.workshops.aws/awscff/en-US/playbooks/application-integration/sqs/4-payload-compression)
 
 ### AWS Documentation
 - [SQS Pricing](https://aws.amazon.com/sqs/pricing/)

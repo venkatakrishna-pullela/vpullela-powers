@@ -43,27 +43,27 @@
 
 **Get Redshift costs by component:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Redshift\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Redshift\"]}}"
 })
 ```
 
 **Analyze Redshift usage patterns:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE_GROUP\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE_GROUP\", \"Values\": [\"Redshift running hours\", \"Redshift: DataScanned\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE_GROUP\", \"Values\": [\"Redshift running hours\", \"Redshift: DataScanned\"]}}"
 })
 ```
 
@@ -80,43 +80,48 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 
 **Monitor Redshift cluster performance:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Redshift",
   "metric_name": "CPUUtilization",
-  "dimensions": [{"Name": "ClusterIdentifier", "Value": "my-redshift-cluster"}],
+  "dimensions": [{"name": "ClusterIdentifier", "value": "my-redshift-cluster"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
 **Create data warehouse efficiency metrics:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "query_duration",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/Redshift",
-          "metric_name": "QueryDuration",
-          "dimensions": [{"Name": "ClusterIdentifier", "Value": "my-redshift-cluster"}]
-        },
-        "period": 3600,
-        "stat": "Average"
+        "namespace": "AWS/Redshift",
+        "metric_name": "QueryDuration",
+        "dimensions": [
+          {
+            "name": "ClusterIdentifier",
+            "value": "my-redshift-cluster"
+          }
+        ],
+        "statistic": "Average",
+        "period": 3600
       }
     },
     {
       "id": "queries_completed",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/Redshift",
-          "metric_name": "DatabaseConnections",
-          "dimensions": [{"Name": "ClusterIdentifier", "Value": "my-redshift-cluster"}]
-        },
-        "period": 3600,
-        "stat": "Average"
+        "namespace": "AWS/Redshift",
+        "metric_name": "DatabaseConnections",
+        "dimensions": [
+          {
+            "name": "ClusterIdentifier",
+            "value": "my-redshift-cluster"
+          }
+        ],
+        "statistic": "Average",
+        "period": 3600
       }
     },
     {
@@ -151,13 +156,12 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Right-Sizing Strategy:**
 ```javascript
 // Monitor cluster utilization for right-sizing
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Redshift",
   "metric_name": "CPUUtilization",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average"]
+  "statistic": "Average"
 })
 ```
 
@@ -207,14 +211,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Spectrum Cost Optimization Techniques:**
 ```javascript
 // Monitor Spectrum data scanning costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"Redshift: DataScanned\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"Redshift: DataScanned\"]}}"
 })
 ```
 
@@ -298,13 +302,12 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Detection:**
 ```javascript
 // Monitor cluster utilization patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Redshift",
   "metric_name": "DatabaseConnections",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average"]
+  "statistic": "Average"
 })
 ```
 
@@ -341,24 +344,23 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current Redshift costs by component
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Redshift\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Redshift\"]}}"
 })
 
 // Step 2: Monitor cluster utilization patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Redshift",
   "metric_name": "CPUUtilization",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -384,14 +386,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Analyze workload patterns and concurrency scaling usage
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "HOURLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"CSFreeUsage\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"CSFreeUsage\"]}}"
 })
 ```
 
@@ -427,14 +429,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze Redshift ecosystem costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Redshift\", \"Amazon Simple Storage Service\", \"Amazon Kinesis\", \"AWS Lambda\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Redshift\", \"Amazon Simple Storage Service\", \"Amazon Kinesis\", \"AWS Lambda\"]}}"
 })
 ```
 
@@ -464,30 +466,26 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Budget Alerts:**
 ```javascript
 // Monitor Redshift-specific budget performance
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Redshift\"]}}"
-})
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
 ```
 
 **Performance and Cost Efficiency Alerts:**
 ```javascript
 // Monitor query performance and cost correlation
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "Redshift-Efficiency",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "Redshift-Efficiency"
 })
 ```
 
 **Spectrum Cost Monitoring:**
 ```javascript
 // Track Spectrum data scanning costs
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Redshift",
   "metric_name": "QueryDuration",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average"]
+  "statistic": "Average"
 })
 ```
 
@@ -529,6 +527,12 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 ---
 
 ## Additional Resources
+
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon Redshift playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/analytics/redshift)
+- [Redshift Serverless](https://catalog.workshops.aws/awscff/en-US/playbooks/analytics/redshift/2-redshift-serverless)
+- [Redshift Advisor](https://catalog.workshops.aws/awscff/en-US/playbooks/analytics/redshift/3-redshift-advisor)
 
 ### AWS Documentation
 - [Redshift Pricing](https://aws.amazon.com/redshift/pricing/)

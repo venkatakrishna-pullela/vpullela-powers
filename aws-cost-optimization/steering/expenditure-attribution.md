@@ -49,7 +49,7 @@ Understand cost drivers and allocate costs accurately to enable informed decisio
 
 2. **Design Hierarchical Tagging Structure**
    ```
-   Use session_sql to plan:
+   Use session-sql to plan:
    - Organizational hierarchy mapping
    - Project and application taxonomy
    - Cost center and business unit structure
@@ -69,15 +69,15 @@ Understand cost drivers and allocate costs accurately to enable informed decisio
 
 ```javascript
 // Step 1: Analyze current tagging coverage
-const taggingCoverage = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
-  "operation": "getTagValues",
+const taggingCoverage = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
+  "operation": "getTagsOrValues",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "tag_key": "CostCenter"
 })
 
 // Step 2: Assess tag consistency across multiple dimensions
-const tagConsistencyAnalysis = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+const tagConsistencyAnalysis = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session-sql", {
   "query": `
     WITH tag_coverage AS (
       SELECT 
@@ -104,7 +104,7 @@ const tagConsistencyAnalysis = usePower("aws-cost-optimization", "aws-billing-co
 })
 
 // Step 3: Implement hierarchical cost allocation
-const hierarchicalAllocation = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const hierarchicalAllocation = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -114,7 +114,7 @@ const hierarchicalAllocation = usePower("aws-cost-optimization", "aws-billing-co
 })
 
 // Step 4: Identify untagged resources and costs
-const untaggedResources = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const untaggedResources = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -133,7 +133,7 @@ const untaggedResources = usePower("aws-cost-optimization", "aws-billing-cost-ma
 
 1. **Design Cost Allocation Methodology**
    ```
-   Use session_sql to implement:
+   Use session-sql to implement:
    - Direct cost allocation rules
    - Shared cost distribution algorithms
    - Proportional allocation methods
@@ -162,7 +162,7 @@ const untaggedResources = usePower("aws-cost-optimization", "aws-billing-cost-ma
 
 ```javascript
 // Step 1: Implement shared cost allocation algorithm
-const sharedCostAllocation = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+const sharedCostAllocation = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session-sql", {
   "query": `
     WITH shared_services AS (
       SELECT 
@@ -199,7 +199,7 @@ const sharedCostAllocation = usePower("aws-cost-optimization", "aws-billing-cost
 })
 
 // Step 2: Generate project-level chargeback
-const projectChargeback = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const projectChargeback = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -209,7 +209,7 @@ const projectChargeback = usePower("aws-cost-optimization", "aws-billing-cost-ma
 })
 
 // Step 3: Calculate cost center allocations with variance analysis
-const costCenterVariance = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_comparison", {
+const costCenterVariance = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-comparison", {
   "operation": "getCostAndUsageComparisons",
   "baseline_start_date": "2024-10-01",
   "baseline_end_date": "2024-11-01",
@@ -220,7 +220,7 @@ const costCenterVariance = usePower("aws-cost-optimization", "aws-billing-cost-m
 })
 
 // Step 4: Generate comprehensive chargeback report
-const chargebackReport = usePower("aws-cost-optimization", "aws-pricing", "generate_cost_report", {
+const chargebackReport = usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "generate_cost_report", {
   "pricing_data": {
     "shared_allocation": sharedCostAllocation,
     "project_costs": projectChargeback,
@@ -270,7 +270,7 @@ const chargebackReport = usePower("aws-cost-optimization", "aws-pricing", "gener
 
 2. **Correlate Costs with Business Activities**
    ```
-   Use session_sql to analyze:
+   Use session-sql to analyze:
    - Cost correlation with business metrics
    - Seasonal cost patterns
    - Project lifecycle cost impacts
@@ -290,7 +290,7 @@ const chargebackReport = usePower("aws-cost-optimization", "aws-pricing", "gener
 
 ```javascript
 // Step 1: Identify top cost change drivers
-const costChangeDrivers = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_comparison", {
+const costChangeDrivers = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-comparison", {
   "operation": "getCostComparisonDrivers",
   "baseline_start_date": "2024-10-01",
   "baseline_end_date": "2024-11-01",
@@ -301,7 +301,7 @@ const costChangeDrivers = usePower("aws-cost-optimization", "aws-billing-cost-ma
 })
 
 // Step 2: Analyze cost drivers by business dimension
-const businessCostDrivers = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+const businessCostDrivers = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session-sql", {
   "query": `
     WITH cost_changes AS (
       SELECT 
@@ -343,7 +343,7 @@ const businessCostDrivers = usePower("aws-cost-optimization", "aws-billing-cost-
 })
 
 // Step 3: Correlate costs with business metrics
-const businessCorrelation = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+const businessCorrelation = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session-sql", {
   "query": `
     SELECT 
       month,
@@ -363,7 +363,7 @@ const businessCorrelation = usePower("aws-cost-optimization", "aws-billing-cost-
 })
 
 // Step 4: Forecast attributed costs
-const attributedForecast = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const attributedForecast = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostForecast",
   "start_date": "2024-12-01",
   "end_date": "2025-03-01",
@@ -381,7 +381,7 @@ const attributedForecast = usePower("aws-cost-optimization", "aws-billing-cost-m
 
 1. **Implement Activity-Based Costing**
    ```
-   Use session_sql to implement:
+   Use session-sql to implement:
    - Activity cost driver identification
    - Resource consumption modeling
    - Service cost allocation algorithms
@@ -410,7 +410,7 @@ const attributedForecast = usePower("aws-cost-optimization", "aws-billing-cost-m
 
 ```javascript
 // Step 1: Implement activity-based costing model
-const activityBasedCosting = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+const activityBasedCosting = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session-sql", {
   "query": `
     WITH activity_drivers AS (
       SELECT 
@@ -454,7 +454,7 @@ const activityBasedCosting = usePower("aws-cost-optimization", "aws-billing-cost
 })
 
 // Step 2: Develop predictive cost attribution model
-const predictiveAttribution = usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+const predictiveAttribution = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session-sql", {
   "query": `
     WITH historical_patterns AS (
       SELECT 
@@ -498,7 +498,7 @@ const predictiveAttribution = usePower("aws-cost-optimization", "aws-billing-cos
 })
 
 // Step 3: Create multi-dimensional attribution analysis
-const multiDimensionalAttribution = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const multiDimensionalAttribution = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -508,7 +508,7 @@ const multiDimensionalAttribution = usePower("aws-cost-optimization", "aws-billi
 })
 
 // Step 4: Generate advanced attribution report
-const advancedAttributionReport = usePower("aws-cost-optimization", "aws-pricing", "generate_cost_report", {
+const advancedAttributionReport = usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "generate_cost_report", {
   "pricing_data": {
     "activity_based_costing": activityBasedCosting,
     "predictive_attribution": predictiveAttribution,
@@ -572,7 +572,7 @@ const advancedAttributionReport = usePower("aws-cost-optimization", "aws-pricing
 ### Organizational Hierarchy
 ```javascript
 // Example organizational cost attribution
-const organizationalAttribution = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const organizationalAttribution = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -585,7 +585,7 @@ const organizationalAttribution = usePower("aws-cost-optimization", "aws-billing
 ### Project & Application Hierarchy
 ```javascript
 // Example project-based cost attribution
-const projectAttribution = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const projectAttribution = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -598,7 +598,7 @@ const projectAttribution = usePower("aws-cost-optimization", "aws-billing-cost-m
 ### Technical Hierarchy
 ```javascript
 // Example technical cost attribution
-const technicalAttribution = usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+const technicalAttribution = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -679,3 +679,14 @@ const technicalAttribution = usePower("aws-cost-optimization", "aws-billing-cost
 - Implement configurable allocation rules
 - Support scenario-based attribution modeling
 - Maintain historical attribution for trend analysis
+
+## CFM TIPs Implementation Guides
+
+Step-by-step guides from the AWS CFM TIPs workshop for the practices in this guide. When you recommend one of these practices, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Setup Tagging Strategy](https://catalog.workshops.aws/awscff/en-US/foundations/2-tagging-strategy)
+- [AWS Cost Categories](https://catalog.workshops.aws/awscff/en-US/playbooks/costmanagement/costcategories)
+- [AWS Data Exports](https://catalog.workshops.aws/awscff/en-US/visualizations/4-data-exports) for Cost and Usage Report (CUR 2.0) data
+- [AWS Billing Conductor](https://catalog.workshops.aws/awscff/en-US/playbooks/costmanagement/billingconductor) for pro forma showback and chargeback
+- [AWS Split Cost Allocation Data for Amazon ECS](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecs/2-split-cost-allocation)
+
+For other topics, call action "readSteering" with powerName="aws-cost-optimization", steeringFile="cfm-tips-playbooks.md".

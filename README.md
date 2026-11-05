@@ -75,6 +75,7 @@ Specializing in AI/ML solutions and helping customers optimize their cloud infra
 ## 🔗 Quick Links
 
 - 🌐 **[Kiro Powers Marketplace](https://kiro.dev/powers/)** - Explore more powers
+- 📘 **[AWS CFM TIPs Workshop](https://catalog.workshops.aws/awscff/en-US)** - Step-by-step cost optimization playbooks that the AWS Cost Optimization power links to
 - 📚 **[Kiro Documentation](https://kiro.dev/)** - Learn about Kiro
 - 🏢 **[AWS](https://aws.amazon.com/)** - Amazon Web Services
 

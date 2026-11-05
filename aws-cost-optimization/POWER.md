@@ -2,9 +2,8 @@
 name: "aws-cost-optimization"
 displayName: "AWS Cost Optimization"
 description: "AWS cost optimization tools for business teams and developers. Analyze spending, get optimization recommendations, and build cost-aware applications with AWS Well-Architected best practices."
-keywords: ["finops", "cost-optimization", "aws-billing", "cost-analysis", "budget-management", "rightsizing", "cost-intelligence", "savings-plans", "reserved-instances", "cost-anomaly", "spend-analysis", "cost-forecasting", "resource-optimization", "well-architected", "cloud-financial-management", "consumption-model", "efficiency-measurement", "expenditure-analysis", "developer-cost-optimization", "pre-deployment-analysis", "architecture-cost-modeling", "development-environment-optimization", "cost-aware-development"]
+keywords: ["finops", "cost-optimization", "aws-billing", "cost-analysis", "budget-management", "rightsizing", "cost-intelligence", "savings-plans", "reserved-instances", "cost-anomaly", "spend-analysis", "cost-forecasting", "resource-optimization", "well-architected", "cloud-financial-management", "consumption-model", "efficiency-measurement", "expenditure-analysis", "developer-cost-optimization", "pre-deployment-analysis", "architecture-cost-modeling", "development-environment-optimization", "cost-aware-development", "cfm-tips"]
 author: "Venkat Pullela"
-license: "Apache-2.0"
 ---
 
 # AWS Cost Optimization Power
@@ -137,74 +136,80 @@ Built around the AWS Well-Architected Cost Optimization Pillar's five design pri
 **Package:** `awslabs.billing-cost-management-mcp-server`  
 **License:** Apache-2.0  
 **Purpose:** Cost analysis, budget monitoring (read-only), and optimization recommendations  
-**Documentation:** https://awslabs.github.io/mcp/servers/billing-cost-management-mcp-server/
+**Documentation:** https://awslabs.github.io/mcp/servers/billing-cost-management-mcp-server
 
 ### awslabs.aws-pricing-mcp-server
 **Package:** `awslabs.aws-pricing-mcp-server`  
 **License:** Apache-2.0  
 **Purpose:** Real-time pricing intelligence, cost modeling, and infrastructure cost analysis  
-**Documentation:** https://awslabs.github.io/mcp/servers/aws-pricing-mcp-server/
+**Documentation:** https://awslabs.github.io/mcp/servers/aws-pricing-mcp-server
 
 ### awslabs.cloudwatch-mcp-server
 **Package:** `awslabs.cloudwatch-mcp-server`  
 **License:** Apache-2.0  
-**Purpose:** Metrics monitoring, log analysis, dashboard management, and operational insights for cost optimization  
-**Documentation:** https://awslabs.github.io/mcp/servers/cloudwatch-mcp-server/
+**Purpose:** Metrics, alarms, and CloudWatch Logs Insights analysis for performance and cost correlation  
+**Documentation:** https://awslabs.github.io/mcp/servers/cloudwatch-mcp-server
 
 ---
 
 ## Available Tools
 
-The AWS Cost Optimization Power provides these tools across two MCP servers:
+The AWS Cost Optimization Power provides these tools across its three MCP servers. Tool names are exact: the billing server uses hyphenated names, and the pricing and CloudWatch servers use underscores.
 
-### Cost Analysis & Forecasting
-- **cost_explorer** - Historical cost/usage data, forecasting, dimension exploration (getCostAndUsage, getCostForecast, getDimensionValues, getTagsOrValues, getSavingsPlansUtilization, getCostCategories, etc.)
-- **cost_comparison** - Month-to-month cost variance analysis with detailed drivers (getCostAndUsageComparisons, getCostComparisonDrivers)
+### Cost Analysis & Forecasting (billing server)
+- **cost-explorer** - Historical cost and usage, forecasts, and dimension and tag exploration (getCostAndUsage, getCostAndUsageWithResources, getCostForecast, getUsageForecast, getDimensionValues, getTagsOrValues, getCostCategories, getSavingsPlansUtilization)
+- **cost-comparison** - Month-to-month cost variance analysis with detailed drivers (getCostAndUsageComparisons, getCostComparisonDrivers)
 
-### Optimization & Recommendations  
-- **cost_optimization** - Cost savings recommendations from Cost Optimization Hub (idle resources, rightsizing, RI/SP purchases)
-- **compute_optimizer** - Performance-based rightsizing recommendations (EC2, EBS, Lambda, RDS, ECS, ASG)
-- **rec_details** - Detailed analysis combining Cost Optimization Hub, Compute Optimizer, and Cost Explorer data
+### Optimization & Recommendations (billing server)
+- **cost-optimization** - Cost Optimization Hub recommendations: idle resources, rightsizing, Graviton migration, and Reserved Instance and Savings Plans purchases
+- **compute-optimizer** - Performance-based rightsizing and idle resource recommendations (get_ec2_instance_recommendations, get_auto_scaling_group_recommendations, get_ebs_volume_recommendations, get_lambda_function_recommendations, get_rds_recommendations, get_ecs_service_recommendations, get_idle_recommendations)
+- **rec-details** - Detailed analysis of one Cost Optimization Hub recommendation
+- **sp-recommendation** - Savings Plans purchase recommendations for Compute, EC2 Instance, SageMaker, and Database Savings Plans
 
-### Budget & Anomaly Monitoring
-- **budgets** - Monitor existing AWS budgets and their performance (read-only - cannot create or modify budgets)
-- **cost_anomaly** - Detect and analyze cost anomalies (last 90 days)
-- **free_tier_usage** - Monitor Free Tier usage across services to avoid unexpected charges
+### Budget & Anomaly Monitoring (billing server)
+- **budgets** - Existing AWS budgets and their status (read-only: cannot create or modify budgets)
+- **budget-performance-history** - A budget's actual and forecasted spend over time
+- **cost-anomaly** - Cost anomalies detected by AWS Cost Anomaly Detection
+- **free-tier-usage** - Free Tier usage across services, to avoid unexpected charges
 
-### Reserved Capacity Analysis
-- **ri_performance** - Reserved Instance coverage and utilization analysis
-- **sp_performance** - Savings Plans coverage and utilization analysis
+### Reserved Capacity Analysis (billing server)
+- **ri-performance** - Reserved Instance coverage and utilization (get_reservation_coverage, get_reservation_utilization)
+- **sp-performance** - Savings Plans coverage and utilization (get_savings_plans_coverage, get_savings_plans_utilization, get_savings_plans_utilization_details)
 
-### Pricing Intelligence
+The billing server also has tools for AWS Billing Conductor, billing views, cost allocation tags, cost categories, invoices, and credits.
+
+### Pricing Intelligence (pricing server)
 - **get_pricing** - Real-time AWS pricing with complex filtering across services and regions
 - **get_pricing_service_codes** - Discover available AWS services in pricing API
 - **get_pricing_service_attributes** - Explore pricing dimensions for services  
 - **get_pricing_attribute_values** - Get valid values for pricing filters
 - **get_price_list_urls** - Access historical pricing data via bulk download URLs
 
-### Infrastructure Cost Analysis
+### Infrastructure Cost Analysis (pricing server)
 - **analyze_cdk_project** - Analyze CDK projects for AWS services and cost implications
 - **analyze_terraform_project** - Analyze Terraform projects for AWS services and cost implications
 - **generate_cost_report** - Generate detailed cost analysis reports with recommendations
 - **get_bedrock_patterns** - Architecture patterns and cost considerations for Amazon Bedrock
 
-### Advanced Analytics
-- **storage_lens** - Query S3 Storage Lens data using Athena SQL for storage optimization
-- **session_sql** - Execute SQL queries on cost data for custom analysis and cross-tool joins
-- **bcm_pricing_calc** - Access AWS Pricing Calculator workload estimates and rate preferences
+### Advanced Analytics (billing server)
+- **storage-lens** - Query S3 Storage Lens data with Athena SQL. It creates Athena and AWS Glue resources and writes query results to Amazon S3.
+- **session-sql** - Run SQL on data that other tools stored in the session database, for custom analysis and cross-tool joins
+- **bcm-pricing-calc** - AWS Pricing Calculator workload estimates and rate preferences
 
-### Operational Monitoring & Insights
-- **list_metrics** - Discover available CloudWatch metrics for cost-related monitoring
-- **get_metric_statistics** - Retrieve metric data for resource utilization and cost correlation analysis
-- **get_metric_data** - Advanced metric queries with math expressions for cost efficiency calculations
-- **describe_alarms** - Monitor existing CloudWatch alarms for cost and performance thresholds
-- **list_dashboards** - Access existing CloudWatch dashboards for cost monitoring
-- **get_dashboard** - Retrieve dashboard configurations for cost optimization insights
-- **describe_log_groups** - Analyze CloudWatch Logs usage and retention for cost optimization
-- **get_log_events** - Query log data for cost-related events and patterns
-- **start_query** - Execute CloudWatch Logs Insights queries for advanced cost analysis
-- **get_query_results** - Retrieve results from CloudWatch Logs Insights cost analysis queries
-- **describe_metric_filters** - Analyze metric filters for cost-related log monitoring
+### Operational Monitoring & Insights (CloudWatch server)
+- **get_metric_data** - Metric data for utilization and cost correlation, including math expressions and Metrics Insights queries
+- **get_metric_metadata** - A metric's description, unit, and recommended statistics
+- **analyze_metric** - Trend, seasonality, and statistical analysis of a metric
+- **get_recommended_metric_alarms** - Recommended alarm configurations for a metric
+- **get_active_alarms** - Alarms currently in the ALARM state
+- **get_alarm_history** - State change history for an alarm
+- **describe_log_groups** - Log groups, their log classes, and saved queries, for retention and storage cost reviews
+- **analyze_log_group** - Anomalies and common message patterns in a log group
+- **execute_log_insights_query** - Run a CloudWatch Logs Insights query (billed per GB of log data scanned)
+- **get_logs_insight_query_results** - Results of a Logs Insights query
+- **cancel_logs_insight_query** - Stop a running Logs Insights query
+
+The CloudWatch server can't read or create dashboards. Build dashboards in the CloudWatch console or with infrastructure as code.
 
 ---
 
@@ -212,7 +217,7 @@ The AWS Cost Optimization Power provides these tools across two MCP servers:
 
 ### Prerequisites
 
-Before using the AWS Cost Optimizer Power, ensure you have:
+Before using the AWS Cost Optimization Power, ensure you have:
 
 1. **AWS CLI** (version 2.32.0 or later recommended)
    - Check: `aws --version`
@@ -226,32 +231,27 @@ Before using the AWS Cost Optimizer Power, ensure you have:
 
 You must ensure that there are valid AWS credentials. This is required for all cost management tools to function properly.
 
-**Configure credentials using one of these methods:**
+**Configure a named profile using one of these methods:**
 
-#### Option A: AWS CLI Configure
+#### Option A: AWS IAM Identity Center (recommended)
 ```bash
-aws configure
+aws configure sso --profile cost-readonly
+aws sso login --profile cost-readonly
 ```
-Enter your Access Key ID, Secret Access Key, default region, and output format.
+IAM Identity Center issues temporary credentials. Run `aws sso login` again when the session expires.
 
-#### Option B: Environment Variables
+#### Option B: Access keys
 ```bash
-export AWS_ACCESS_KEY_ID=your_access_key
-export AWS_SECRET_ACCESS_KEY=your_secret_key
-export AWS_DEFAULT_REGION=us-east-1
+aws configure --profile cost-readonly
 ```
-
-#### Option C: AWS SSO
-```bash
-aws configure sso
-```
+Enter your Access Key ID, Secret Access Key, default region, and output format. Prefer temporary credentials (Option A) where your organization supports them.
 
 **Verify credentials:**
 ```bash
-AWS_PAGER="" aws sts get-caller-identity
+AWS_PAGER="" aws sts get-caller-identity --profile cost-readonly
 ```
 
-**Important for MCP Servers**: The MCP servers in this power use AWS credential files (`~/.aws/credentials`) rather than environment variables. If you're using temporary credentials (like AWS SSO or session tokens), ensure they are saved to the credential file, not just set as environment variables.
+**Important for MCP Servers**: Kiro starts the power's MCP servers itself, so they don't see variables you export in a terminal. They read the `AWS_PROFILE` and `AWS_REGION` values from the power's MCP configuration, which default to the `default` profile and `us-east-1`. To use another profile, such as `cost-readonly` above, change `AWS_PROFILE` for the three servers in `~/.kiro/settings/mcp.json`, then restart the servers.
 
 ### Step 2: Enable Cost Explorer (if not already enabled)
 
@@ -262,37 +262,62 @@ Cost Explorer is enabled by default for most AWS accounts, but verify:
 
 ### Step 3: Configure Billing and Monitoring Permissions
 
-Ensure your AWS user/role has the required permissions:
+The power only needs read access, and its MCP configuration auto-approves the read-only analysis tools. Attach a dedicated read-only policy to the role or user in the profile above, so approved tool calls can't change your resources:
 ```json
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ce:*",
-                "budgets:*",
-                "pricing:*",
-                "organizations:ListAccounts",
-                "organizations:DescribeOrganization",
-                "support:*",
-                "cur:*",
-                "cloudwatch:*",
-                "logs:*"
-            ],
-            "Resource": "*"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CostAndUsageReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "ce:Describe*",
+        "ce:Get*",
+        "ce:List*",
+        "budgets:ViewBudget",
+        "budgets:DescribeBudgetActionsForAccount",
+        "budgets:DescribeBudgetActionsForBudget",
+        "cost-optimization-hub:Get*",
+        "cost-optimization-hub:List*",
+        "compute-optimizer:Describe*",
+        "compute-optimizer:Get*",
+        "savingsplans:Describe*",
+        "freetier:Get*",
+        "freetier:List*",
+        "pricing:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "MonitoringReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "cloudwatch:Describe*",
+        "cloudwatch:Get*",
+        "cloudwatch:List*",
+        "logs:Describe*",
+        "logs:Get*",
+        "logs:List*",
+        "logs:StartQuery",
+        "logs:StopQuery"
+      ],
+      "Resource": "*"
+    }
+  ]
 }
 ```
 
+- All AWS Price List API actions (`pricing:*`) are read-only.
+- The policy leaves out optional tools that write data or start jobs: `storage-lens` (creates Athena and AWS Glue resources and writes to S3), Savings Plans recommendation generation, and `sp-purchase-analyzer`. To use them, add the actions listed in the [Billing and Cost Management MCP server README](https://github.com/awslabs/mcp/tree/main/src/billing-cost-management-mcp-server).
+- In AWS Organizations, a member account sees only its own costs, and the management account sees costs for the whole organization.
+
 ### Step 4: Install the Cost Check Hooks (Optional)
 
-This power ships three agent hooks that review infrastructure-as-code for cost issues whenever a file is saved — one each for CDK, CloudFormation, and Terraform. Hooks are resolved **per workspace** from `.kiro/hooks/`, so they are not deployed by power installation and must be written into the workspace. To install them:
+This power ships three agent hooks that review infrastructure-as-code for cost issues whenever a matching file is saved: one each for CDK, CloudFormation, and Terraform. Hooks are resolved **per workspace** from `.kiro/hooks/*.json`, so they are not deployed by power installation and must be written into the workspace. To install them:
 
 > "Install the aws-cost-optimization cost check hooks in this workspace"
 
-**Agent instructions:** Load the hook definitions and installation steps by calling action `"readSteering"` with `powerName="aws-cost-optimization"`, `steeringFile="install-hooks.md"`, then follow them. Install only the hooks matching the infrastructure-as-code actually present in the workspace, and adapt each hook's file patterns to the workspace's real layout.
+**Agent instructions:** Load the hook definitions and installation steps by calling action `"readSteering"` with `powerName="aws-cost-optimization"`, `steeringFile="install-hooks.md"`, then follow them. Install only the hooks matching the infrastructure-as-code actually present in the workspace, and adapt each hook's `matcher` to the workspace's real layout.
 
 Skip this step if the workspace contains no infrastructure-as-code.
 
@@ -311,7 +336,7 @@ Once credentials are configured, you can immediately start using the power:
 
 **Get monthly costs by service:**
 ```javascript
-usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -324,7 +349,7 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer"
 
 **Get cost forecast for next 3 months:**
 ```javascript
-usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostForecast",
   "metric": "UNBLENDED_COST",
   "granularity": "MONTHLY",
@@ -336,7 +361,7 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_explorer"
 
 **Compare costs month-over-month:**
 ```javascript
-usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_comparison", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-comparison", {
   "operation": "getCostAndUsageComparisons",
   "baseline_start_date": "2024-10-01",
   "baseline_end_date": "2024-11-01",
@@ -351,7 +376,7 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_compariso
 
 **Get cost optimization opportunities:**
 ```javascript
-usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_optimization", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-optimization", {
   "operation": "list_recommendations",
   "filters": "{\"actionTypes\": [\"Rightsize\", \"Stop\", \"Delete\"]}"
 })
@@ -360,15 +385,15 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_optimizat
 
 **Get detailed recommendation analysis:**
 ```javascript
-usePower("aws-cost-optimization", "aws-billing-cost-management", "rec_details", {
-  "recommendation_id": "arn:aws:cost-optimization-hub:us-east-1:123456789012:recommendation/12345"
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "rec-details", {
+  "recommendation_id": "<recommendationId returned by cost-optimization list_recommendations>"
 })
-// Returns: Detailed analysis combining multiple AWS services data
+// Returns: Detailed analysis combining Cost Optimization Hub, Compute Optimizer, and Cost Explorer data
 ```
 
 **Get EC2 rightsizing recommendations:**
 ```javascript
-usePower("aws-cost-optimization", "aws-billing-cost-management", "compute_optimizer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
   "operation": "get_ec2_instance_recommendations"
 })
 // Returns: Performance-based EC2 rightsizing opportunities
@@ -378,15 +403,15 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "compute_optimi
 
 **Monitor existing budgets (read-only):**
 ```javascript
-usePower("aws-cost-optimization", "aws-billing-cost-management", "budgets", {
-  "max_results": 100
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
+  "max_items": 100
 })
 // Returns: List of existing budgets with current spend vs limits (read-only - cannot create or modify budgets)
 ```
 
 **Detect cost anomalies:**
 ```javascript
-usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "total_impact_start": 100
@@ -396,7 +421,7 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "cost_anomaly",
 
 **Monitor Free Tier usage:**
 ```javascript
-usePower("aws-cost-optimization", "aws-billing-cost-management", "free_tier_usage", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "free-tier-usage", {
   "operation": "get_free_tier_usage"
 })
 // Returns: Free Tier usage across services with limits
@@ -406,7 +431,7 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "free_tier_usag
 
 **Analyze Reserved Instance utilization:**
 ```javascript
-usePower("aws-cost-optimization", "aws-billing-cost-management", "ri_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "ri-performance", {
   "operation": "get_reservation_utilization",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
@@ -417,7 +442,7 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "ri_performance
 
 **Analyze Savings Plans performance:**
 ```javascript
-usePower("aws-cost-optimization", "aws-billing-cost-management", "sp_performance", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "sp-performance", {
   "operation": "get_savings_plans_utilization",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01"
@@ -429,7 +454,7 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "sp_performance
 
 **Compare EC2 pricing across regions:**
 ```javascript
-usePower("aws-cost-optimization", "aws-pricing", "get_pricing", {
+usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing", {
   "service_code": "AmazonEC2",
   "region": ["us-east-1", "us-west-2", "eu-west-1"],
   "filters": [
@@ -441,7 +466,7 @@ usePower("aws-cost-optimization", "aws-pricing", "get_pricing", {
 
 **Discover available services:**
 ```javascript
-usePower("aws-cost-optimization", "aws-pricing", "get_pricing_service_codes", {
+usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing_service_codes", {
   "filter": "bedrock"
 })
 // Returns: AWS services matching "bedrock" pattern
@@ -451,7 +476,7 @@ usePower("aws-cost-optimization", "aws-pricing", "get_pricing_service_codes", {
 
 **Analyze CDK project costs:**
 ```javascript
-usePower("aws-cost-optimization", "aws-pricing", "analyze_cdk_project", {
+usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "analyze_cdk_project", {
   "project_path": "./my-cdk-app"
 })
 // Returns: AWS services used in CDK project with cost implications
@@ -459,7 +484,7 @@ usePower("aws-cost-optimization", "aws-pricing", "analyze_cdk_project", {
 
 **Generate detailed cost report:**
 ```javascript
-usePower("aws-cost-optimization", "aws-pricing", "generate_cost_report", {
+usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "generate_cost_report", {
   "pricing_data": { /* pricing data from get_pricing */ },
   "service_name": "Amazon Bedrock",
   "format": "markdown"
@@ -471,7 +496,7 @@ usePower("aws-cost-optimization", "aws-pricing", "generate_cost_report", {
 
 **Query S3 Storage Lens data:**
 ```javascript
-usePower("aws-cost-optimization", "aws-billing-cost-management", "storage_lens", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "storage-lens", {
   "query": "SELECT bucket_name, SUM(CAST(metric_value AS BIGINT)) as total_size FROM {table} WHERE metric_name = 'StorageBytes' GROUP BY bucket_name ORDER BY total_size DESC LIMIT 10"
 })
 // Returns: Top 10 S3 buckets by storage size
@@ -479,7 +504,7 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "storage_lens",
 
 **Execute custom SQL analysis:**
 ```javascript
-usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "session-sql", {
   "query": "SELECT service, SUM(cost) as total_cost FROM cost_data GROUP BY service ORDER BY total_cost DESC"
 })
 // Returns: Custom cost analysis results from session database
@@ -487,25 +512,24 @@ usePower("aws-cost-optimization", "aws-billing-cost-management", "session_sql", 
 
 ### Operational Monitoring & Cost Correlation
 
-**Discover cost-related metrics:**
+**Look up a metric before you query it:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "list_metrics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_metadata", {
   "namespace": "AWS/EC2",
   "metric_name": "CPUUtilization"
 })
-// Returns: Available EC2 CPU metrics for rightsizing analysis
+// Returns: The metric's description, unit, and recommended statistics
 ```
 
 **Analyze resource utilization for cost optimization:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/EC2",
   "metric_name": "CPUUtilization",
-  "dimensions": [{"Name": "InstanceId", "Value": "i-1234567890abcdef0"}],
+  "dimensions": [{"name": "InstanceId", "value": "i-1234567890abcdef0"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 // Returns: CPU utilization data for rightsizing decisions
 ```
@@ -513,17 +537,15 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Create cost efficiency calculations:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "cpu_util",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/EC2",
-          "metric_name": "CPUUtilization",
-          "dimensions": [{"Name": "InstanceId", "Value": "i-1234567890abcdef0"}]
-        },
-        "period": 3600,
-        "stat": "Average"
+        "namespace": "AWS/EC2",
+        "metric_name": "CPUUtilization",
+        "dimensions": [{"name": "InstanceId", "value": "i-1234567890abcdef0"}],
+        "statistic": "Average",
+        "period": 3600
       }
     },
     {
@@ -539,22 +561,23 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 
 **Monitor cost-related alarms:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "HighCost",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "HighCost"
 })
 // Returns: Active cost-related alarms requiring attention
 ```
 
 **Analyze log-based cost events:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "start_query", {
-  "log_group_name": "/aws/lambda/my-function",
-  "start_time": "2024-11-01T00:00:00Z",
-  "end_time": "2024-12-01T00:00:00Z",
-  "query_string": "fields @timestamp, @duration, @billedDuration | filter @duration > 5000 | stats count() by bin(5m)"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "execute_log_insights_query", {
+  "log_group_names": ["/aws/lambda/my-function"],
+  "start_time": "2024-11-01T00:00:00+00:00",
+  "end_time": "2024-12-01T00:00:00+00:00",
+  "query_string": "filter @type = \"REPORT\" | stats avg(@billedDuration), max(@maxMemoryUsed / 1000 / 1000), count() by bin(1d)",
+  "limit": 100
 })
-// Returns: Query ID for analyzing Lambda execution patterns affecting costs
+// Returns: Daily billed duration, peak memory (MB), and invocation counts for Lambda cost analysis.
+// Logs Insights charges per GB of log data scanned, so keep the time range and log groups narrow.
 ```
 
 ---
@@ -568,7 +591,7 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "start_query"
 The tool selection guide provides:
 - **Query Pattern Mapping** - Match your questions to the right tools
 - **Business vs Developer Workflows** - Tailored guidance for different user types  
-- **Service-Specific Guidance** - Direct links to 20 detailed service optimization guides
+- **Service-Specific Guidance** - Direct links to 22 detailed service optimization guides
 - **Workflow Combinations** - Multi-step analysis patterns
 - **CloudWatch Integration** - Performance-cost correlation analysis
 
@@ -580,23 +603,32 @@ This power includes workflow guidance for both business teams and developers, or
 
 ### Service-Specific Optimization Guides
 
-For detailed cost optimization guidance on individual AWS services, see our service guides:
+For detailed cost optimization guidance on individual AWS services, see the 22 service guides:
 
 **High-Priority Services (Start Here):**
-- **EC2** - Instance rightsizing, Reserved Instances, Spot optimization, Auto Scaling
-- **S3** - Storage classes, lifecycle policies, data transfer optimization
-- **RDS** - Database sizing, Reserved Instances, Multi-AZ cost management
-- **Lambda** - Memory optimization, execution duration, concurrency management
+- **EC2** (`services/compute-cost-optimization.md`) - Instance rightsizing, Spot optimization, Auto Scaling
+- **S3, EBS, and EFS** (`services/storage-cost-optimization.md`) - Storage classes, lifecycle policies, volume types
+- **RDS and Aurora** (`services/rds-aurora-cost-optimization.md`) - Database sizing, Reserved Instances, Multi-AZ cost management
+- **Lambda** (`services/lambda-cost-optimization.md`) - Memory optimization, execution duration, concurrency management
 
 **Additional Services Available:**
-- **Compute:** ECS, Batch, Fargate optimization strategies
-- **Storage:** EBS, EFS, FSx cost management
-- **Database:** DynamoDB, Redshift, Aurora optimization
-- **AI/ML:** Bedrock, SageMaker, Comprehend cost strategies
-- **Networking:** CloudFront, VPC, Route53, Load Balancer optimization
-- **Analytics:** Athena, Glue, EMR, Kinesis cost management
+- **Compute:** Containers (ECS, EKS, Fargate), EC2 AMD instances, Graviton
+- **Storage:** FSx for NetApp ONTAP
+- **Database:** DynamoDB, Redshift, OpenSearch, ElastiCache for Redis
+- **AI/ML:** Bedrock, Bedrock Agents, SageMaker, AI workloads
+- **Networking:** Data transfer, NAT gateways, load balancers, public IPv4, Route 53
+- **Security & governance:** Security services, CloudTrail
+- **Monitoring & commitments:** CloudWatch and cost intelligence, Reserved Instances
+- **Application integration:** SQS
 
-*Call action "readSteering" with powerName="aws-cost-optimization", steeringFile="services/README.md" to see available service guides, then read specific service files like "services/ec2-cost-optimization.md" for detailed guidance.*
+*Call action "readSteering" with powerName="aws-cost-optimization", steeringFile="services/README.md" to list every service guide and its file name, then read the guide you need, for example steeringFile="services/compute-cost-optimization.md".*
+
+### 📘 [CFM TIPs Implementation Playbooks](./steering/cfm-tips-playbooks.md)
+*Step-by-step implementation guides from AWS*
+- [AWS CFM TIPs](https://catalog.workshops.aws/awscff/en-US) (Cloud Financial Management Technical Implementation Playbooks) is a free AWS workshop with step-by-step guides for the practices in this power
+- Covers foundations, visualizations, service cost optimization playbooks, and governance controls
+
+**Agent instructions:** When you recommend an optimization, a setup step, or a governance control, end your answer with `**Implement with CFM TIPs:**` and a link to the matching CFM TIPs page. Service guides list their pages under "CFM TIPs Playbooks". For other topics, call action "readSteering" with powerName="aws-cost-optimization", steeringFile="cfm-tips-playbooks.md". Link only pages listed in this power's guides, and skip the link when no page matches.
 
 ### For Business & FinOps Teams
 
@@ -671,7 +703,7 @@ For detailed cost optimization guidance on individual AWS services, see our serv
 
 - **Query very long time ranges** without reason (expensive and slow)
 - **Ignore cost forecasts** - use them for budget planning and capacity decisions
-- **Skip dimension exploration** - use get_dimension_values to understand your data
+- **Skip dimension exploration** - use the cost-explorer `getDimensionValues` operation to understand your data
 - **Forget regional differences** - pricing varies significantly by region
 - **Overlook Free Tier usage** - monitor to avoid unexpected charges
 - **Ignore budget performance** - regularly check budget status and utilization
@@ -737,7 +769,7 @@ For detailed information about the individual MCP servers, please refer to their
 **Solutions**:
 1. **Verify CloudWatch permissions**:
    ```bash
-   aws cloudwatch list-metrics --namespace AWS/EC2 --max-records 1
+   aws cloudwatch list-metrics --namespace AWS/EC2 --max-items 1
    ```
 2. **Check log group permissions**:
    ```bash
@@ -749,26 +781,25 @@ For detailed information about the individual MCP servers, please refer to their
 ### "ExpiredTokenException" or MCP Credential Issues
 **Problem**: MCP servers show expired token errors even when AWS CLI works fine.
 
-**Root Cause**: MCP servers use AWS credential files (`~/.aws/credentials`) rather than environment variables, and may cache old credentials even after restart.
+**Root Cause**: Kiro starts the MCP servers itself, so they use the profile named by `AWS_PROFILE` in the power's MCP configuration, not variables exported in your terminal. That profile's credentials have expired, or the configuration points at a different profile than the one you refreshed. Running servers can also keep using old credentials until they restart.
 
 **Solution**:
-1. **Update AWS credential file** with fresh credentials:
+1. **Refresh the profile's credentials**:
    ```bash
-   # Edit ~/.aws/credentials file directly
-   [default]
-   aws_access_key_id = YOUR_ACCESS_KEY
-   aws_secret_access_key = YOUR_SECRET_KEY
-   aws_session_token = YOUR_SESSION_TOKEN  # If using temporary credentials
+   aws sso login --profile cost-readonly   # IAM Identity Center profiles
+   ```
+   For a profile that uses temporary access keys, replace the keys for that profile in `~/.aws/credentials`.
+
+2. **Check which profile the servers use**: confirm that `AWS_PROFILE` for the power's three servers in `~/.kiro/settings/mcp.json` names the profile you refreshed.
+
+3. **Restart MCP servers** in Kiro to pick up new credentials
+
+4. **Verify credentials work**:
+   ```bash
+   AWS_PAGER="" aws sts get-caller-identity --profile cost-readonly
    ```
 
-2. **Restart MCP servers** in Kiro to pick up new credentials
-
-3. **Verify credentials work**:
-   ```bash
-   aws sts get-caller-identity
-   ```
-
-**Note**: Environment variables (`export AWS_ACCESS_KEY_ID=...`) alone are not sufficient for MCP servers. The credential file must be updated for MCP servers to authenticate properly.
+**Note**: Environment variables such as `export AWS_ACCESS_KEY_ID=...` in a terminal don't reach the MCP servers. Use a named profile instead.
 
 ---
 
@@ -777,6 +808,7 @@ For detailed information about the individual MCP servers, please refer to their
 - AWS Cost Management: https://aws.amazon.com/aws-cost-management/
 - AWS Well-Architected Cost Optimization Pillar: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/
 - AWS Cost Explorer: https://aws.amazon.com/aws-cost-management/aws-cost-explorer/
+- AWS CFM TIPs workshop (step-by-step implementation playbooks): https://catalog.workshops.aws/awscff/en-US
 
 ---
 

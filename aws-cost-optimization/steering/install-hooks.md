@@ -5,7 +5,7 @@ inclusion: manual
 # Installing the Cost Check Hooks
 
 This power ships three agent hooks that review infrastructure-as-code for cost
-optimization issues each time a file is saved: one for CDK, one for
+optimization issues each time a matching file is saved: one for CDK, one for
 CloudFormation, and one for Terraform.
 
 ## Why the agent has to install these
@@ -25,6 +25,10 @@ writes into the user's workspace on request.
 `hooks/` directory holds no hook files for that reason — see
 `hooks/README.md`.
 
+The definitions use the hook schema that Kiro IDE 1.0 and Kiro CLI V3 load:
+standalone JSON files at `.kiro/hooks/<name>.json` with `"version": "v1"`, a
+PascalCase `trigger`, a `matcher` regular expression, and an `action`.
+
 ## Agent instructions
 
 When the user asks to install these hooks:
@@ -35,99 +39,92 @@ When the user asks to install these hooks:
 2. **Write only the hooks that apply.** Do not install the Terraform hook into a
    workspace with no Terraform. If none of the three apply, say so rather than
    installing hooks that can never fire.
-3. **Adapt each `patterns` array to the real layout.** The defaults below assume
-   a conventional CDK/CloudFormation project with top-level `lib/`, `stacks/`,
-   `templates/`, and `cloudformation/` directories. Rewrite the globs to match
-   where the user's IaC actually lives — a hook with patterns that match nothing
-   is worse than no hook, because it looks installed.
+3. **Adapt each `matcher` to the real layout.** The `matcher` is a regular
+   expression tested against the saved file's path. The defaults below assume a
+   conventional CDK/CloudFormation project with `lib/`, `stacks/`,
+   `templates/`, and `cloudformation/` directories. Rewrite the expression to
+   match where the user's IaC actually lives — a hook whose matcher matches
+   nothing is worse than no hook, because it looks installed.
 4. **Create `.kiro/hooks/` if it does not exist**, then write each hook as its
    own file using the filenames given below.
-5. **Confirm what was installed** and which hooks were skipped, with the reason.
+5. **Check for hooks from an earlier install.** Earlier versions of this guide
+   wrote `.kiro/hooks/cdk-cost-check-on-save.kiro.hook`,
+   `cfn-cost-check-on-save.kiro.hook`, and `terraform-cost-check-on-save.kiro.hook`
+   in the IDE 0.x format, which Kiro IDE 1.0 shows as legacy hooks. If any of
+   them exist, tell the user and offer to delete them so each review doesn't
+   run twice.
+6. **Confirm what was installed** and which hooks were skipped, with the reason.
 
 ## Hook definitions
 
-### `.kiro/hooks/cdk-cost-check-on-save.kiro.hook`
+### `.kiro/hooks/cdk-cost-check-on-save.json`
 
 ```json
 {
-  "enabled": true,
-  "name": "CDK Cost Check on Save",
-  "description": "When a CDK source file is saved, automatically review it for cost optimization issues against the aws-cost-optimization standards",
-  "version": "1",
-  "when": {
-    "type": "fileEdited",
-    "patterns": [
-      "lib/**/*.ts",
-      "stacks/**/*.ts",
-      "lib/**/*.py",
-      "stacks/**/*.py",
-      "lib/**/*.java",
-      "stacks/**/*.java"
-    ]
-  },
-  "then": {
-    "type": "askAgent",
-    "prompt": "Review the edited CDK file for AWS cost optimization issues. Only flag issues if this appears to be AWS infrastructure code; if it is not, stay silent. Check for: oversized or previous-generation instance types (prefer Graviton/current-gen), EbsDeviceVolumeType.GP2 instead of GP3, DatabaseInstanceEngine or instance classes using db.t families for production, missing removalPolicy on stateful constructs, missing Schedule tags on EC2/RDS resources, Lambda functions with over-provisioned memory, and missing performanceInsightEnabled on RDS. For the full set of standards, load the power's guidance by calling the kiro_powers tool with action=\"readSteering\", powerName=\"aws-cost-optimization\", steeringFile=\"developer-cost-optimization.md\"."
-  }
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "CDK Cost Check on Save",
+      "description": "When a CDK source file is saved, review it for cost optimization issues against the aws-cost-optimization standards",
+      "trigger": "PostFileSave",
+      "matcher": "(^|/)(lib|stacks)/.+\\.(ts|py|java)$",
+      "action": {
+        "type": "agent",
+        "prompt": "Review the saved CDK file for AWS cost optimization issues. Only flag issues if this appears to be AWS infrastructure code; if it is not, stay silent. Check for: oversized or previous-generation instance types (prefer Graviton/current-gen), EbsDeviceVolumeType.GP2 instead of GP3, DatabaseInstanceEngine or instance classes using db.t families for production, missing removalPolicy on stateful constructs, missing Schedule tags on EC2/RDS resources, Lambda functions with over-provisioned memory, and missing enablePerformanceInsights on RDS. For the full set of standards, load the power's developer guide: call action \"readSteering\" with powerName=\"aws-cost-optimization\", steeringFile=\"developer-cost-optimization.md\"."
+      }
+    }
+  ]
 }
 ```
 
-### `.kiro/hooks/cfn-cost-check-on-save.kiro.hook`
+### `.kiro/hooks/cfn-cost-check-on-save.json`
 
 ```json
 {
-  "enabled": true,
-  "name": "CloudFormation Cost Check on Save",
-  "description": "When a CloudFormation template is saved, automatically review it against the cost-optimization standards and flag any violations",
-  "version": "1",
-  "when": {
-    "type": "fileEdited",
-    "patterns": [
-      "templates/**/*.yaml",
-      "templates/**/*.yml",
-      "cloudformation/**/*.yaml",
-      "cloudformation/**/*.yml",
-      "lib/**/*.yaml",
-      "lib/**/*.yml",
-      "stacks/**/*.yaml",
-      "stacks/**/*.yml"
-    ]
-  },
-  "then": {
-    "type": "askAgent",
-    "prompt": "Review the edited CloudFormation template against the cost-optimization standards. Only flag issues if this is actually a CloudFormation template; if it is not, stay silent. Flag any violations: gp2 storage, db.t instance families, missing DeletionPolicy or UpdateReplacePolicy on stateful resources, missing Schedule tags on RDS/EC2, string-quoted Number defaults, missing MinValue/MaxValue on Number parameters, missing Performance Insights on RDS, and Fn::Join with an empty delimiter instead of !Sub. For the full set of standards, load the power's guidance by calling the kiro_powers tool with action=\"readSteering\", powerName=\"aws-cost-optimization\", steeringFile=\"developer-cost-optimization.md\"."
-  }
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "CloudFormation Cost Check on Save",
+      "description": "When a CloudFormation template is saved, review it against the cost-optimization standards and flag any violations",
+      "trigger": "PostFileSave",
+      "matcher": "(^|/)(templates|cloudformation|lib|stacks)/.+\\.ya?ml$",
+      "action": {
+        "type": "agent",
+        "prompt": "Review the saved CloudFormation template against the cost-optimization standards. Only flag issues if this is actually a CloudFormation template; if it is not, stay silent. Flag any violations: gp2 storage, db.t instance families, missing DeletionPolicy or UpdateReplacePolicy on stateful resources, missing Schedule tags on RDS/EC2, string-quoted Number defaults, missing MinValue/MaxValue on Number parameters, missing Performance Insights on RDS, and Fn::Join with an empty delimiter instead of !Sub. For the full set of standards, load the power's developer guide: call action \"readSteering\" with powerName=\"aws-cost-optimization\", steeringFile=\"developer-cost-optimization.md\"."
+      }
+    }
+  ]
 }
 ```
 
-### `.kiro/hooks/terraform-cost-check-on-save.kiro.hook`
+### `.kiro/hooks/terraform-cost-check-on-save.json`
 
 ```json
 {
-  "enabled": true,
-  "name": "Terraform Cost Check on Save",
-  "description": "When a Terraform file is saved, automatically review it for cost optimization issues against the aws-cost-optimization standards",
-  "version": "1",
-  "when": {
-    "type": "fileEdited",
-    "patterns": [
-      "**/*.tf"
-    ]
-  },
-  "then": {
-    "type": "askAgent",
-    "prompt": "Review the edited Terraform file for AWS cost optimization issues. Only flag issues if this file provisions AWS resources; if it does not, stay silent. Check for: oversized or previous-generation instance types (prefer current-gen like m7g, c7g, r7g), gp2 EBS volumes instead of gp3, db.t instance families for production RDS, missing deletion_protection on stateful resources, missing Schedule tags on EC2/RDS resources, over-provisioned IOPS, missing enable_performance_insights on RDS, and hardcoded regions that miss cheaper alternatives. For the full set of standards, load the power's guidance by calling the kiro_powers tool with action=\"readSteering\", powerName=\"aws-cost-optimization\", steeringFile=\"developer-cost-optimization.md\"."
-  }
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Terraform Cost Check on Save",
+      "description": "When a Terraform file is saved, review it for cost optimization issues against the aws-cost-optimization standards",
+      "trigger": "PostFileSave",
+      "matcher": "\\.tf$",
+      "action": {
+        "type": "agent",
+        "prompt": "Review the saved Terraform file for AWS cost optimization issues. Only flag issues if this file provisions AWS resources; if it does not, stay silent. Check for: oversized or previous-generation instance types (prefer current-gen like m7g, c7g, r7g), gp2 EBS volumes instead of gp3, db.t instance families for production RDS, missing deletion_protection on stateful resources, missing Schedule tags on EC2/RDS resources, over-provisioned IOPS, missing performance_insights_enabled on RDS, and hardcoded regions that miss cheaper alternatives. For the full set of standards, load the power's developer guide: call action \"readSteering\" with powerName=\"aws-cost-optimization\", steeringFile=\"developer-cost-optimization.md\"."
+      }
+    }
+  ]
 }
 ```
 
 ## Verifying installation
 
-After writing the files, confirm each one is valid JSON and that its patterns
-match at least one file in the workspace. A hook only fires on files saved after
-it is installed, so the user will not see output until their next edit.
+After writing the files, confirm each one is valid JSON with `"version": "v1"`
+and that its `matcher` matches the path of at least one IaC file in the
+workspace. Hooks load when a session starts, so tell the user to start a new
+session before testing. A hook only fires on files saved after it is active.
 
 ## Removing the hooks
 
-Delete the corresponding files from `.kiro/hooks/`, or set `"enabled": false` in
+Delete the corresponding files from `.kiro/hooks/`, or set `"enabled": false` on
 a hook to keep it in place while silencing it.

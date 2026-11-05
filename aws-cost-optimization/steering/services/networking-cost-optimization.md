@@ -44,27 +44,27 @@
 
 **Get Networking costs by service:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Load Balancing\", \"Amazon Route 53\", \"Amazon VPC\", \"AWS Direct Connect\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Load Balancing\", \"Amazon Route 53\", \"Amazon VPC\", \"AWS Direct Connect\"]}}"
 })
 ```
 
 **Analyze data transfer patterns:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"DataTransfer-Out-Bytes\", \"DataTransfer-Regional-Bytes\", \"AWS-Out-Bytes\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"DataTransfer-Out-Bytes\", \"DataTransfer-Regional-Bytes\", \"AWS-Out-Bytes\"]}}"
 })
 ```
 
@@ -81,31 +81,28 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 
 **Monitor NAT Gateway utilization:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/NatGateway",
   "metric_name": "BytesOutToDestination",
-  "dimensions": [{"Name": "NatGatewayId", "Value": "nat-1234567890abcdef0"}],
+  "dimensions": [{"name": "NatGatewayId", "value": "nat-1234567890abcdef0"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum", "Average"]
+  "statistic": "Sum"
 })
 ```
 
 **Create data transfer efficiency metrics:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
-  "metric_data_queries": [
+  "queries": [
     {
       "id": "bytes_processed",
       "metric_stat": {
-        "metric": {
-          "namespace": "AWS/NatGateway",
-          "metric_name": "BytesOutToDestination",
-          "dimensions": [{"Name": "NatGatewayId", "Value": "nat-1234567890abcdef0"}]
-        },
-        "period": 3600,
-        "stat": "Sum"
+        "namespace": "AWS/NatGateway",
+        "metric_name": "BytesOutToDestination",
+        "dimensions": [{"name": "NatGatewayId", "value": "nat-1234567890abcdef0"}],
+        "statistic": "Sum",
+        "period": 3600
       }
     },
     {
@@ -177,13 +174,12 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 **Implementation:**
 ```javascript
 // Monitor NAT Gateway utilization
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/NatGateway",
   "metric_name": "ActiveConnectionCount",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -232,14 +228,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Implementation:**
 ```javascript
 // Identify unused Elastic IPs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"ElasticIP:IdleAddress\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"ElasticIP:IdleAddress\"]}}"
 })
 ```
 
@@ -282,14 +278,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Detection:**
 ```javascript
 // Identify high cross-AZ data transfer costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"DataTransfer-Regional-Bytes\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"DataTransfer-Regional-Bytes\"]}}"
 })
 ```
 
@@ -339,24 +335,23 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current networking costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon VPC\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon VPC\"]}}"
 })
 
 // Step 2: Analyze data transfer patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/NatGateway",
   "metric_name": "BytesOutToDestination",
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum"]
+  "statistic": "Sum"
 })
 ```
 
@@ -381,14 +376,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 **Analysis Approach:**
 ```javascript
 // Analyze internet data transfer costs by region
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"REGION\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"DataTransfer-Out-Bytes\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"DataTransfer-Out-Bytes\"]}}"
 })
 ```
 
@@ -423,14 +418,14 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze cross-service networking costs
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon VPC\", \"Amazon Elastic Load Balancing\", \"Amazon Route 53\", \"Amazon CloudFront\", \"AWS Direct Connect\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon VPC\", \"Amazon Elastic Load Balancing\", \"Amazon Route 53\", \"Amazon CloudFront\", \"AWS Direct Connect\"]}}"
 })
 ```
 
@@ -460,27 +455,23 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Budget Alerts:**
 ```javascript
 // Monitor networking-specific budget performance
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon VPC\", \"Amazon Elastic Load Balancing\", \"Amazon Route 53\"]}}"
-})
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "budgets", {})
 ```
 
 **Anomaly Detection:**
 ```javascript
 // Set up anomaly monitoring for networking services
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_anomaly", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-anomaly", {
   "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
-  "filters": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"DataTransfer-Out-Bytes\", \"DataTransfer-Regional-Bytes\"]}}"
+  "end_date": "2024-12-01"
 })
 ```
 
 **Resource Utilization Alerts:**
 ```javascript
 // Monitor NAT Gateway utilization
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_alarms", {
-  "alarm_name_prefix": "NATGateway",
-  "state_value": "ALARM"
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_active_alarms", {
+  "max_items": 50  // returns alarms in ALARM state; look for names starting with "NATGateway"
 })
 ```
 
@@ -523,6 +514,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_ala
 ---
 
 ## Additional Resources
+
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Data Transfer playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/networking/datatransfer)
+- [Inter-AZ and Regional data transfer](https://catalog.workshops.aws/awscff/en-US/playbooks/networking/datatransfer/3-dto-inter-az)
+- [NAT Gateways playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/networking/nat)
+- [Public IPv4](https://catalog.workshops.aws/awscff/en-US/playbooks/networking/vpc/11-public-ipv4)
+- [Amazon VPC playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/networking/vpc)
 
 ### AWS Documentation
 - [VPC Pricing](https://aws.amazon.com/vpc/pricing/)

@@ -41,40 +41,39 @@ Total Cost = (Number of Invocations × $0.0000002) + (Duration in seconds × Mem
 
 **Get Lambda costs by function:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"RESOURCE_ID\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS Lambda\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS Lambda\"]}}"
 })
 ```
 
 **Analyze Lambda usage patterns:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS Lambda\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS Lambda\"]}}"
 })
 ```
 
 **Monitor Lambda performance metrics:**
 ```javascript
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Lambda",
   "metric_name": "Duration",
-  "dimensions": [{"Name": "FunctionName", "Value": "my-function"}],
+  "dimensions": [{"name": "FunctionName", "value": "my-function"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Average", "Maximum"]
+  "statistic": "Average"
 })
 ```
 
@@ -96,7 +95,7 @@ Memory allocation is the primary cost lever in Lambda. Optimal memory configurat
 
 1. **Use AWS Compute Optimizer (Free):**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute_optimizer", {
+   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "compute-optimizer", {
      "operation": "get_lambda_function_recommendations"
    })
    ```
@@ -108,14 +107,13 @@ Memory allocation is the primary cost lever in Lambda. Optimal memory configurat
 
 3. **Monitor with CloudWatch Lambda Insights:**
    ```javascript
-   usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+   usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
      "namespace": "AWS/Lambda",
      "metric_name": "MemoryUtilization",
-     "dimensions": [{"Name": "FunctionName", "Value": "my-function"}],
+     "dimensions": [{"name": "FunctionName", "value": "my-function"}],
      "start_time": "2024-11-01T00:00:00Z",
      "end_time": "2024-12-01T00:00:00Z",
-     "period": 3600,
-     "statistics": ["Average", "Maximum"]
+     "statistic": "Average"
    })
    ```
 
@@ -145,13 +143,13 @@ Efficient code reduces execution time, directly lowering costs. Focus on bottlen
 1. **Enable X-Ray tracing:**
    ```javascript
    // Monitor X-Ray costs
-   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+   usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
      "operation": "getCostAndUsage",
      "start_date": "2024-11-01",
      "end_date": "2024-12-01",
      "granularity": "MONTHLY",
      "metrics": "[\"UnblendedCost\"]",
-     "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS X-Ray\"]}}"
+     "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS X-Ray\"]}}"
    })
    ```
 
@@ -203,14 +201,14 @@ usePower("aws-cost-optimization", "awslabs.aws-pricing-mcp-server", "get_pricing
 **Cost Analysis:**
 ```javascript
 // Analyze Lambda usage patterns for Savings Plans
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-09-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS Lambda\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS Lambda\"]}}"
 })
 ```
 
@@ -228,14 +226,13 @@ Minimize unnecessary invocations through architectural optimization and event fi
 **Implementation Example:**
 ```javascript
 // Monitor invocation patterns
-usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_statistics", {
+usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_data", {
   "namespace": "AWS/Lambda",
   "metric_name": "Invocations",
-  "dimensions": [{"Name": "FunctionName", "Value": "my-function"}],
+  "dimensions": [{"name": "FunctionName", "value": "my-function"}],
   "start_time": "2024-11-01T00:00:00Z",
   "end_time": "2024-12-01T00:00:00Z",
-  "period": 3600,
-  "statistics": ["Sum"]
+  "statistic": "Sum"
 })
 ```
 
@@ -253,14 +250,14 @@ CloudWatch Logs charges can become significant for verbose Lambda functions.
 **Implementation:**
 ```javascript
 // Monitor CloudWatch Logs costs for Lambda
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost_explorer", {
+usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"RESOURCE_ID\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filters": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch Logs\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch Logs\"]}}"
 })
 ```
 
@@ -290,6 +287,17 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 - **Monthly:** Review Compute Optimizer recommendations
 - **Quarterly:** Assess Savings Plans opportunities and Graviton2 migration
 - **Annually:** Review architecture patterns and optimization strategies
+
+---
+
+## Additional Resources
+
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [AWS Lambda playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda)
+- [Lambda Optimize Duration](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda/optimize-duration)
+- [Lambda Memory Optimization](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda/optimize-duration/3-memory-optimization)
+- [Lambda Reduce cold starts](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda/reduce-cold-starts)
 
 ---
 
