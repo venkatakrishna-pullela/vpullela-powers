@@ -512,6 +512,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_ala
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon S3 playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/storage/s3)
+- [Choosing The Right Storage Class](https://catalog.workshops.aws/awscff/en-US/playbooks/storage/s3/2-choosing-storage-class)
+- [Amazon EBS playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/storage/ebs)
+- [Migrate gp2 to gp3](https://catalog.workshops.aws/awscff/en-US/playbooks/storage/ebs/2-migrate-gp2-to-gp3)
+- [Amazon EFS playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/storage/efs)
+
 ### AWS Documentation
 - [EBS Volume Types and Performance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html)
 - [S3 Storage Classes](https://aws.amazon.com/s3/storage-classes/)

@@ -424,6 +424,18 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 
 ---
 
+## Additional Resources
+
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon RDS playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/rds)
+- [Amazon Aurora playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/aurora)
+- [RDS RightSizing](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/rds/3-rightsizing)
+- [RDS Extended Support](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/rds/12-rds-extended-support)
+- [Database Savings Plans](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/dbsp)
+
+---
+
 **Service Code:** `AmazonRDS`  
 **Last Updated:** January 6, 2025  
 **Review Cycle:** Monthly

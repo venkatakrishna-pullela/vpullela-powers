@@ -524,6 +524,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_ala
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Data Transfer playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/networking/datatransfer)
+- [Inter-AZ and Regional data transfer](https://catalog.workshops.aws/awscff/en-US/playbooks/networking/datatransfer/3-dto-inter-az)
+- [NAT Gateways playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/networking/nat)
+- [Public IPv4](https://catalog.workshops.aws/awscff/en-US/playbooks/networking/vpc/11-public-ipv4)
+- [Amazon VPC playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/networking/vpc)
+
 ### AWS Documentation
 - [VPC Pricing](https://aws.amazon.com/vpc/pricing/)
 - [Data Transfer Pricing](https://aws.amazon.com/ec2/pricing/on-demand/#Data_Transfer)

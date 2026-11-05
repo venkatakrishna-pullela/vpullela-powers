@@ -513,6 +513,13 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Cloud Intelligence Dashboards](https://catalog.workshops.aws/awscff/en-US/visualizations/3-cid) for CUDOS, KPI, and CORA dashboards
+- [AWS Data Exports](https://catalog.workshops.aws/awscff/en-US/visualizations/4-data-exports) for Cost and Usage Report (CUR 2.0) setup
+- [Amazon CloudWatch playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/management-and-governance/cloudwatch)
+- [CloudWatch Logs](https://catalog.workshops.aws/awscff/en-US/playbooks/management-and-governance/cloudwatch/3-logs)
+
 ### AWS Documentation
 - [AWS Cost Management](https://aws.amazon.com/aws-cost-management/)
 - [Cloud Intelligence Dashboards](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/)

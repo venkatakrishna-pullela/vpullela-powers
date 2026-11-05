@@ -523,6 +523,13 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_ala
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon SageMaker playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/sagemaker)
+- [SageMaker Deploy](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/sagemaker/deploy) for choosing between real-time, serverless, asynchronous, and batch inference
+- [SageMaker Savings Plans](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/sagemaker/7-sp)
+- [FinOps for AI: Amazon SageMaker](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/2-finops-for-ai#sagemaker)
+
 ### AWS Documentation
 - [SageMaker Pricing](https://aws.amazon.com/sagemaker/pricing/)
 - [ML Savings Plans](https://aws.amazon.com/savingsplans/ml-pricing/)

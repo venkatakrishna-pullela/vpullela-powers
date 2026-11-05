@@ -293,6 +293,17 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 
 ---
 
+## Additional Resources
+
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [AWS Lambda playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda)
+- [Lambda Optimize Duration](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda/optimize-duration)
+- [Lambda Memory Optimization](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda/optimize-duration/3-memory-optimization)
+- [Lambda Reduce cold starts](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda/reduce-cold-starts)
+
+---
+
 **Service Code:** `AWSLambda`  
 **Last Updated:** January 6, 2025  
 **Review Cycle:** Monthly

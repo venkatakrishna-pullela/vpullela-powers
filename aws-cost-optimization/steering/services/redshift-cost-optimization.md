@@ -530,6 +530,12 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon Redshift playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/analytics/redshift)
+- [Redshift Serverless](https://catalog.workshops.aws/awscff/en-US/playbooks/analytics/redshift/2-redshift-serverless)
+- [Redshift Advisor](https://catalog.workshops.aws/awscff/en-US/playbooks/analytics/redshift/3-redshift-advisor)
+
 ### AWS Documentation
 - [Redshift Pricing](https://aws.amazon.com/redshift/pricing/)
 - [Redshift User Guide](https://docs.aws.amazon.com/redshift/latest/mgmt/)

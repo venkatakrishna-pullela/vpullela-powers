@@ -503,6 +503,12 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_dashboar
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon Bedrock playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/bedrock)
+- [Tokenomics](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/3-tokenomics) for attributing, optimizing, and governing agent token spend
+- [FinOps for AI: Amazon Bedrock](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/2-finops-for-ai#bedrock)
+
 ### AWS Documentation
 - [Amazon Bedrock Agents User Guide](https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html)
 - [Bedrock Pricing and Cost Optimization](https://aws.amazon.com/bedrock/pricing/)

@@ -439,6 +439,10 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_dashboar
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- {SERVICE_NAME} playbook and key pages, copied from `../cfm-tips-playbooks.md`
+
 ### AWS Documentation
 - Official {SERVICE_NAME} pricing documentation
 - {SERVICE_NAME} best practices guides

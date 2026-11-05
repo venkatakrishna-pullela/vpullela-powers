@@ -400,6 +400,17 @@ Monitor throttling events and high capacity consumption without corresponding bu
 
 ---
 
+## Additional Resources
+
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon DynamoDB playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/dynamodb)
+- [DynamoDB Capacity Modes](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/dynamodb/1-capacity-modes)
+- [DynamoDB Table Classes](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/dynamodb/2-table-classes)
+- [DynamoDB Backups](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/dynamodb/4-backups)
+
+---
+
 **Service Code:** `AmazonDynamoDB`  
 **Last Updated:** January 6, 2025  
 **Review Cycle:** Monthly

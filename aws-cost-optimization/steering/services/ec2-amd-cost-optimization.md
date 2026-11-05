@@ -596,6 +596,12 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_dashboar
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon EC2 playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2)
+- [EC2 RightSizing](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/3-rightsizing)
+- [Enable AWS Compute Optimizer](https://catalog.workshops.aws/awscff/en-US/foundations/5-enable-compute-optimizer) for limiting recommendations to AMD instance families
+
 ### AWS Documentation
 - [Amazon EC2 AMD Instances](https://aws.amazon.com/ec2/amd/)
 - [EC2 Instance Types](https://aws.amazon.com/ec2/instance-types/)

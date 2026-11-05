@@ -2,7 +2,7 @@
 name: "aws-cost-optimization"
 displayName: "AWS Cost Optimization"
 description: "AWS cost optimization tools for business teams and developers. Analyze spending, get optimization recommendations, and build cost-aware applications with AWS Well-Architected best practices."
-keywords: ["finops", "cost-optimization", "aws-billing", "cost-analysis", "budget-management", "rightsizing", "cost-intelligence", "savings-plans", "reserved-instances", "cost-anomaly", "spend-analysis", "cost-forecasting", "resource-optimization", "well-architected", "cloud-financial-management", "consumption-model", "efficiency-measurement", "expenditure-analysis", "developer-cost-optimization", "pre-deployment-analysis", "architecture-cost-modeling", "development-environment-optimization", "cost-aware-development"]
+keywords: ["finops", "cost-optimization", "aws-billing", "cost-analysis", "budget-management", "rightsizing", "cost-intelligence", "savings-plans", "reserved-instances", "cost-anomaly", "spend-analysis", "cost-forecasting", "resource-optimization", "well-architected", "cloud-financial-management", "consumption-model", "efficiency-measurement", "expenditure-analysis", "developer-cost-optimization", "pre-deployment-analysis", "architecture-cost-modeling", "development-environment-optimization", "cost-aware-development", "cfm-tips"]
 author: "Venkat Pullela"
 license: "Apache-2.0"
 ---
@@ -598,6 +598,13 @@ For detailed cost optimization guidance on individual AWS services, see our serv
 
 *Call action "readSteering" with powerName="aws-cost-optimization", steeringFile="services/README.md" to see available service guides, then read specific service files like "services/ec2-cost-optimization.md" for detailed guidance.*
 
+### 📘 [CFM TIPs Implementation Playbooks](./steering/cfm-tips-playbooks.md)
+*Step-by-step implementation guides from AWS*
+- [AWS CFM TIPs](https://catalog.workshops.aws/awscff/en-US) (Cloud Financial Management Technical Implementation Playbooks) is a free AWS workshop with step-by-step guides for the practices in this power
+- Covers foundations, visualizations, service cost optimization playbooks, and governance controls
+
+**Agent instructions:** When you recommend an optimization, a setup step, or a governance control, end your answer with `**Implement with CFM TIPs:**` and a link to the matching CFM TIPs page. Service guides list their pages under "CFM TIPs Playbooks". For other topics, call action "readSteering" with powerName="aws-cost-optimization", steeringFile="cfm-tips-playbooks.md". Link only pages listed in this power's guides, and skip the link when no page matches.
+
 ### For Business & FinOps Teams
 
 ### 💼 [Cloud Financial Management](./steering/cloud-financial-management.md)
@@ -777,6 +784,7 @@ For detailed information about the individual MCP servers, please refer to their
 - AWS Cost Management: https://aws.amazon.com/aws-cost-management/
 - AWS Well-Architected Cost Optimization Pillar: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/
 - AWS Cost Explorer: https://aws.amazon.com/aws-cost-management/aws-cost-explorer/
+- AWS CFM TIPs workshop (step-by-step implementation playbooks): https://catalog.workshops.aws/awscff/en-US
 
 ---
 

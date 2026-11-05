@@ -504,6 +504,13 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_ala
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon EKS playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/eks)
+- [Amazon ECS playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecs)
+- [Right-Sizing Amazon ECS Tasks](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecs/3-rightsizing-ecs-tasks)
+- [Amazon ECR playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecr)
+
 ### AWS Documentation
 - [EKS Cost Monitoring](https://docs.aws.amazon.com/eks/latest/userguide/cost-monitoring.html)
 - [ECS Cost Optimization](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-recommendations.html)

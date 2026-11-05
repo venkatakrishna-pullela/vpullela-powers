@@ -498,6 +498,13 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon SQS playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/application-integration/sqs)
+- [SQS Batching](https://catalog.workshops.aws/awscff/en-US/playbooks/application-integration/sqs/2-batching)
+- [SQS Polling Modes](https://catalog.workshops.aws/awscff/en-US/playbooks/application-integration/sqs/3-polling-modes)
+- [SQS Payload Compression](https://catalog.workshops.aws/awscff/en-US/playbooks/application-integration/sqs/4-payload-compression)
+
 ### AWS Documentation
 - [SQS Pricing](https://aws.amazon.com/sqs/pricing/)
 - [SQS Developer Guide](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/)

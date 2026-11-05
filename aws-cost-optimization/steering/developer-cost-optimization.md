@@ -354,3 +354,15 @@ Enable cost-aware development workflows and patterns to optimize AWS costs throu
 - **Time to Market**: Impact of cost optimization on delivery speed
 - **Resource Utilization**: Improvement in development resource efficiency
 - **Innovation Enablement**: Cost savings reinvested in innovation
+
+## CFM TIPs Implementation Guides
+
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these changes, or a cost check hook flags one of these issues, add `**Implement with CFM TIPs:**` and the matching link after the recommendation or finding.
+- [Governance](https://catalog.workshops.aws/awscff/en-US/governance) for service control policies and AWS Config rules that prevent and detect cost issues
+- [AWS Pricing Calculator](https://catalog.workshops.aws/awscff/en-US/playbooks/costmanagement/pricingcalculator) for estimates before deployment
+- [Migrate gp2 to gp3](https://catalog.workshops.aws/awscff/en-US/playbooks/storage/ebs/2-migrate-gp2-to-gp3) for gp2 EBS volumes
+- [EC2 Graviton Compatible](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/4-graviton-compatible) for instance types that could run on Graviton
+- [Lambda Memory Optimization](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda/optimize-duration/3-memory-optimization) for over-provisioned Lambda memory
+- [RDS RightSizing](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/rds/3-rightsizing) for oversized database instances
+
+For other topics, call action "readSteering" with powerName="aws-cost-optimization", steeringFile="cfm-tips-playbooks.md".

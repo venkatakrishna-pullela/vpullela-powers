@@ -74,6 +74,7 @@ The AWS Cost Optimization Power transforms how teams manage cloud spending by br
 - **5 Core Workflow Guides** - Aligned with AWS Well-Architected principles
 - **20+ Service-Specific Guides** - Detailed optimization strategies for EC2, S3, Lambda, RDS, and more
 - **Tool Selection Guide** - Query-to-tool mapping for efficient navigation
+- **CFM TIPs Links** - Recommendations link to the matching step-by-step playbook in the [AWS CFM TIPs workshop](https://catalog.workshops.aws/awscff/en-US)
 - **Best Practices** - Do's and don'ts for effective cost optimization
 
 ## Documentation
@@ -183,6 +184,7 @@ Built with AWS Labs MCP servers:
 
 - [AWS Cost Optimization Best Practices](https://aws.amazon.com/pricing/cost-optimization/)
 - [AWS Well-Architected Framework - Cost Optimization Pillar](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/welcome.html)
+- [AWS CFM TIPs Workshop](https://catalog.workshops.aws/awscff/en-US) - Step-by-step Cloud Financial Management implementation playbooks
 - [Kiro Powers Documentation](https://kiro.dev/powers/)
 
 ---

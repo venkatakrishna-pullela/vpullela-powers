@@ -514,6 +514,13 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [EC2 Graviton Compatible](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/4-graviton-compatible)
+- [RDS Graviton Compatible](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/rds/2-graviton-compatiable)
+- [OpenSearch Graviton Compatible](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/opensearch/2-graviton-compatiable)
+- [Lambda Graviton Compatible](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda/optimize-duration/4-graviton-compatible)
+
 ### AWS Documentation
 - [AWS Graviton Processor](https://aws.amazon.com/ec2/graviton/)
 - [Graviton Getting Started Guide](https://github.com/aws/aws-graviton-getting-started)

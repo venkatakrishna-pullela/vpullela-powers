@@ -449,3 +449,14 @@ const performanceValidation = usePower("aws-cost-optimization", "aws-billing-cos
 - **Cost predictability**: Alignment of costs with business usage
 - **Resource efficiency**: Optimal resource allocation for business needs
 - **Innovation enablement**: Freed resources for new initiatives
+
+## CFM TIPs Implementation Guides
+
+Step-by-step guides from the AWS CFM TIPs workshop for the practices in this guide. When you recommend one of these practices, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [EC2 RightSizing](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/3-rightsizing)
+- [EC2 Scheduling](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/11-scheduling)
+- [RDS Instance Scheduling](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/rds/4-instance-schedule)
+- [Amazon ECS Autoscaling](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecs/4-ecs-autoscaling)
+- [Putting Data in the Most Appropriate S3 Storage Class](https://catalog.workshops.aws/awscff/en-US/playbooks/storage/s3/3-appropriate-storage-class)
+
+For other topics, call action "readSteering" with powerName="aws-cost-optimization", steeringFile="cfm-tips-playbooks.md".

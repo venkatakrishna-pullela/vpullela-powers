@@ -499,6 +499,13 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_dashboar
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [FinOps for AI](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/2-finops-for-ai) for accelerated compute, SageMaker AI, and Bedrock cost levers
+- [Tokenomics](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/3-tokenomics) for cost per successful outcome of AI workloads
+- [Amazon SageMaker playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/sagemaker)
+- [Amazon Bedrock playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/bedrock)
+
 ### AWS Documentation
 - [SageMaker Pricing and Cost Optimization](https://docs.aws.amazon.com/sagemaker/latest/dg/model-manage-costs.html)
 - [Bedrock Pricing Guide](https://aws.amazon.com/bedrock/pricing/)

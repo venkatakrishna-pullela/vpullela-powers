@@ -632,3 +632,13 @@ const storageOptimization = usePower("aws-cost-optimization", "aws-billing-cost-
 - **Time-to-market**: Faster deployment of new capabilities
 - **Resource reallocation**: Percentage of resources redirected to business value
 - **Competitive advantage**: Business benefits from managed service capabilities
+
+## CFM TIPs Implementation Guides
+
+Step-by-step guides from the AWS CFM TIPs workshop for the practices in this guide. When you recommend one of these practices, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Service Cost Optimization Playbooks](https://catalog.workshops.aws/awscff/en-US/playbooks) for per-service guidance on managed services
+- [Amazon Aurora playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/aurora)
+- [Amazon ECS playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecs), including AWS Fargate purchase options
+- [Amazon ElastiCache Serverless](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/elasticache/6-serverless)
+
+For other topics, call action "readSteering" with powerName="aws-cost-optimization", steeringFile="cfm-tips-playbooks.md".

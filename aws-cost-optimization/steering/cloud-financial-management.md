@@ -410,3 +410,14 @@ const allocationReport = usePower("aws-cost-optimization", "aws-billing-cost-man
 - Make cost data easily accessible
 - Integrate cost considerations into technical processes
 - Recognize and reward cost-conscious behavior
+
+## CFM TIPs Implementation Guides
+
+Step-by-step guides from the AWS CFM TIPs workshop for the practices in this guide. When you recommend one of these practices, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Culture Change](https://catalog.workshops.aws/awscff/en-US/culture-change) for the cost optimization function, the finance and technology partnership, and a cost-aware culture
+- [Setup Budgets](https://catalog.workshops.aws/awscff/en-US/foundations/1-budgets)
+- [Setup Cost Anomaly Detection Monitors](https://catalog.workshops.aws/awscff/en-US/foundations/3-cost-anomaly)
+- [Cloud Intelligence Dashboards](https://catalog.workshops.aws/awscff/en-US/visualizations/3-cid) for financial reporting and KPIs
+- [CFM TIPs home](https://catalog.workshops.aws/awscff/en-US) for the full implementation path
+
+For other topics, call action "readSteering" with powerName="aws-cost-optimization", steeringFile="cfm-tips-playbooks.md".

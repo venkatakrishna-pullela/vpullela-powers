@@ -679,3 +679,14 @@ const technicalAttribution = usePower("aws-cost-optimization", "aws-billing-cost
 - Implement configurable allocation rules
 - Support scenario-based attribution modeling
 - Maintain historical attribution for trend analysis
+
+## CFM TIPs Implementation Guides
+
+Step-by-step guides from the AWS CFM TIPs workshop for the practices in this guide. When you recommend one of these practices, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Setup Tagging Strategy](https://catalog.workshops.aws/awscff/en-US/foundations/2-tagging-strategy)
+- [AWS Cost Categories](https://catalog.workshops.aws/awscff/en-US/playbooks/costmanagement/costcategories)
+- [AWS Data Exports](https://catalog.workshops.aws/awscff/en-US/visualizations/4-data-exports) for Cost and Usage Report (CUR 2.0) data
+- [AWS Billing Conductor](https://catalog.workshops.aws/awscff/en-US/playbooks/costmanagement/billingconductor) for pro forma showback and chargeback
+- [AWS Split Cost Allocation Data for Amazon ECS](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecs/2-split-cost-allocation)
+
+For other topics, call action "readSteering" with powerName="aws-cost-optimization", steeringFile="cfm-tips-playbooks.md".

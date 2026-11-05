@@ -494,6 +494,14 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_ala
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [EC2 Commitment Plans](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/7-commitment-plans)
+- [Amazon RDS Reserved Instances](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/rds/10-rds-ris)
+- [Database Savings Plans](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/dbsp)
+- [OpenSearch Reserved Instances](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/opensearch/6-ris)
+- [SageMaker Savings Plans](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/sagemaker/7-sp)
+
 ### AWS Documentation
 - [EC2 Reserved Instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html)
 - [RDS Reserved Instances](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html)

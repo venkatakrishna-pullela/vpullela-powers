@@ -533,6 +533,13 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_s
 
 ## Additional Resources
 
+### CFM TIPs Playbooks
+Step-by-step guides from the AWS CFM TIPs workshop. When you recommend one of these optimizations, end your answer with `**Implement with CFM TIPs:**` and the matching link.
+- [Amazon OpenSearch Service playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/opensearch)
+- [Migrate from gp2 to gp3](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/opensearch/3-gp3-migration)
+- [UltraWarm and cold storage](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/opensearch/4-ultrwarm-cold-storage)
+- [OR1 instances](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/opensearch/8-or1)
+
 ### AWS Documentation
 - [OpenSearch Service Pricing](https://aws.amazon.com/opensearch-service/pricing/)
 - [OpenSearch Service User Guide](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/)
