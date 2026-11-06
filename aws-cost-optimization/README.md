@@ -128,7 +128,9 @@ The [read-only IAM policy in POWER.md](POWER.md#step-3-configure-billing-and-mon
 
 ## Hooks
 
-This power includes agent hooks that automatically review your infrastructure code for cost issues whenever a matching file is saved. No manual prompting needed.
+This power includes agent hooks that automatically review your infrastructure code for cost issues whenever Kiro edits a matching file, including code that Kiro changes for you. No manual prompting needed.
+
+Kiro's file hooks respond only to changes the agent makes, so edits you make yourself in the editor don't trigger them (see [Kiro hook types](https://kiro.dev/docs/hooks/types/)). To review a file you edited yourself, ask Kiro to review it.
 
 ### Available Hooks
 
@@ -152,7 +154,7 @@ Hooks are resolved per workspace from `.kiro/hooks/`, so installing the power do
 
 > "Install the aws-cost-optimization cost check hooks in this workspace"
 
-The agent reads the definitions from the power's `steering/install-hooks.md` guide, installs only the hooks matching the infrastructure-as-code present in your workspace, and adapts each hook's `matcher` to your layout. Each hook is a v1 hook file in `.kiro/hooks/`, the format Kiro IDE 1.0 and Kiro CLI V3 load. Start a new session after installing so the hooks load.
+The agent reads the definitions from the power's `steering/install-hooks.md` guide, installs only the hooks matching the infrastructure-as-code present in your workspace, and adapts each hook's `matcher` to your layout. Each hook is a v1 hook file in `.kiro/hooks/`, the format Kiro IDE 1.0 and Kiro CLI V3 load. Start a new session after installing so the hooks load. To test a hook, ask Kiro to make a small change to a matching file, such as adding a tag.
 
 If you installed the hooks before this format change, your workspace may still have `.kiro/hooks/*-cost-check-on-save.kiro.hook` files, which Kiro IDE 1.0 shows as legacy hooks. Delete them after installing the new ones so each review runs once.
 

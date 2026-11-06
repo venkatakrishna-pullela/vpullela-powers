@@ -313,7 +313,7 @@ The power only needs read access, and its MCP configuration auto-approves the re
 
 ### Step 4: Install the Cost Check Hooks (Optional)
 
-This power ships three agent hooks that review infrastructure-as-code for cost issues whenever a matching file is saved: one each for CDK, CloudFormation, and Terraform. Hooks are resolved **per workspace** from `.kiro/hooks/*.json`, so they are not deployed by power installation and must be written into the workspace. To install them:
+This power ships three agent hooks that review infrastructure-as-code for cost issues whenever Kiro edits a matching file: one each for CDK, CloudFormation, and Terraform. Kiro's file hooks respond only to changes the agent makes, so edits the user makes in the editor don't trigger them. Hooks are resolved **per workspace** from `.kiro/hooks/*.json`, so they are not deployed by power installation and must be written into the workspace. To install them:
 
 > "Install the aws-cost-optimization cost check hooks in this workspace"
 
@@ -677,7 +677,7 @@ For detailed cost optimization guidance on individual AWS services, see the 22 s
 - Integration with development workflows and CI/CD pipelines
 
 ### 🪝 [Installing the Cost Check Hooks](./steering/install-hooks.md)
-*Automated cost review on file save*
+*Automated cost review when Kiro edits infrastructure code*
 - Hook definitions for CDK, CloudFormation, and Terraform
 - Per-workspace installation steps and pattern adaptation
 - Verification and removal guidance
