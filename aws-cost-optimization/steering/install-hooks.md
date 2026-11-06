@@ -5,8 +5,12 @@ inclusion: manual
 # Installing the Cost Check Hooks
 
 This power ships three agent hooks that review infrastructure-as-code for cost
-optimization issues each time a matching file is saved: one for CDK, one for
+optimization issues each time Kiro edits a matching file: one for CDK, one for
 CloudFormation, and one for Terraform.
+
+Kiro's file hooks respond only to changes the agent makes. Edits the user makes
+in the editor don't trigger them, so a file the user changed by hand is reviewed
+only when the user asks for a review.
 
 ## Why the agent has to install these
 
@@ -54,6 +58,8 @@ When the user asks to install these hooks:
    them exist, tell the user and offer to delete them so each review doesn't
    run twice.
 6. **Confirm what was installed** and which hooks were skipped, with the reason.
+   Tell the user that the hooks review files when Kiro edits them, not when the
+   user edits and saves a file in the editor.
 
 ## Hook definitions
 
@@ -65,7 +71,7 @@ When the user asks to install these hooks:
   "hooks": [
     {
       "name": "CDK Cost Check on Save",
-      "description": "When a CDK source file is saved, review it for cost optimization issues against the aws-cost-optimization standards",
+      "description": "When Kiro edits a CDK source file, review it for cost optimization issues against the aws-cost-optimization standards",
       "trigger": "PostFileSave",
       "matcher": "(^|/)(lib|stacks)/.+\\.(ts|py|java)$",
       "action": {
@@ -85,7 +91,7 @@ When the user asks to install these hooks:
   "hooks": [
     {
       "name": "CloudFormation Cost Check on Save",
-      "description": "When a CloudFormation template is saved, review it against the cost-optimization standards and flag any violations",
+      "description": "When Kiro edits a CloudFormation template, review it against the cost-optimization standards and flag any violations",
       "trigger": "PostFileSave",
       "matcher": "(^|/)(templates|cloudformation|lib|stacks)/.+\\.ya?ml$",
       "action": {
@@ -105,7 +111,7 @@ When the user asks to install these hooks:
   "hooks": [
     {
       "name": "Terraform Cost Check on Save",
-      "description": "When a Terraform file is saved, review it for cost optimization issues against the aws-cost-optimization standards",
+      "description": "When Kiro edits a Terraform file, review it for cost optimization issues against the aws-cost-optimization standards",
       "trigger": "PostFileSave",
       "matcher": "\\.tf$",
       "action": {
@@ -122,7 +128,9 @@ When the user asks to install these hooks:
 After writing the files, confirm each one is valid JSON with `"version": "v1"`
 and that its `matcher` matches the path of at least one IaC file in the
 workspace. Hooks load when a session starts, so tell the user to start a new
-session before testing. A hook only fires on files saved after it is active.
+session before testing. A hook only fires on edits Kiro makes after the hook is
+active. To test it, the user can ask Kiro to make a small change to a matching
+file, such as adding a tag.
 
 ## Removing the hooks
 
