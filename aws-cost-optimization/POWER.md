@@ -2,7 +2,7 @@
 name: "aws-cost-optimization"
 displayName: "AWS Cost Optimization"
 description: "AWS cost optimization tools for business teams and developers. Analyze spending, get optimization recommendations, and build cost-aware applications with AWS Well-Architected best practices."
-keywords: ["finops", "cost-optimization", "aws-billing", "cost-analysis", "budget-management", "rightsizing", "cost-intelligence", "savings-plans", "reserved-instances", "cost-anomaly", "spend-analysis", "cost-forecasting", "resource-optimization", "well-architected", "cloud-financial-management", "consumption-model", "efficiency-measurement", "expenditure-analysis", "developer-cost-optimization", "pre-deployment-analysis", "architecture-cost-modeling", "development-environment-optimization", "cost-aware-development", "cfm-tips"]
+keywords: ["finops", "cost-optimization", "aws-billing", "cost-analysis", "budget-management", "rightsizing", "cost-intelligence", "savings-plans", "reserved-instances", "cost-anomaly", "spend-analysis", "cost-forecasting", "resource-optimization", "well-architected", "cloud-financial-management", "consumption-model", "efficiency-measurement", "expenditure-analysis", "developer-cost-optimization", "pre-deployment-analysis", "architecture-cost-modeling", "development-environment-optimization", "cost-aware-development", "cfm-tips", "unused-resources", "idle-resources"]
 author: "Venkat Pullela"
 ---
 
@@ -63,6 +63,7 @@ Built around the AWS Well-Architected Cost Optimization Pillar's five design pri
 - Reserved Instance and Savings Plans performance analysis
 - Cost anomaly detection and unusual spending pattern analysis
 - Cross-service cost optimization recommendations
+- Read-only reviews of idle and forgotten resources, such as unattached volumes, idle Elastic IP addresses, unused NAT gateways, and old snapshots
 
 **Example:** "Find cost optimization opportunities across our organization"
 
@@ -102,6 +103,7 @@ Built around the AWS Well-Architected Cost Optimization Pillar's five design pri
 "Show me our AWS costs for the last 3 months by business unit"
 "What are our top 5 cost drivers this month?"
 "Find cost optimization opportunities across our organization"
+"Find resources I'm still paying for but not using"
 "Show me our current budgets and their performance"
 "Analyze our Reserved Instance utilization and savings"
 "Compare our costs between last quarter and this quarter"
@@ -630,6 +632,15 @@ For detailed cost optimization guidance on individual AWS services, see the 22 s
 
 **Agent instructions:** When you recommend an optimization, a setup step, or a governance control, end your answer with `**Implement with CFM TIPs:**` and a link to the matching CFM TIPs page. Service guides list their pages under "CFM TIPs Playbooks". For other topics, call action "readSteering" with powerName="aws-cost-optimization", steeringFile="cfm-tips-playbooks.md". Link only pages listed in this power's guides, and skip the link when no page matches.
 
+### 🧹 [Unused Resource Review](./steering/unused-resource-review.md)
+*Find resources that keep billing after their work is done*
+- Idle and unattached resources from Cost Optimization Hub or Compute Optimizer
+- Idle Elastic IP addresses, quiet NAT gateways, snapshots, backups, and unused capacity reservations from Cost Explorer
+- Log groups that never expire, from CloudWatch Logs
+- A findings table with the matching CFM TIPs cleanup page for each row
+
+**Agent instructions:** When the user asks about idle, unused, orphaned, or forgotten resources, call action "readSteering" with powerName="aws-cost-optimization", steeringFile="unused-resource-review.md" and follow it. The review is read-only: report findings and link the cleanup steps, and never delete, stop, or modify resources.
+
 ### For Business & FinOps Teams
 
 ### 💼 [Cloud Financial Management](./steering/cloud-financial-management.md)
@@ -696,6 +707,7 @@ For detailed cost optimization guidance on individual AWS services, see the 22 s
 - **Monitor anomalies regularly** - set up automated anomaly detection
 - **Use tags consistently** for accurate cost allocation and chargeback
 - **Analyze Reserved Instance utilization** monthly to optimize commitments
+- **Review unused resources** monthly and after migrations or project shutdowns, with the unused resource review
 - **Compare costs month-over-month** to identify trends and drivers
 - **Use SQL analytics** for complex custom analysis and reporting
 

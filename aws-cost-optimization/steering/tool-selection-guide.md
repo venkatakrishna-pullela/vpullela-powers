@@ -33,7 +33,7 @@ For service-specific queries, refer to the detailed guides in the [Service-Speci
 #### Optimization Queries  
 - "save money", "reduce costs", "optimization" → `cost-optimization`
 - "rightsizing", "instance recommendations" → `compute-optimizer`
-- "unused resources", "idle instances" → `cost-optimization`
+- "unused resources", "idle instances", "forgotten resources", "unattached volumes", "idle Elastic IPs", "old snapshots" → Read `unused-resource-review.md` and follow it (read-only review with `cost-optimization` or `compute-optimizer`, `cost-explorer`, and `describe_log_groups`)
 
 #### Budget & Monitoring
 - "budget", "spending limits", "alerts" → `budgets`
@@ -169,6 +169,15 @@ For service-specific queries, refer to the detailed guides in the [Service-Speci
 1. `get_pricing` → Compare service options
 2. `get_pricing_service_attributes` → Understand pricing dimensions
 3. `get_pricing_attribute_values` → Explore configuration options
+
+### Unused Resource Review
+Read-only. Follow `unused-resource-review.md` for the arguments and how to read the results.
+1. `cost-optimization` (list_enrollment_statuses) and `cost-explorer` (getCostAndUsage grouped by REGION) → Check the sources and find the active Regions
+2. `cost-optimization` (Delete, Stop, and ScaleIn recommendations), or `compute-optimizer` (get_idle_recommendations) if Cost Optimization Hub isn't enrolled → Named idle resources
+3. `cost-explorer` (getDimensionValues, getCostAndUsage grouped by USAGE_TYPE, optional getCostAndUsageWithResources) → Idle Elastic IPs, NAT gateways, snapshots, backups, and unused capacity reservations
+4. `get_metric_data` → Confirm a NAT gateway's traffic
+5. `describe_log_groups` → Log groups that never expire
+6. Report the findings with a CFM TIPs link in each row
 
 ### Development Cost Optimization
 1. `cost-explorer` → Analyze current development spending
