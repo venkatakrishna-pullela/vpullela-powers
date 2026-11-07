@@ -12,6 +12,7 @@ inclusion: manual
 - Use only the URLs in this file and in the "CFM TIPs Playbooks" sections of the service guides. Don't build CFM TIPs URLs yourself, because page paths don't follow service names consistently.
 - Skip the link when no page matches, for short factual answers such as a single price or a cost total, and in hook-triggered file reviews that find no issues.
 - In a hook-triggered review that flags an issue, you can add the matching link after the finding, for example the gp2 to gp3 migration page for a gp2 volume.
+- In an unused resource review (`unused-resource-review.md`), link the matching page in each row of the findings table instead of one or two pages at the end.
 
 ## Start here
 
@@ -40,13 +41,32 @@ inclusion: manual
 | Cost management for AI workloads | [FinOps for AI](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/2-finops-for-ai), [Tokenomics](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/3-tokenomics) |
 | Kiro subscription and credit spend | [FinOps for AI: Kiro](https://catalog.workshops.aws/awscff/en-US/playbooks/aiml/2-finops-for-ai#kiro) |
 
+## Idle and unused resources
+
+| Finding | CFM TIPs page |
+|---|---|
+| Idle EC2 instances | [Low Utilization EC2 instances](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/2-low-utilization-ec2) |
+| Stopped EC2 instances and unattached Elastic IP addresses (AWS Config rules) | [EC2 Detection](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/governance/2-detection) |
+| Unused On-Demand Capacity Reservations | [Unused On Demand Capacity Reservations](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/8-unused-on-demand-capacity-reservations) |
+| Idle RDS DB instances | [RDS Idle Instances](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/rds/1-idle-instances) |
+| RDS backup storage | [RDS ChargedBackup](https://catalog.workshops.aws/awscff/en-US/playbooks/databases/rds/6-rds-charged-backup) |
+| Unattached or idle EBS volumes | [Underutilized EBS volumes](https://catalog.workshops.aws/awscff/en-US/playbooks/storage/ebs/4-ta-ebs), [EBS Detection](https://catalog.workshops.aws/awscff/en-US/playbooks/storage/ebs/governance/2-detection) |
+| EBS snapshot storage | [EBS Snapshot Spend](https://catalog.workshops.aws/awscff/en-US/playbooks/storage/ebs/3-snapshot) |
+| Fast snapshot restore left on | [Fast Snapshot Restore](https://catalog.workshops.aws/awscff/en-US/playbooks/storage/ebs/6-fast-snapshot-restore) |
+| Idle NAT gateways | [Idle NAT Gateways](https://catalog.workshops.aws/awscff/en-US/playbooks/networking/nat/5-idle-nat-gateways) |
+| Idle Elastic IP addresses and other public IPv4 addresses | [Public IPv4](https://catalog.workshops.aws/awscff/en-US/playbooks/networking/vpc/11-public-ipv4) |
+| Idle VPC endpoints | [Idle VPC Endpoints](https://catalog.workshops.aws/awscff/en-US/playbooks/networking/vpc/10-idle-vpc-endpoints) |
+| Log groups that never expire | [CloudWatch Logs](https://catalog.workshops.aws/awscff/en-US/playbooks/management-and-governance/cloudwatch/3-logs) |
+| Unused KMS keys | [Removing unused KMS keys](https://catalog.workshops.aws/awscff/en-US/playbooks/security/kms/3-removing-unused-kms) |
+| Idle load balancers and other Trusted Advisor cost checks | [Review AWS Trusted Advisor Cost Optimization pillar](https://catalog.workshops.aws/awscff/en-US/foundations/4-trusted-advisor) |
+
 ## Service playbooks
 
 All service playbooks: [Service Cost Optimization Playbooks](https://catalog.workshops.aws/awscff/en-US/playbooks)
 
 ### Compute and containers
 
-- **Amazon EC2:** [playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2), [RightSizing](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/3-rightsizing), [Graviton Compatible](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/4-graviton-compatible), [Spot Instances](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/6-spot), [Scheduling](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/11-scheduling), [Commitment Plans](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/7-commitment-plans), [Limit instance types with SCPs](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/governance/1-prevention)
+- **Amazon EC2:** [playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2), [RightSizing](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/3-rightsizing), [Graviton Compatible](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/4-graviton-compatible), [Spot Instances](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/6-spot), [Scheduling](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/11-scheduling), [Commitment Plans](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/7-commitment-plans), [Unused Capacity Reservations](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/8-unused-on-demand-capacity-reservations), [Limit instance types with SCPs](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/ec2/governance/1-prevention)
 - **AWS Lambda:** [playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda), [Optimize Duration](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda/optimize-duration), [Memory optimization](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda/optimize-duration/3-memory-optimization), [Reduce cold starts](https://catalog.workshops.aws/awscff/en-US/playbooks/compute/lambda/reduce-cold-starts)
 - **Amazon ECS and AWS Fargate:** [playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecs), [Right-Sizing ECS Tasks](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecs/3-rightsizing-ecs-tasks), [Fargate purchase options](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecs/6-optimizing-fargate-by-purchase-option), [Split Cost Allocation Data](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/ecs/2-split-cost-allocation)
 - **Amazon EKS:** [playbook](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/eks), [Overall cluster costs](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/eks/1-eks-overall-cluster-costs), [EKS Extended Support](https://catalog.workshops.aws/awscff/en-US/playbooks/containers/eks/12-eks-extended-support)
@@ -118,4 +138,4 @@ All service playbooks: [Service Cost Optimization Playbooks](https://catalog.wor
 
 ---
 
-**Source:** Page paths checked against the published CFM TIPs build on November 5, 2026. To check them again, compare them with the `path` values in the workshop manifest, which the build listed in `https://static.us-east-1.prod.workshops.aws/public/quicklinks/awscff/published.json` points to.
+**Source:** Page paths checked against the published CFM TIPs build on November 7, 2026. To check them again, compare them with the `path` values in the workshop manifest, which the build listed in `https://static.us-east-1.prod.workshops.aws/public/quicklinks/awscff/published.json` points to.

@@ -33,6 +33,7 @@ This repository contains Kiro Powers developed by **Venkatakrishna Pullela**, a 
 - 📊 **Real-time Cost Analysis** - Historical trends, forecasting, and multi-dimensional breakdowns
 - 🎯 **Pre-deployment Modeling** - Cost estimates for CDK and Terraform before deployment
 - 💡 **Smart Recommendations** - Automated rightsizing and optimization opportunities
+- 🧹 **Unused Resource Review** - Find idle and forgotten resources, such as unattached volumes, idle Elastic IP addresses, and old snapshots
 - 🔍 **Pricing Intelligence** - Compare services and regions with real-time AWS pricing
 - 📈 **Budget Monitoring** - Track budgets and detect cost anomalies
 - ⚡ **Operational Insights** - CloudWatch metrics for performance-cost correlation

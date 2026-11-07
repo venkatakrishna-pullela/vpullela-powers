@@ -51,6 +51,7 @@ The AWS Cost Optimization Power transforms how teams manage cloud spending by br
 ```
 "Show me our AWS costs for the last 3 months by business unit"
 "Find cost optimization opportunities across our organization"
+"Find resources I'm still paying for but not using"
 "Compare our costs between last quarter and this quarter"
 ```
 
@@ -74,6 +75,7 @@ The AWS Cost Optimization Power transforms how teams manage cloud spending by br
 - **5 Core Workflow Guides** - Aligned with AWS Well-Architected principles
 - **20+ Service-Specific Guides** - Detailed optimization strategies for EC2, S3, Lambda, RDS, and more
 - **Tool Selection Guide** - Query-to-tool mapping for efficient navigation
+- **Unused Resource Review** - A read-only review of resources that keep billing after their work is done, such as unattached volumes, idle Elastic IP addresses, quiet NAT gateways, old snapshots, and log groups that never expire
 - **CFM TIPs Links** - Recommendations link to the matching step-by-step playbook in the [AWS CFM TIPs workshop](https://catalog.workshops.aws/awscff/en-US)
 - **Best Practices** - Do's and don'ts for effective cost optimization
 
@@ -98,6 +100,7 @@ Full documentation is available in the [POWER.md](POWER.md) file, including:
 - Automated rightsizing recommendations
 - Reserved Instance and Savings Plans analysis
 - Cost anomaly detection
+- Idle and forgotten resource reviews, with a CFM TIPs cleanup page for each finding
 
 ### Architecture Planning
 - Pre-deployment cost modeling
