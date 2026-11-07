@@ -235,7 +235,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"ElasticIP:IdleAddress\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"PublicIPv4:IdleAddress\"]}}"
 })
 ```
 

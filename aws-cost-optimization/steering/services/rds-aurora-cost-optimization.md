@@ -208,7 +208,8 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 
 **Implementation:**
 ```javascript
-// Monitor backup costs
+// Monitor backup storage above the free amount. Outside us-east-1 the usage type has a Region
+// prefix (for example USE2-RDS:ChargedBackupUsage): list the exact values with getDimensionValues
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
@@ -216,7 +217,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"RDS:BackupUsage\", \"RDS:SnapshotUsage\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"RDS:ChargedBackupUsage\"]}}"
 })
 ```
 
@@ -369,15 +370,15 @@ Manual snapshots and backups accumulating costs after database deletion or reten
 
 **Detection:**
 ```javascript
-// Monitor backup storage costs
+// Monitor backup storage costs per resource (resource-level data covers the last 14 days)
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
-  "operation": "getCostAndUsage",
-  "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
+  "operation": "getCostAndUsageWithResources",
+  "start_date": "2026-10-24",
+  "end_date": "2026-11-07",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"RESOURCE_ID\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"RDS:BackupUsage\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"RDS:ChargedBackupUsage\"]}}"
 })
 ```
 

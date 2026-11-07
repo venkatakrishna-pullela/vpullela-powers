@@ -51,10 +51,12 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 
 **Analyze CloudTrail usage patterns:**
 ```javascript
+// Resource-level data: start_date must be within the last 14 days, and the service must be
+// turned on for resource-level data in Cost Management preferences
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
-  "operation": "getCostAndUsage",
-  "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
+  "operation": "getCostAndUsageWithResources",
+  "start_date": "2026-10-24",
+  "end_date": "2026-11-07",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"RESOURCE_ID\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",

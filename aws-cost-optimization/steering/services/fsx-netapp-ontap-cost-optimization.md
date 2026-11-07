@@ -49,10 +49,12 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 
 **Analyze FSx usage patterns by resource:**
 ```javascript
+// Resource-level data: start_date must be within the last 14 days, and the service must be
+// turned on for resource-level data in Cost Management preferences
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
-  "operation": "getCostAndUsage",
-  "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
+  "operation": "getCostAndUsageWithResources",
+  "start_date": "2026-10-24",
+  "end_date": "2026-11-07",
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"RESOURCE_ID\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
@@ -365,11 +367,11 @@ Large enterprise with 50TB file share system, mostly document storage with mixed
 
 **Analysis Approach:**
 ```javascript
-// Step 1: Analyze current costs
+// Step 1: Analyze current costs per file system (resource-level data covers the last 14 days)
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
-  "operation": "getCostAndUsage",
-  "start_date": "2024-10-01",
-  "end_date": "2024-11-01",
+  "operation": "getCostAndUsageWithResources",
+  "start_date": "2026-10-24",
+  "end_date": "2026-11-07",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"RESOURCE_ID\"}]",
   "metrics": "[\"UnblendedCost\"]",
