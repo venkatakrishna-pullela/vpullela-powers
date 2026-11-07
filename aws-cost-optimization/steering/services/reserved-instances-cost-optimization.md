@@ -81,7 +81,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"PURCHASE_OPTION\"}]",
+  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"PURCHASE_TYPE\"}]",
   "metrics": "[\"AmortizedCost\", \"UnblendedCost\"]",
   "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
 })
@@ -395,7 +395,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"PURCHASE_OPTION\"}]",
+  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"PURCHASE_TYPE\"}]",
   "metrics": "[\"AmortizedCost\"]"
 })
 ```

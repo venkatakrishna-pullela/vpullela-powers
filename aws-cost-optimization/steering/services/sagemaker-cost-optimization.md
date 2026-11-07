@@ -426,7 +426,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\", \"Amazon Simple Storage Service\", \"Amazon Elastic Container Registry\", \"AWS Lambda\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\", \"Amazon Simple Storage Service\", \"Amazon EC2 Container Registry (ECR)\", \"AWS Lambda\"]}}"
 })
 ```
 

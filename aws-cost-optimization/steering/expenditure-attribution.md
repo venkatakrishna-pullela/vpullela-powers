@@ -104,12 +104,13 @@ const tagConsistencyAnalysis = usePower("aws-cost-optimization", "awslabs.billin
 })
 
 // Step 3: Implement hierarchical cost allocation
+// Cost Explorer groups by at most two keys. For the next level, filter on one CostCenter value and group by Project.
 const hierarchicalAllocation = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "group_by": "[{\"Type\": \"TAG\", \"Key\": \"BusinessUnit\"}, {\"Type\": \"TAG\", \"Key\": \"CostCenter\"}, {\"Type\": \"TAG\", \"Key\": \"Project\"}]",
+  "group_by": "[{\"Type\": \"TAG\", \"Key\": \"BusinessUnit\"}, {\"Type\": \"TAG\", \"Key\": \"CostCenter\"}]",
   "metrics": "[\"UnblendedCost\"]"
 })
 
@@ -199,12 +200,13 @@ const sharedCostAllocation = usePower("aws-cost-optimization", "awslabs.billing-
 })
 
 // Step 2: Generate project-level chargeback
+// Cost Explorer groups by at most two keys. For the next level, filter on one Environment value and group by SERVICE.
 const projectChargeback = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "group_by": "[{\"Type\": \"TAG\", \"Key\": \"Project\"}, {\"Type\": \"TAG\", \"Key\": \"Environment\"}, {\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
+  "group_by": "[{\"Type\": \"TAG\", \"Key\": \"Project\"}, {\"Type\": \"TAG\", \"Key\": \"Environment\"}]",
   "metrics": "[\"UnblendedCost\"]"
 })
 
@@ -498,12 +500,13 @@ const predictiveAttribution = usePower("aws-cost-optimization", "awslabs.billing
 })
 
 // Step 3: Create multi-dimensional attribution analysis
+// Cost Explorer groups by at most two keys. For the next level, filter on one Project value and group by Environment and SERVICE.
 const multiDimensionalAttribution = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "group_by": "[{\"Type\": \"TAG\", \"Key\": \"BusinessUnit\"}, {\"Type\": \"TAG\", \"Key\": \"Project\"}, {\"Type\": \"TAG\", \"Key\": \"Environment\"}, {\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
+  "group_by": "[{\"Type\": \"TAG\", \"Key\": \"BusinessUnit\"}, {\"Type\": \"TAG\", \"Key\": \"Project\"}]",
   "metrics": "[\"UnblendedCost\"]"
 })
 
@@ -572,12 +575,13 @@ const advancedAttributionReport = usePower("aws-cost-optimization", "awslabs.aws
 ### Organizational Hierarchy
 ```javascript
 // Example organizational cost attribution
+// Cost Explorer groups by at most two keys. For the next level, filter on one BusinessUnit value and group by Department and Team.
 const organizationalAttribution = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "group_by": "[{\"Type\": \"TAG\", \"Key\": \"Division\"}, {\"Type\": \"TAG\", \"Key\": \"BusinessUnit\"}, {\"Type\": \"TAG\", \"Key\": \"Department\"}, {\"Type\": \"TAG\", \"Key\": \"Team\"}]",
+  "group_by": "[{\"Type\": \"TAG\", \"Key\": \"Division\"}, {\"Type\": \"TAG\", \"Key\": \"BusinessUnit\"}]",
   "metrics": "[\"UnblendedCost\"]"
 })
 ```
@@ -585,12 +589,13 @@ const organizationalAttribution = usePower("aws-cost-optimization", "awslabs.bil
 ### Project & Application Hierarchy
 ```javascript
 // Example project-based cost attribution
+// Cost Explorer groups by at most two keys. For the next level, filter on one Program value and group by Project and Application.
 const projectAttribution = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "group_by": "[{\"Type\": \"TAG\", \"Key\": \"Portfolio\"}, {\"Type\": \"TAG\", \"Key\": \"Program\"}, {\"Type\": \"TAG\", \"Key\": \"Project\"}, {\"Type\": \"TAG\", \"Key\": \"Application\"}]",
+  "group_by": "[{\"Type\": \"TAG\", \"Key\": \"Portfolio\"}, {\"Type\": \"TAG\", \"Key\": \"Program\"}]",
   "metrics": "[\"UnblendedCost\"]"
 })
 ```

@@ -37,6 +37,7 @@
 
 **Get Storage costs by service:**
 ```javascript
+// EBS is billed under EC2 - Other, with NAT gateways and some data transfer. Its usage types include EBS:VolumeUsage and EBS:SnapshotUsage.
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
@@ -44,12 +45,13 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Block Store\", \"Amazon Simple Storage Service\", \"Amazon Elastic File System\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"EC2 - Other\", \"Amazon Simple Storage Service\", \"Amazon Elastic File System\"]}}"
 })
 ```
 
 **Analyze EBS usage patterns:**
 ```javascript
+// EBS is billed under EC2 - Other, with NAT gateways and some data transfer. Its usage types include EBS:VolumeUsage and EBS:SnapshotUsage.
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
@@ -57,7 +59,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Block Store\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"EC2 - Other\"]}}"
 })
 ```
 
@@ -328,6 +330,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Approach:**
 ```javascript
 // Step 1: Analyze current EBS costs
+// EBS is billed under EC2 - Other, with NAT gateways and some data transfer. Its usage types include EBS:VolumeUsage and EBS:SnapshotUsage.
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
@@ -335,7 +338,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Block Store\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"EC2 - Other\"]}}"
 })
 
 // Step 2: Get EBS optimization recommendations
@@ -413,6 +416,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze cross-service storage costs
+// EBS is billed under EC2 - Other, with NAT gateways and some data transfer. Its usage types include EBS:VolumeUsage and EBS:SnapshotUsage.
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
@@ -420,7 +424,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Block Store\", \"Amazon Simple Storage Service\", \"Amazon Elastic File System\", \"Amazon CloudFront\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"EC2 - Other\", \"Amazon Simple Storage Service\", \"Amazon Elastic File System\", \"Amazon CloudFront\"]}}"
 })
 ```
 

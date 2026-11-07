@@ -36,6 +36,8 @@
 
 ### Using the Power's Tools
 
+Every CloudTrail usage type starts with a Region code, including `USE1-` in us-east-1, for example `USE1-PaidEventsRecorded`. Cost Explorer filters match exact values only, so filter on the service and group by usage type, as these examples do, instead of filtering on a usage type ([CloudTrail usage types](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-costs.html)).
+
 **Get CloudTrail costs by usage type:**
 ```javascript
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
@@ -99,6 +101,7 @@ First copy of management events is FREE, but additional copies cost $2.00 per 10
 **Implementation Steps:**
 1. **Audit current trail configuration:**
    ```javascript
+   // Read the usage types that end in PaidEventsRecorded: additional copies of management events
    usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
      "operation": "getCostAndUsage",
      "start_date": "2024-11-01",
@@ -106,7 +109,7 @@ First copy of management events is FREE, but additional copies cost $2.00 per 10
      "granularity": "MONTHLY",
      "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
      "metrics": "[\"UnblendedCost\"]",
-     "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"PaidEventsRecorded\"]}}]}"
+     "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}}"
    })
    ```
 
@@ -132,6 +135,7 @@ All data events are charged at $0.10 per 100,000 events. Selective enablement an
 **Implementation Steps:**
 1. **Analyze current data event costs:**
    ```javascript
+   // Read the usage types that end in DataEventsRecorded: data events
    usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
      "operation": "getCostAndUsage",
      "start_date": "2024-11-01",
@@ -139,7 +143,7 @@ All data events are charged at $0.10 per 100,000 events. Selective enablement an
      "granularity": "DAILY",
      "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
      "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-     "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"DataEvents\"]}}]}"
+     "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}}"
    })
    ```
 
@@ -167,6 +171,7 @@ CloudTrail Insights costs $0.35 per 100,000 events analyzed per Insight type. En
 **Implementation Steps:**
 1. **Analyze Insights costs:**
    ```javascript
+   // Read the usage types that end in InsightsEvents or DataInsightsEvents: CloudTrail Insights
    usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
      "operation": "getCostAndUsage",
      "start_date": "2024-11-01",
@@ -174,7 +179,7 @@ CloudTrail Insights costs $0.35 per 100,000 events analyzed per Insight type. En
      "granularity": "MONTHLY",
      "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
      "metrics": "[\"UnblendedCost\"]",
-     "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"InsightEvents\"]}}]}"
+     "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}}"
    })
    ```
 
@@ -203,6 +208,7 @@ CloudTrail Lake has ingestion, retention, and analysis costs. Optimize through s
 **Implementation Steps:**
 1. **Analyze CloudTrail Lake costs:**
    ```javascript
+   // Read the CloudTrail Lake usage types, which contain Ingestion-Bytes or QueryScanned-Bytes
    usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
      "operation": "getCostAndUsage",
      "start_date": "2024-11-01",
@@ -210,7 +216,7 @@ CloudTrail Lake has ingestion, retention, and analysis costs. Optimize through s
      "granularity": "MONTHLY",
      "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
      "metrics": "[\"UnblendedCost\"]",
-     "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"CloudTrailLake-Ingestion\", \"CloudTrailLake-Storage\", \"CloudTrailLake-Query\"]}}]}"
+     "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}}"
    })
    ```
 
@@ -298,6 +304,7 @@ Multiple trails capturing the same management events across regions or accounts,
 **Detection:**
 ```javascript
 // Look for paid management events charges
+// Read the usage types that end in PaidEventsRecorded: additional copies of management events
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
@@ -305,7 +312,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"PaidEventsRecorded\"]}}]}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}}"
 })
 ```
 
@@ -323,6 +330,7 @@ Enabling data events on all S3 buckets or Lambda functions without filtering, ge
 **Detection:**
 ```javascript
 // Analyze data events volume and cost
+// Read the usage types that end in DataEventsRecorded: data events
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
@@ -330,7 +338,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"DataEvents\"]}}]}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}}"
 })
 ```
 
@@ -348,6 +356,7 @@ Running broad queries without time constraints or filters, scanning unnecessary 
 **Detection:**
 ```javascript
 // Monitor CloudTrail Lake query costs
+// Read the usage types that end in QueryScanned-Bytes: CloudTrail Lake queries
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
@@ -355,7 +364,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "DAILY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"CloudTrailLake-Query\"]}}]}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}}"
 })
 ```
 
@@ -388,17 +397,11 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 })
 
 // Step 2: Identify paid events (duplicate trails)
-usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
-  "operation": "getCostAndUsage",
-  "start_date": "2024-10-01",
-  "end_date": "2024-11-01",
-  "granularity": "MONTHLY",
-  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"LINKED_ACCOUNT\"}]",
-  "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"PaidEventsRecorded\"]}]}"
-})
+// In the Step 1 results, the usage types that end in PaidEventsRecorded show each account's
+// additional copies of management events, so no second query is needed
 
 // Step 3: Analyze data events volume
+// Read the usage types that end in DataEventsRecorded: data events
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-10-01",
@@ -406,7 +409,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"DataEvents\"]}]}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}}"
 })
 ```
 
@@ -429,6 +432,7 @@ Financial services company with 7-year retention requirements using CloudTrail L
 **Analysis Approach:**
 ```javascript
 // Analyze CloudTrail Lake costs by component
+// Read the CloudTrail Lake usage types, which contain Ingestion-Bytes or QueryScanned-Bytes
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-09-01",
@@ -436,7 +440,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"CloudTrailLake-Ingestion\", \"CloudTrailLake-Storage\", \"CloudTrailLake-Query\"]}}]}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\"]}}"
 })
 ```
 
@@ -474,6 +478,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze cross-service costs for CloudTrail ecosystem
+// CloudWatch Logs is billed under AmazonCloudWatch, and EventBridge under CloudWatch Events
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
@@ -481,7 +486,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\", \"Amazon Simple Storage Service\", \"Amazon CloudWatch Logs\", \"Amazon EventBridge\", \"AWS Config\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AWS CloudTrail\", \"Amazon Simple Storage Service\", \"AmazonCloudWatch\", \"CloudWatch Events\", \"AWS Config\"]}}"
 })
 ```
 

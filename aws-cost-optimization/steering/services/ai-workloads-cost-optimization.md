@@ -388,7 +388,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\", \"Amazon Bedrock\", \"Amazon S3\", \"Amazon EC2-Instance\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon SageMaker\", \"Amazon Bedrock\", \"Amazon Simple Storage Service\", \"Amazon Elastic Compute Cloud - Compute\"]}}"
 })
 ```
 

@@ -56,7 +56,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE_GROUP\"}]",
+  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
   "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Relational Database Service\"]}}"
 })
