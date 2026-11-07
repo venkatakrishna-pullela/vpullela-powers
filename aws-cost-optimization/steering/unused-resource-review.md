@@ -13,7 +13,8 @@ The review follows Well-Architected question [COST 4: How do you decommission re
 - **Read-only.** Report findings and link the cleanup steps. Never delete, stop, release, or modify a resource. The resource owner decides what to remove.
 - **This power's MCP tools only.** Don't run AWS CLI commands. The power's IAM policy has no EC2 `Describe*` permissions, so the review works from recommendations, billing data, and CloudWatch.
 - **On demand.** Run the review when the user asks, for example monthly or after a migration, a load test, or a project shutdown. Don't create hooks, schedules, or alarms for it.
-- **Cost.** Cost Explorer charges $0.01 per API request. A full review makes 7 or 8 requests, and more if results run to extra pages. Say how many you made in the report.
+- **Cost.** Cost Explorer charges $0.01 per API request. A full review makes up to 8 requests, and more if results run to extra pages. Say how many you made in the report.
+- **Large results.** The billing server keeps a large result in a session table and returns `data_stored: true` with a `table_name` instead of the rows. Read the rows with the `session-sql` tool, for example `SELECT * FROM <table_name>`.
 - **Account scope.** From the management account, Cost Explorer covers every account in the organization, and Cost Optimization Hub covers member accounts if it's enrolled for the organization. Compute Optimizer takes one account per call (`account_ids`). CloudWatch Logs covers only the account that the power's credentials belong to.
 
 ## What each source can find
@@ -55,7 +56,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 
 If the status is Active, use Cost Optimization Hub in Step 2. If it's Inactive, use Compute Optimizer instead, and add enrolling in Cost Optimization Hub to the report ([Getting started with Cost Optimization Hub](https://docs.aws.amazon.com/cost-management/latest/userguide/coh-getting-started.html)).
 
-2. Find the Regions that had spend last month:
+2. Find the Regions that had usage last month:
 
 ```javascript
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
@@ -64,11 +65,16 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "end_date": "2026-11-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"REGION\"}]",
-  "metrics": "[\"UnblendedCost\"]"
+  "metrics": "[\"AmortizedCost\"]",
+  "filter": "{\"Dimensions\": {\"Key\": \"RECORD_TYPE\", \"Values\": [\"Usage\", \"DiscountedUsage\", \"SavingsPlanCoveredUsage\"]}}"
 })
 ```
 
-Use these Regions in Steps 2 and 4. Skip `global` and `NoRegion`, which hold costs that belong to no Region.
+The filter keeps usage charges and leaves out credits, refunds, and discounts, so a Region still shows its usage when credits pay for it. `AmortizedCost` counts usage that Reserved Instances and Savings Plans cover at its effective cost.
+
+Use these Regions in Steps 2 and 4:
+- Skip `global` and `NoRegion`, which hold costs that belong to no Region.
+- Skip Regions with less than $1 of usage. An idle resource's charges count toward its Region's usage, so a Region below $1 can't hold anything worth more than that.
 
 ## Step 2: List idle resources from recommendations
 
@@ -128,7 +134,7 @@ Recommendations don't cover Elastic IP addresses, snapshots, backups, or capacit
 
 ### 3.1 Find the exact usage types
 
-Cost Explorer filters match exact values only, and usage types outside us-east-1 start with a Region code, such as `USE2-` for us-east-2. Look up the exact names with one `getDimensionValues` call for each search string in the table:
+Cost Explorer filters match exact values only. Most usage types start with a Region code, such as `USE2-` for us-east-2, and services differ in whether they add one in us-east-1. Look up the exact names with one `getDimensionValues` call for each search string in the table:
 
 ```javascript
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
@@ -149,6 +155,8 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 | `Unused` | `UnusedBox:<instance type>`, `UnusedDed:<instance type>` | Capacity Reservation hours that no instance used |
 
 Sources: [public IPv4 usage types](https://repost.aws/knowledge-center/vpc-identify-public-ipv4-charges), [EBS billing codes](https://docs.aws.amazon.com/ebs/latest/userguide/ebs-billing-usage-reports.html), [EC2 billing codes](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-billing-usage-reports.html).
+
+A search that returns no values means the account had no charges of that type in the six months. Leave those usage types out of 3.2. If no search returns values, skip 3.2 and 3.3 and report that the account had none of these charges.
 
 ### 3.2 Get six months of cost and usage
 
@@ -193,7 +201,8 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 })
 ```
 
-- Costs that come back without a resource ID usually mean resource-level data is off for that service. Add turning it on to the report as a setup step for the user.
+- If the call fails with `AccessDeniedException` and a message that resource-level data is an opt-in feature, resource-level data is off for the organization. That isn't a missing IAM permission, so don't report it as one. Skip this step, and add turning it on from the management account to the report as a setup step.
+- Costs that come back without a resource ID usually mean resource-level data is on, but not for that service. Add turning it on for the service to the report.
 - An account can have thousands of snapshots. If the result is partial (`complete_dataset: false`), query one usage type at a time.
 
 ### 3.4 Check a NAT gateway's traffic (optional)
@@ -213,7 +222,7 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 })
 ```
 
-Check `ActiveConnectionCount` with the `Maximum` statistic the same way. A quiet NAT gateway can still be standby capacity for failover or disaster recovery, so say so in the finding.
+Check `ActiveConnectionCount` with the `Maximum` statistic the same way. An empty `datapoints` list, rather than zeros, means CloudWatch has no data for that gateway ID in that Region, so check both before you call the gateway idle. A quiet NAT gateway can still be standby capacity for failover or disaster recovery, so say so in the finding.
 
 ## Step 4: Find log groups that never expire
 
@@ -225,7 +234,7 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "describe_log
 })
 ```
 
-- An empty `retentionInDays` means the log group never expires.
+- A `retentionInDays` of `null` means the log group never expires.
 - Rank those log groups by `storedBytes` and report the largest, with their stored size in GB.
 - In a Region with many log groups, list one prefix at a time with `log_group_name_prefix`, such as `/aws/lambda/`.
 - Some logs must be kept for compliance, so the owner picks the retention period. Link [log retention settings](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html).

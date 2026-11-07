@@ -65,13 +65,14 @@ Use managed services to reduce operational overhead, eliminate infrastructure ma
 
 ```javascript
 // Step 1: Analyze current self-managed infrastructure costs
+// EBS is billed under EC2 - Other, with NAT gateways and some data transfer. Its usage types include EBS:VolumeUsage and EBS:SnapshotUsage.
 const selfManagedCosts = usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\", \"Amazon Elastic Block Store\", \"Amazon Virtual Private Cloud\"], \"MatchOptions\": [\"EQUALS\"]}}",
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\", \"EC2 - Other\", \"Amazon Virtual Private Cloud\"], \"MatchOptions\": [\"EQUALS\"]}}",
   "metrics": "[\"UnblendedCost\"]"
 })
 

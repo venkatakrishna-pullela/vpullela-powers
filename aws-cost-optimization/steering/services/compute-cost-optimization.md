@@ -392,6 +392,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
 **Analysis Commands:**
 ```javascript
 // Analyze compute-related costs across services
+// EBS is billed under EC2 - Other, with NAT gateways and some data transfer. Its usage types include EBS:VolumeUsage and EBS:SnapshotUsage.
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
@@ -399,7 +400,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\", \"Amazon Elastic Block Store\", \"Amazon Elastic Load Balancing\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\", \"EC2 - Other\", \"Amazon Elastic Load Balancing\"]}}"
 })
 ```
 

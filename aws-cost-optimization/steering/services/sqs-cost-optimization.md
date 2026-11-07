@@ -61,7 +61,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
-  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"API_OPERATION\"}]",
+  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"OPERATION\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
   "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\"]}}"
 })
@@ -310,7 +310,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
-  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"API_OPERATION\"}]",
+  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"OPERATION\"}]",
   "metrics": "[\"UnblendedCost\"]",
   "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Simple Queue Service\"]}}"
 })

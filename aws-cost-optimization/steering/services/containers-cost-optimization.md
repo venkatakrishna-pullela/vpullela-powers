@@ -37,6 +37,9 @@
 
 **Get Container service costs:**
 ```javascript
+// Fargate has no service name of its own in Cost Explorer: ECS tasks on Fargate are billed under
+// Amazon Elastic Container Service, with usage types that contain Fargate. EC2 worker nodes
+// are billed under Amazon Elastic Compute Cloud - Compute.
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
@@ -44,7 +47,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service\", \"Amazon Elastic Container Service for Kubernetes\", \"AWS Fargate\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service\", \"Amazon Elastic Container Service for Kubernetes\"]}}"
 })
 ```
 
@@ -157,15 +160,16 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 
 **Analysis Commands:**
 ```javascript
-// Check Spot instance utilization
+// Check Spot instance utilization. EKS worker nodes are billed as EC2 instances, not under
+// the EKS service, so query EC2 compute and add your cluster's tag to the filter.
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"PURCHASE_OPTION\"}]",
+  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"PURCHASE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Container Service for Kubernetes\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Compute Cloud - Compute\"]}}"
 })
 ```
 

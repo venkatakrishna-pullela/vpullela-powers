@@ -42,7 +42,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
-  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"API_OPERATION\"}]",
+  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"OPERATION\"}]",
   "metrics": "[\"UnblendedCost\"]",
   "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}}"
 })
@@ -202,7 +202,8 @@ Use appropriate table classes based on access patterns to optimize storage costs
 
 **Implementation:**
 ```javascript
-// Analyze storage costs by table class
+// Analyze storage costs by table class. Storage usage types contain TimedStorage, and
+// Standard-IA tables have their own. Outside us-east-1 they start with a Region code.
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
@@ -210,7 +211,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"TimedStorage-ByteHrs\"]}}]}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}}"
 })
 ```
 
@@ -263,15 +264,16 @@ Balance data protection requirements with backup costs through strategic backup 
 
 **Cost Analysis:**
 ```javascript
-// Monitor backup costs
+// Monitor backup costs. Backup, point-in-time recovery, and restore charges have their own
+// usage types, which contain Backup, PITR, or Restore.
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"API_OPERATION\"}]",
+  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}, \"And\": [{\"Dimensions\": {\"Key\": \"API_OPERATION\", \"Values\": [\"BackupStorage\", \"RestoreTableFromBackup\"]}}]}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon DynamoDB\"]}}"
 })
 ```
 

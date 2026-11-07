@@ -334,6 +334,10 @@ Once credentials are configured, you can immediately start using the power:
 
 ## Tool Usage Examples
 
+The dates and filter values in this power's examples show the format. Before you run one:
+- Replace the dates with dates relative to today. Cost Explorer keeps the current month and the previous 13 months by default, and resource-level data for the last 14 days.
+- Look up exact filter values, such as service names and usage types, with the cost-explorer `getDimensionValues` operation. A filter value that doesn't exist returns $0 instead of an error. For example, CloudWatch is `AmazonCloudWatch`, and EBS is billed under `EC2 - Other`.
+
 ### Cost Analysis & Forecasting
 
 **Get monthly costs by service:**

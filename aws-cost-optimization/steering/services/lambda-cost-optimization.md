@@ -252,6 +252,7 @@ CloudWatch Logs charges can become significant for verbose Lambda functions.
 **Implementation:**
 ```javascript
 // Monitor CloudWatch Logs costs for Lambda (resource-level data covers the last 14 days)
+// CloudWatch Logs is billed under AmazonCloudWatch, with metrics and alarms
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsageWithResources",
   "start_date": "2026-10-24",
@@ -259,7 +260,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"RESOURCE_ID\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon CloudWatch Logs\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"AmazonCloudWatch\"]}}"
 })
 ```
 

@@ -468,7 +468,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon FSx\", \"Amazon EC2\", \"AWS Backup\", \"AWS DataSync\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon FSx\", \"Amazon Elastic Compute Cloud - Compute\", \"AWS Backup\", \"AWS DataSync\"]}}"
 })
 ```
 

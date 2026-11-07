@@ -51,7 +51,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Load Balancing\", \"Amazon Route 53\", \"Amazon VPC\", \"AWS Direct Connect\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Elastic Load Balancing\", \"Amazon Route 53\", \"Amazon Virtual Private Cloud\", \"AWS Direct Connect\"]}}"
 })
 ```
 
@@ -227,15 +227,16 @@ usePower("aws-cost-optimization", "awslabs.cloudwatch-mcp-server", "get_metric_d
 
 **Implementation:**
 ```javascript
-// Identify unused Elastic IPs
+// Identify unused Elastic IPs. Idle addresses bill as PublicIPv4:IdleAddress, with a Region
+// code in most Regions (for example USE2-PublicIPv4:IdleAddress), so group by usage type.
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
   "operation": "getCostAndUsage",
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
-  "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE\", \"Values\": [\"PublicIPv4:IdleAddress\"]}}"
+  "metrics": "[\"UnblendedCost\", \"UsageQuantity\"]",
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Virtual Private Cloud\"]}}"
 })
 ```
 
@@ -342,7 +343,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon VPC\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Virtual Private Cloud\"]}}"
 })
 
 // Step 2: Analyze data transfer patterns
@@ -425,7 +426,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon VPC\", \"Amazon Elastic Load Balancing\", \"Amazon Route 53\", \"Amazon CloudFront\", \"AWS Direct Connect\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Virtual Private Cloud\", \"Amazon Elastic Load Balancing\", \"Amazon Route 53\", \"Amazon CloudFront\", \"AWS Direct Connect\"]}}"
 })
 ```
 

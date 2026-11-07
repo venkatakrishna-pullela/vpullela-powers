@@ -240,7 +240,7 @@ const utilizationTrends = usePower("aws-cost-optimization", "awslabs.billing-cos
   "start_date": "2024-09-01",
   "end_date": "2024-12-01",
   "granularity": "MONTHLY",
-  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE_GROUP\"}]",
+  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE_GROUP\", \"Values\": [\"EC2: Running Hours\"], \"MatchOptions\": [\"EQUALS\"]}}",
   "metrics": "[\"UsageQuantity\"]"
 })

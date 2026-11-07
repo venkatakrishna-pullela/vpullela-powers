@@ -61,9 +61,9 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "start_date": "2024-11-01",
   "end_date": "2024-12-01",
   "granularity": "DAILY",
-  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE_GROUP\"}]",
+  "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"USAGE_TYPE\"}]",
   "metrics": "[\"UsageQuantity\", \"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"USAGE_TYPE_GROUP\", \"Values\": [\"Redshift running hours\", \"Redshift: DataScanned\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Redshift\"]}}"
 })
 ```
 

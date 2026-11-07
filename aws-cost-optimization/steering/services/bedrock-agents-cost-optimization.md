@@ -391,7 +391,7 @@ usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", 
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"SERVICE\"}]",
   "metrics": "[\"UnblendedCost\"]",
-  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\", \"Amazon OpenSearch Service\", \"Amazon S3\", \"AWS Lambda\"]}}"
+  "filter": "{\"Dimensions\": {\"Key\": \"SERVICE\", \"Values\": [\"Amazon Bedrock\", \"Amazon OpenSearch Service\", \"Amazon Simple Storage Service\", \"AWS Lambda\"]}}"
 })
 ```
 
