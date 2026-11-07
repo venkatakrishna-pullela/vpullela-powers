@@ -132,6 +132,8 @@ This power includes agent hooks that automatically review your infrastructure co
 
 Kiro's file hooks respond only to changes the agent makes, so edits you make yourself in the editor don't trigger them (see [Kiro hook types](https://kiro.dev/docs/hooks/types/)). To review a file you edited yourself, ask Kiro to review it.
 
+To try the hooks, use the [Terraform cost review sample](examples/terraform-cost-review/).
+
 ### Available Hooks
 
 | Hook | Trigger | Default files matched |
