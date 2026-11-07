@@ -41,10 +41,12 @@ Total Cost = (Number of Invocations × $0.0000002) + (Duration in seconds × Mem
 
 **Get Lambda costs by function:**
 ```javascript
+// Resource-level data: start_date must be within the last 14 days, and the service must be
+// turned on for resource-level data in Cost Management preferences
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
-  "operation": "getCostAndUsage",
-  "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
+  "operation": "getCostAndUsageWithResources",
+  "start_date": "2026-10-24",
+  "end_date": "2026-11-07",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"RESOURCE_ID\"}]",
   "metrics": "[\"UnblendedCost\"]",
@@ -249,11 +251,11 @@ CloudWatch Logs charges can become significant for verbose Lambda functions.
 
 **Implementation:**
 ```javascript
-// Monitor CloudWatch Logs costs for Lambda
+// Monitor CloudWatch Logs costs for Lambda (resource-level data covers the last 14 days)
 usePower("aws-cost-optimization", "awslabs.billing-cost-management-mcp-server", "cost-explorer", {
-  "operation": "getCostAndUsage",
-  "start_date": "2024-11-01",
-  "end_date": "2024-12-01",
+  "operation": "getCostAndUsageWithResources",
+  "start_date": "2026-10-24",
+  "end_date": "2026-11-07",
   "granularity": "MONTHLY",
   "group_by": "[{\"Type\": \"DIMENSION\", \"Key\": \"RESOURCE_ID\"}]",
   "metrics": "[\"UnblendedCost\"]",
